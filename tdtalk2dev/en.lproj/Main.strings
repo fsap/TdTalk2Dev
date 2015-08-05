@@ -1,0 +1,12 @@
+
+/* Class = "UIViewController"; title = "BookList"; ObjectID = "BYZ-38-t0r"; */
+"BYZ-38-t0r.title" = "BookList";
+
+/* Class = "UITableViewController"; title = "Root"; ObjectID = "F0k-l1-PJB"; */
+"F0k-l1-PJB.title" = "Root";
+
+/* Class = "UINavigationItem"; title = "Book List"; ObjectID = "LUJ-KY-eLu"; */
+"LUJ-KY-eLu.title" = "Book List";
+
+/* Class = "UINavigationItem"; title = "Book List"; ObjectID = "NQc-1k-KeO"; */
+"NQc-1k-KeO.title" = "Book List";
