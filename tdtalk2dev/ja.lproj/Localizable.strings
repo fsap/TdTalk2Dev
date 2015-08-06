@@ -9,7 +9,10 @@
 "dialog_title_error" = "エラー";
 "dialog_title_notice" = "確認";
 
+"dialog_msg_delete" = "削除してもよろしいです？";
+
 "dialog_ok" = "OK";
+"dialog_cancel" = "Cancel";
 
 "error_msg_101" = "ファイルの取得に失敗しました";
 "error_msg_102" = "ファイルがありません";
@@ -17,6 +20,7 @@
 "error_msg_104" = "ファイルの読み込みに失敗しました";
 "error_msg_105" = "既に取り込み済みのファイルです";
 "error_msg_106" = "ファイルの保存に失敗しました";
+"error_msg_107" = "ファイルの削除に失敗しました";
 
 "msg_import_success" = "ファイルの取り込みが完了しました";
 

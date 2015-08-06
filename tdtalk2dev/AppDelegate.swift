@@ -83,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             TTAlertController(nibName: nil, bundle: nil).show(
                 window?.rootViewController!,
                 title:NSLocalizedString("dialog_title_error", comment: ""),
-                message:TTError.getErrorMessage(ret))
+                message:TTError.getErrorMessage(ret), actionOk: {() -> Void in})
             return false
         }
         
@@ -97,14 +97,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             TTAlertController(nibName: nil, bundle: nil).show(
                 window?.rootViewController!,
                 title:NSLocalizedString("dialog_title_error", comment: ""),
-                message:TTError.getErrorMessage(ret))
+                message:TTError.getErrorMessage(ret), actionOk: {() -> Void in})
             return false
         }
         
         TTAlertController(nibName: nil, bundle: nil).show(
             window?.rootViewController!,
             title:NSLocalizedString("dialog_title_notice", comment: ""),
-            message:NSLocalizedString("msg_import_success", comment: ""))
+            message:NSLocalizedString("msg_import_success", comment: ""),
+            actionOk: {() -> Void in})
         
         return true
     }

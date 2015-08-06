@@ -84,12 +84,14 @@ class TTFileManager : NSObject {
         return Main.unzipFileAtPath(importFile, toDestination: expandPath)
     }
     
-    func removeFile(path:String)->Void {
+    func removeFile(path:String)->TTErrorCode {
         var err:NSError? = nil
         self.fileManager.removeItemAtPath(path, error: &err)
         if err != nil {
             Log(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
+            return TTErrorCode.FailedToDeleteFile
         }
+        return TTErrorCode.Normal
     }
     
     //

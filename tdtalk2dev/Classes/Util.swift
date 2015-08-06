@@ -1,8 +1,8 @@
 //
 //  Util.swift
-//  AnyViewSample
+//  TdTalk2Dev
 //
-//  Created by 藤原修市 on 2015/08/05.
+//  Created by Fujiwara on 2015/08/05.
 //  Copyright (c) 2015年 fsap. All rights reserved.
 //
 

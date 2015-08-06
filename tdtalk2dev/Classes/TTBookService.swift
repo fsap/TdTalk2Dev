@@ -18,7 +18,9 @@ protocol BookServiceDelegate {
 //
 class TTBookService {
     
-
+    var fileManager: TTFileManager = TTFileManager.sharedInstance
+    var dataManager: DataManager = DataManager.sharedInstance
+    
     var delegate: BookServiceDelegate?
     
     class var sharedInstance : TTBookService {
@@ -44,12 +46,11 @@ class TTBookService {
             return TTErrorCode.FailedToGetFile
         }
 
-        var fileManager = TTFileManager.sharedInstance
         let filepath = TTFileManager.getInboxDir().stringByAppendingPathComponent(filename)
         Log(NSString(format: "--- paht:%@", filepath))
         
         // ファイルの存在チェック
-        if !(fileManager.exists(filepath)) {
+        if !(self.fileManager.exists(filepath)) {
             Log(NSString(format: "%@ not found.", filepath))
             return TTErrorCode.FileNotExists
         }
@@ -57,7 +58,7 @@ class TTBookService {
         // ファイル形式のチェック
         if !(TTFileManager.isValiedExtension(filename)) {
             Log(NSString(format: "Unsupported type:%@", filename))
-            fileManager.removeFile(filepath)
+            self.fileManager.removeFile(filepath)
             return TTErrorCode.UnsupportedFileType
         }
         
@@ -68,7 +69,6 @@ class TTBookService {
     // ファイルの取り込み
     //
     func importDaisy(filename :String)->TTErrorCode {
-        var fileManager = TTFileManager.sharedInstance
         
         // 外部から渡ってきたファイルのパス
         let importFilePath = TTFileManager.getInboxDir().stringByAppendingPathComponent(filename)
@@ -84,15 +84,15 @@ class TTBookService {
             
         } else if (filename.pathExtension == "zip") {
             // zip解凍
-            if !(fileManager.unzip(importFilePath, expandPath: expandDir)) {
-                fileManager.deInitImport([importFilePath])
+            if !(self.fileManager.unzip(importFilePath, expandPath: expandDir)) {
+                self.fileManager.deInitImport([importFilePath])
                 return TTErrorCode.UnsupportedFileType
             }
         }
-        Log(NSString(format: "unzip file:%@", fileManager.fileManager.contentsOfDirectoryAtPath(tmpDir, error: nil)!))
+        Log(NSString(format: "unzip file:%@", self.fileManager.fileManager.contentsOfDirectoryAtPath(tmpDir, error: nil)!))
         
         // 初期化
-        fileManager.initImport()
+        self.fileManager.initImport()
         
         // 展開
         let saveFilePath = fileManager.loadXmlFiles(expandDir)
@@ -107,11 +107,19 @@ class TTBookService {
             return result
         }
         
-        // ToDo:作品メタ情報とファイル情報をCoreData等で永続化する
-        
+        // 図書情報をDBに保存
+        var book: BookEntity = self.dataManager.getEntity(DataManager.Const.kBookEntityName) as! BookEntity
+        book.title = saveFilePath.lastPathComponent.stringByDeletingPathExtension
+        book.filename = TTFileManager.getImportDir().stringByAppendingPathComponent(saveFilePath.lastPathComponent.stringByDeletingPathExtension)
+        book.sort_num = self.getBookList().count
+        var ret = self.dataManager.save()
+        if ret != TTErrorCode.Normal {
+            self.fileManager.deInitImport([importFilePath, expandDir])
+            return ret
+        }
         
         // 終了処理
-        fileManager.deInitImport([importFilePath, expandDir])
+        self.fileManager.deInitImport([importFilePath, expandDir])
         
         self.delegate?.importCompleted()
         
@@ -136,4 +144,25 @@ class TTBookService {
         return result
     }
     
+    func getBookList()->[BookEntity] {
+        let sortDescriptor = NSSortDescriptor(key: "sort_num", ascending: true)
+        let results: [BookEntity] = self.dataManager.find(DataManager.Const.kBookEntityName, condition: nil, sort: [sortDescriptor]) as! [BookEntity]
+
+        return results
+    }
+    
+    // 図書ファイルを削除
+    func deleteBook(book: BookEntity)->TTErrorCode {
+        // ファイル削除
+        let filepath = book.filename
+        let fileResult: TTErrorCode = self.fileManager.removeFile(filepath)
+        if fileResult != TTErrorCode.Normal {
+            return fileResult
+        }
+        
+        // 完了したらDBからも削除
+        var dbResult: TTErrorCode = self.dataManager.remove(book)
+        
+        return dbResult
+    }
 }

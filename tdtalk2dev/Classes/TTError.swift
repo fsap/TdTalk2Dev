@@ -10,13 +10,16 @@ import Foundation
 
 enum TTErrorCode :Int {
     case Normal = 0
-        // 1xx : ファイル読み込みに関するエラー
+    // 1xx : ファイル読み込みに関するエラー
     case FailedToGetFile = 101,
         FileNotExists,
         UnsupportedFileType,
         FailedToLoadFile,
         FileAlreadyExists,
-        FailedToSaveFile
+        FailedToSaveFile,
+        FailedToDeleteFile
+    // 2xx : DBに関するエラー
+    case FailedToSaveDB = 201
 }
 
 class TTError {

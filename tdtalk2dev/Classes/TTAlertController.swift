@@ -10,38 +10,78 @@ import UIKit
 
 class TTAlertController : UIViewController {
 
+    var actionOkBlock: (()->Void)
+    var actionCancelBlock: (()->Void)
+    
     required init(coder aDecoder: NSCoder) {
+        self.actionOkBlock = {}
+        self.actionCancelBlock = {}
         super.init(coder: aDecoder)
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+        self.actionOkBlock = {}
+        self.actionCancelBlock = {}
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
-    deinit {
-        
-    }
-    
-    // ダイアログを表示
-    // ※OS分岐ではなくobjc_getClassを使う方が良いかもしれない
-    func show(parentView:UIViewController?, title:String, message:String)->Void {
-        // OS7,8で出し分け
-        if (isOS8()) {
-            var alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-            if parentView != nil {
-                // action
-                let okAction = UIAlertAction(title: NSLocalizedString("dialog_ok", comment:""), style: UIAlertActionStyle.Default , handler: { (action:UIAlertAction!) -> Void in
-                    alertController.dismissViewControllerAnimated(false, completion: nil)
+    // メッセージダイアログ(OKボタンのみ)
+    func show(parentViewController: UIViewController?, title: String, message: String, actionOk: (()->Void))->Void {
+        if objc_getClass("UIAlertController") != nil {
+            var alertController: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+            if parentViewController != nil {
+                let alertAction = UIAlertAction(title: "OK", style: .Default, handler: { (action: UIAlertAction!) -> Void in
+                    alertController.dismissViewControllerAnimated(true, completion: nil)
+                    actionOk()
                 })
-                alertController.addAction(okAction)
-                
-                var viewController = parentView!
+                alertController.addAction(alertAction)
+                let viewController = parentViewController!
                 viewController.presentViewController(alertController, animated: true, completion: nil)
             }
         } else {
-            var alertView = UIAlertView(title: title, message: message, delegate: nil, cancelButtonTitle: NSLocalizedString("dialog_ok", comment:""))
+            var alertView: UIAlertView = UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "OK")
             alertView.show()
+            self.actionOkBlock = actionOk
         }
+    }
     
+    // メッセージダイアログ(OK, Cancelボタン)
+    func show(parentViewController: UIViewController?, title: String, message: String, actionOk: (()->Void), actionCancel: (()->Void)?) {
+        if objc_getClass("UIAlertController") != nil {
+            var alertController: UIAlertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+            if parentViewController != nil {
+                let alertOkAction = UIAlertAction(title: "OK", style: .Default, handler: { (action: UIAlertAction!) -> Void in
+                    alertController.dismissViewControllerAnimated(true, completion: nil)
+                    actionOk()
+                })
+                let alertCancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: { (action: UIAlertAction!) -> Void in
+                    alertController.dismissViewControllerAnimated(true, completion: nil)
+                    if actionCancel != nil {
+                        actionCancel!()
+                    }
+                })
+                alertController.addAction(alertOkAction)
+                alertController.addAction(alertCancelAction)
+                let viewController = parentViewController!
+                viewController.presentViewController(alertController, animated: true, completion: nil)
+            }
+        } else {
+            var alertView: UIAlertView = UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "OK")
+            alertView.show()
+            self.actionOkBlock = actionOk
+        }
+    }
+    
+    
+    //
+    // MARK: UIAlertViewDelegate
+    //
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        if buttonIndex == alertView.cancelButtonIndex {
+            // Canceled
+            self.actionOkBlock()
+        } else {
+            // OK
+        }
     }
 }

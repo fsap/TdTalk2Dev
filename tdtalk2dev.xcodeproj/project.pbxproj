@@ -7,7 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		823439431B73E0C70066E942 /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823439421B73E0C70066E942 /* BookEntity.swift */; };
 		825185941B6A884700196715 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 825185961B6A884700196715 /* Localizable.strings */; };
+		82A802FD1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 82A802FB1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld */; };
+		82A803021B73CC330027094D /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A803001B73CC330027094D /* DataManager.swift */; };
 		82F0969F1B725E96002E01BC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F0969E1B725E96002E01BC /* Util.swift */; };
 		82F0C24C1B6BD213007D782A /* BRLBUF.M in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C2461B6BD213007D782A /* BRLBUF.M */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		82F0C24D1B6BD213007D782A /* file.m in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C2481B6BD213007D782A /* file.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -43,10 +46,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		823439421B73E0C70066E942 /* BookEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BookEntity.swift; path = tdtalk2dev/Classes/BookEntity.swift; sourceTree = SOURCE_ROOT; };
 		825185951B6A884700196715 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		825185971B6A885900196715 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
 		825185981B6A885900196715 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		825185991B6A885900196715 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		82A802FC1B73CA9A0027094D /* tdtalk2dev.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = tdtalk2dev.xcdatamodel; sourceTree = "<group>"; };
+		82A803001B73CC330027094D /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataManager.swift; path = tdtalk2dev/Classes/DataManager.swift; sourceTree = SOURCE_ROOT; };
 		82F0969E1B725E96002E01BC /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Util.swift; path = tdtalk2dev/Classes/Util.swift; sourceTree = SOURCE_ROOT; };
 		82F0C2451B6BD213007D782A /* BRLBUF.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BRLBUF.H; sourceTree = "<group>"; };
 		82F0C2461B6BD213007D782A /* BRLBUF.M */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BRLBUF.M; sourceTree = "<group>"; };
@@ -105,6 +111,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		82A802FE1B73CAEB0027094D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				823439421B73E0C70066E942 /* BookEntity.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
 		82F0C2441B6BD213007D782A /* loadxml */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +163,7 @@
 				F0E35DE31B6A490300CC6A6B /* Main.storyboard */,
 				F0E35DE61B6A490300CC6A6B /* Images.xcassets */,
 				F0E35DE81B6A490300CC6A6B /* LaunchScreen.xib */,
+				82A802FB1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld */,
 				F0E35DDD1B6A490300CC6A6B /* Supporting Files */,
 			);
 			path = TdTalk2Dev;
@@ -220,6 +235,8 @@
 		F0E35E161B6A4A4B00CC6A6B /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				82A803001B73CC330027094D /* DataManager.swift */,
+				82A802FE1B73CAEB0027094D /* Models */,
 				82F0969E1B725E96002E01BC /* Util.swift */,
 				F0E35E171B6A4A4B00CC6A6B /* BookListViewController.swift */,
 				F0E35E191B6A4A4B00CC6A6B /* TTAlertController.swift */,
@@ -346,6 +363,9 @@
 				82F0C24D1B6BD213007D782A /* file.m in Sources */,
 				F0E35E111B6A49D000CC6A6B /* Main.m in Sources */,
 				F0E35E201B6A4A4B00CC6A6B /* TTBookService.swift in Sources */,
+				82A803021B73CC330027094D /* DataManager.swift in Sources */,
+				823439431B73E0C70066E942 /* BookEntity.swift in Sources */,
+				82A802FD1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld in Sources */,
 				82F0C24E1B6BD213007D782A /* LIST.M in Sources */,
 				82F0C24C1B6BD213007D782A /* BRLBUF.M in Sources */,
 				F0E35E131B6A49D000CC6A6B /* mztools.c in Sources */,
@@ -596,6 +616,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		82A802FB1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				82A802FC1B73CA9A0027094D /* tdtalk2dev.xcdatamodel */,
+			);
+			currentVersion = 82A802FC1B73CA9A0027094D /* tdtalk2dev.xcdatamodel */;
+			name = tdtalk2dev.xcdatamodeld;
+			path = ../tdtalk2dev/tdtalk2dev.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F0E35DD21B6A490300CC6A6B /* Project object */;
 }
