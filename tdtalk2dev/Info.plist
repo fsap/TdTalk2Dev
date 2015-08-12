@@ -10,6 +10,7 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>zip</string>
+				<string>exe</string>
 			</array>
 			<key>CFBundleTypeIconFiles</key>
 			<array/>
@@ -18,6 +19,9 @@
 				<string>application/zip</string>
 				<string>application/x-zip</string>
 				<string>application/x-zip-compressed</string>
+				<string>application/x-msdownload</string>
+				<string>application/octet-stream</string>
+				<string>application/x-exe</string>
 			</array>
 			<key>CFBundleTypeName</key>
 			<string>TdTalk2</string>
@@ -33,6 +37,7 @@
 			<array>
 				<string>com.pkware.zip-archive</string>
 				<string>org.gnu.gnu-zip-archive</string>
+				<string>com.microsoft.windows-​executable</string>
 			</array>
 		</dict>
 	</array>

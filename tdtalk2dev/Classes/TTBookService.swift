@@ -40,11 +40,12 @@ class TTBookService {
     //
     // ファイル形式の検証
     //
-    func validate(filename :String)->TTErrorCode {
+    func validate(target :String)->TTErrorCode {
         
-        if filename == "" {
+        if target == "" {
             return TTErrorCode.FailedToGetFile
         }
+        var filename: String = target.stringByRemovingPercentEncoding!
 
         let filepath = TTFileManager.getInboxDir().stringByAppendingPathComponent(filename)
         Log(NSString(format: "--- paht:%@", filepath))
@@ -68,8 +69,9 @@ class TTBookService {
     //
     // ファイルの取り込み
     //
-    func importDaisy(filename :String)->TTErrorCode {
+    func importDaisy(target :String)->TTErrorCode {
         
+        var filename: String = target.stringByRemovingPercentEncoding!
         // 外部から渡ってきたファイルのパス
         let importFilePath = TTFileManager.getInboxDir().stringByAppendingPathComponent(filename)
         // 作業用ディレクトリ
@@ -79,13 +81,14 @@ class TTBookService {
         // 取り込み先ディレクトリ
         let bookDir = TTFileManager.getImportDir()
         
-        if (filename.pathExtension == "exe") {
+        if (filename.pathExtension == ImportableExtension.EXE.rawValue) {
             // exe展開
             
-        } else if (filename.pathExtension == "zip") {
+        } else if (filename.pathExtension == ImportableExtension.ZIP.rawValue) {
             // zip解凍
             if !(self.fileManager.unzip(importFilePath, expandPath: expandDir)) {
                 self.fileManager.deInitImport([importFilePath])
+                Log(NSString(format: "Unable to expand:%@", filename))
                 return TTErrorCode.UnsupportedFileType
             }
         }

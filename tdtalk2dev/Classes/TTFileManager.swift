@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum ImportableExtension: String {
+    case EXE = "exe"
+    case ZIP = "zip"
+}
+
 class TTFileManager : NSObject {
     
     // 定数
@@ -50,7 +55,16 @@ class TTFileManager : NSObject {
     }
     
     static func isValiedExtension(filename : String)->Bool {
-        return contains(Const.kAllowedExtensions, filename.pathExtension)
+//        return contains(Const.kAllowedExtensions, filename.pathExtension)
+        switch filename.pathExtension {
+        case ImportableExtension.EXE.rawValue:
+            return true
+        case ImportableExtension.ZIP.rawValue:
+            return true
+        default:
+            break
+        }
+        return false
     }
     
     /**

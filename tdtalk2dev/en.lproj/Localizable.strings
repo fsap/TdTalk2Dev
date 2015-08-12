@@ -9,7 +9,7 @@
 "dialog_title_error" = "Error";
 "dialog_title_notice" = "Confirm";
 
-"dialog_msg_delete" = "削除してもよろしいです？";
+"dialog_msg_delete" = "削除してもよろしいですか？";
 
 "dialog_ok" = "OK";
 "dialog_cancel" = "Cancel";
