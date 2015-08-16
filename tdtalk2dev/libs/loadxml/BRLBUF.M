@@ -11,7 +11,7 @@
 	m_lpDelList = [m_lpDelList autorelease];
 	id lpTmpDelList = [[BrlList alloc] init];
 	lpTmpDelList = [lpTmpDelList autorelease];
-	// Xg?f[^?WA??
+	// リストのデータを編集し、接続します
 	[m_lpList SetAttr:BUF_LIST_HEAD];
 	[m_lpList SetStart:m_lpList];
 	[m_lpList SetNext:lpTmpList];
@@ -20,7 +20,7 @@
 	[lpTmpList SetStart:m_lpList];
 	[lpTmpList SetNext:m_lpList];
 	[lpTmpList SetBefore:m_lpList];
-	// ?Xg?\z
+	// 削除リストの構築
 	[m_lpDelList SetAttr:BUF_DEL_LIST_HEAD];
 	[m_lpDelList SetStart:m_lpDelList];
 	[m_lpDelList SetNext:lpTmpDelList];
@@ -36,14 +36,57 @@ fclose(fp);
 */
 }
 
+- (unsigned char)IsAttr {
+	return [m_lpList GetAttr];
+}
+
+- (BOOL)IsBuffer {
+	id TmpList = [m_lpList GetStart];
+	if ([[TmpList GetNext] GetAttr] == BUF_LIST_END) {
+		return FALSE;
+	}
+	return TRUE;
+}
+
+- (BOOL)Del {
+	if (![self IsBuffer]) {
+		return FALSE;
+	}
+	id TmpList = m_lpList;
+	m_lpList = [m_lpList GetBefore];
+	[[TmpList GetNext] SetBefore:m_lpList];
+	[m_lpList SetNext:[TmpList GetNext]];
+	id DelTmpList = [m_lpDelList GetStart];
+	id DelTmpNextList = [[m_lpDelList GetStart] GetNext];
+	[TmpList SetStart:[DelTmpList GetStart]];
+	[TmpList SetNext:[DelTmpList GetNext]];
+	[TmpList SetBefore:[DelTmpList GetStart]];
+	[DelTmpList SetNext:TmpList];
+	[DelTmpNextList SetBefore:TmpList];
+	return TRUE;
+}
+
+- (void)Remove {
+	if (![self IsBuffer]) {
+		return;
+	}
+	[self End];
+	while ([self IsBuffer]) {
+		[self Del];
+		if ([m_lpList GetAttr] == BUF_LIST_HEAD) {
+			break;
+		}
+	}
+}
+
 - (void)Ins:(unsigned char *)Dat {
 	id TmpList;
 	m_lpDelList = [m_lpDelList GetStart];
-	if ([[m_lpDelList GetNext] GetAttr] != BUF_LIST_END) {	// XgbNIuWFNg?
+	if ([[m_lpDelList GetNext] GetAttr] != BUF_LIST_END) {	// ストックオブジェクトから拾う
 		TmpList = [m_lpDelList GetNext];
 		[[TmpList GetNext] SetBefore:m_lpDelList];
 		[m_lpDelList SetNext:[TmpList GetNext]];
-	} else {	// XgbN????VIuWFNg?
+	} else {	// ストックが存在しないので新しいオブジェクトを作成
 		TmpList = [[BrlList alloc] init];
 		TmpList = [TmpList autorelease];
 		[TmpList SetAttr:BUF_LIST_DATA];
@@ -78,6 +121,43 @@ fclose(fp);
 
 - (void)End {
 	m_lpList = [[[m_lpList GetStart] GetBefore] GetBefore];
+}
+
+- (unsigned short)IsCurLine {
+	unsigned short Line = 1;
+	id Temp = m_lpList;
+	[self Top];
+	while (1) {
+		if (Temp == m_lpList) {
+			return Line;
+		}
+		if (![self NextLine]) {
+			m_lpList = Temp;
+			return 0;
+		}
+		Line++;
+	}
+	m_lpList = Temp;
+	return 0;
+}
+
+- (BOOL)SetLine:(unsigned short)Line {
+	unsigned short TempLine = 1;
+	[self Top];
+	if (!Line) {
+		return TRUE;
+	}
+	while (1) {
+		if (![self NextLine]) {
+			[self Top];
+			return 0;
+		}
+		TempLine++;
+		if (TempLine == Line) {
+			return TRUE;
+		}
+	}
+	return 0;
 }
 
 @end

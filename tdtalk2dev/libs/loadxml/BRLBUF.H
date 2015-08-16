@@ -10,14 +10,6 @@
 #define CR_MARK	0x0d
 #define PR_MARK	0x0c
 
-typedef struct {
-	unsigned short AllPage;
-	unsigned short Page;
-	unsigned short Line;
-	unsigned short Kan;
-	unsigned short KanPage;
-}PAGE_INFO;
-
 @interface BrlBuffer : NSObject {
 	id m_lpList;
 	id m_lpDelList;
@@ -28,8 +20,13 @@ typedef struct {
 }
 - (void)Setinit;
 - (void)Ins:(unsigned char *)Dat;
+- (BOOL)IsBuffer;
+- (BOOL)Del;
+- (void)Remove;
 - (char *)GetDat;
 - (BOOL)NextLine;
 - (void)Top;
 - (void)End;
+- (BOOL)SetLine:(unsigned short)Line;
+- (unsigned short)IsCurLine;
 @end

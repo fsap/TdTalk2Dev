@@ -27,59 +27,21 @@
 #define BR3_ED_MARK	0x13
 #define BRLDOC_HEAD_SIZE	256
 
-// データヘッダ領域
+// ヘッダ領域
 typedef struct {
-	unsigned short AllPage;	// 総頁
-	unsigned short CurLine;		// Cur行
-	unsigned char MaxCol;	// 最大マス数
-	unsigned char Col;		// Curマス数
-	unsigned char MaxLine;	// １頁行数
-	unsigned char Line;		// Cur行数
-	unsigned char InitPage;	// 頁付けフラグ
-	unsigned char DatAttr;	// データ識別	(0x00ならⅡ0x13ならⅢ)
-}BRLDOC_DAT_HEAD;
-// ブレイルスターⅢ追加情報
-typedef struct {
-	unsigned char SubTitol[BRLDOC_SUBTTL_SIZE];	// 文書備考
-	unsigned short MaxRec;			// 最大レコード数
-	unsigned char TabTbl[BRLDOC_TAB_MAP_SIZE];	// タブ位置ビットマップ
-}BRLDOC_DAT_INFO;
-// 墨字プリンタ制御領域(A4ｻｲｽﾞ固定)
-typedef struct {
-	unsigned char Attr;		// プリンタ種別
-	unsigned char Form;		// 印字方式
-	unsigned char LFiller;	// 左マージン
-	unsigned char Rv;	// 0:凸面 1:凹面
-}BRLDOC_DAT_SPRT;
-// 点字プリンタ制御領域
-typedef struct {
-	unsigned char Attr;	// プリンタ種別
-	unsigned char Form;	//印刷方式(片面:0x00 奇数頁:0x01 偶数頁:0x02 両面:0x03)
-						// 上位４ビットは出力制御情報
-						// 0x80:両面フラグ
-						// 0x40:立っていればｲﾝﾀｰﾎﾟｲﾝﾄそうでなければｲﾝﾀｰﾗｲﾝ
-						// 0x20:BT5000用立っていればかな同時印刷
-	unsigned char LFiller;	// 左マージン
-	unsigned char Port;		// 出力先
-/*****出力先について・・・
-0x00ならセントロニクスそれ以外はRS-232C
-RS-232Cの場合この項目は設定として使用する
-0Bit:未使用
-1Bit:ストップビット0:8Bit 1:7Bit
-2-3Bit:チャンネル番号
-4-7Bit:ボーレート(300,600,1200,2400,4800,9600)の順で１オリジンで格納
-300BPS:001,600:010,1200:011,2400:100,4800:101,9600:110,19200:111(将来用)
-********/
-	unsigned char RvMap[BRLDOC_REV_MAP_SIZE];	// 折線行最大３つまで（１オリジンのバイナリ形式）
-}BRLDOC_DAT_PPRT;
-// ファイルヘッダ領域
-typedef struct {
-	BRLDOC_DAT_HEAD DatHead;	// データヘッダ
-	BRLDOC_DAT_INFO DatInfo;	// Ⅲ追加情報
-	BRLDOC_DAT_SPRT SPrtCtrl;	// 墨字プリンタ制御情報
-	BRLDOC_DAT_PPRT PPrtCtrl;	// 点字プリンタ制御情報
-	char SepName[SEP_NAME_SIZE];	// 読み換えファイルネーム
-}BRLDOC_HEAD;
+	unsigned short AllLine;	// 総行
+	unsigned short CurLine;	// 現在行
+	unsigned char Move;	// 移動単位
+	unsigned char VoiceItem;	// 音声種類（言語）
+	unsigned char VoiceSpeed;	// 音声スピード
+	unsigned char VoiceTone;	// 音声トーン
+	unsigned char VoiceVolume;	// 音声ボリューム
+	unsigned char fILLE1[7];	// 予備1
+	char SearchWord[80];	// 検索語
+	char YomikaeFileName[80];	// 読替ファイル名
+	char fILLE2[80];	// 予備1
+}TDV_HEAD;
+
 
 // 文字のデータレイアウト
 typedef union {
@@ -127,17 +89,18 @@ typedef union {
 
 @interface File : NSObject {
 	id m_EditBuffer;
-	BRLDOC_HEAD m_EditHeadder;	// 文書ヘッダ
+	TDV_HEAD m_EditHeadder;	// 文書ヘッダ
 	BRLDOC_DAT m_EditData;	// １行バッファ
 }
 - (void)DataSet:(id)Bufid;
 - (int)LoadXmlFile:(const char *)filename ReadMode:(int)RMode;
-- (int)SaveTdvFile:(const char *)filename;
-// カーソル位置を保存する
-// 行内の最大文字取得関数
+- (int)LoadTdvFile:(const char *)filename Head:(TDV_HEAD *)HeadInfo;
+- (BOOL)SaveTdvFile:(const char *)filename Head:(TDV_HEAD *)HeadInfo;
+- (int)SaveHead:(const char *)filename Head:(TDV_HEAD*)HeadInfo;
+- (void)SetLineHead;
+- (int)EditDataLen;
 - (int)sSearch:(char *)Str1 Str2:(char *)Str2 Start:(int)Start;
 - (int)IsKugiri:(char *)Str;
 - (void)SetRuby:(char *)Str rStr:(char *)rStr;
-- (void)SetSpan:(char *)Str rStr:(char *)rStr;
 - (void)SetBuf:(char *)Str;
 @end

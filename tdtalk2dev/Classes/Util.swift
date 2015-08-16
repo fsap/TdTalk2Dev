@@ -16,7 +16,7 @@ func Log(message: NSString,
     line: Int = __LINE__)
 {
 #if DEBUG
-    NSLog("%@(%d) %@", function, line, message)
+    NSLog("DEBUG:%@(%d) %@", function, line, message)
 #endif
 }
 
@@ -26,8 +26,16 @@ func LogM(message: String,
     line: Int = __LINE__)
 {
 #if DEBUG
-    NSLog("%@(%d) %@", function, line, message)
+    NSLog("DEBUG:%@(%d) %@", function, line, message)
 #endif
+}
+
+// エラーログ出力
+func LogE(message: NSString,
+    function: String = __FUNCTION__,
+    line: Int = __LINE__)
+{
+    NSLog("ERR:%@(%d) %@", function, line, message)
 }
 
 // iOS8判定

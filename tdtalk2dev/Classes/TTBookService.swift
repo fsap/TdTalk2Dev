@@ -72,13 +72,13 @@ class TTBookService {
     func importDaisy(target :String)->TTErrorCode {
         
         var filename: String = target.stringByRemovingPercentEncoding!
-        // 外部から渡ってきたファイルのパス
+        // 外部から渡ってきたファイルのパス ex) sadbox/Documents/Inbox/What_Is_HTML5_.zip
         let importFilePath = TTFileManager.getInboxDir().stringByAppendingPathComponent(filename)
-        // 作業用ディレクトリ
+        // 作業用ディレクトリ ex) sadbox/tmp/
         let tmpDir = TTFileManager.getTmpDir()
-        // 作業ファイル展開用ディレクトリ
+        // 作業ファイル展開用ディレクトリ ex) sadbox/tmp/What_Is_HTML5_
         let expandDir = tmpDir.stringByAppendingPathComponent(filename.stringByDeletingPathExtension)
-        // 取り込み先ディレクトリ
+        // 取り込み先ディレクトリ ex) sandbox/Library/Books/
         let bookDir = TTFileManager.getImportDir()
         
         if (filename.pathExtension == ImportableExtension.EXE.rawValue) {
@@ -92,13 +92,14 @@ class TTBookService {
                 return TTErrorCode.UnsupportedFileType
             }
         }
-        Log(NSString(format: "unzip file:%@", self.fileManager.fileManager.contentsOfDirectoryAtPath(tmpDir, error: nil)!))
+        Log(NSString(format: "tmp_dir:%@", self.fileManager.fileManager.contentsOfDirectoryAtPath(tmpDir, error: nil)!))
         
         // 初期化
         self.fileManager.initImport()
         
         // 展開
-        let saveFilePath = fileManager.loadXmlFiles(expandDir)
+        let xmlFiles: [String] = fileManager.searchXmlFiles(expandDir, ext: "xml")!
+        let saveFilePath = fileManager.loadXmlFiles(xmlFiles, saveDir:expandDir)
         if saveFilePath == "" {
             fileManager.deInitImport([importFilePath, expandDir])
             return TTErrorCode.FailedToLoadFile
@@ -157,7 +158,7 @@ class TTBookService {
     // 図書ファイルを削除
     func deleteBook(book: BookEntity)->TTErrorCode {
         // ファイル削除
-        let filepath = book.filename
+        let filepath: String = book.filename//.stringByRemovingPercentEncoding!
         let fileResult: TTErrorCode = self.fileManager.removeFile(filepath)
         if fileResult != TTErrorCode.Normal {
             return fileResult

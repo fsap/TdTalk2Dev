@@ -116,7 +116,7 @@ class TTFileManager : NSObject {
             var err:NSError? = nil
             self.fileManager.createDirectoryAtPath(TTFileManager.getImportDir(), withIntermediateDirectories: false, attributes: nil, error: &err)
             if err != nil {
-                Log(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
+                LogE(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
             }
         }
     }
@@ -135,58 +135,84 @@ class TTFileManager : NSObject {
     }
     
     //
+    // 内部ディレクトリを探索して指定ファイルのリストを返却
+    //
+    func searchXmlFiles(rootDir: String, ext: String)->[String]? {
+        Log(NSString(format: "root_dir:%@", rootDir))
+        
+        if !(exists(rootDir)) {
+            LogE(NSString(format: "Specified dircectory not found. [%@]", rootDir))
+            return nil
+        }
+        
+        var filePaths: [String] = []
+        let contents = self.fileManager.contentsOfDirectoryAtPath(rootDir, error: nil)!
+        for content in contents {
+            var content: String = content as! String
+            Log(NSString(format: "content:%@", content))
+            // 中身のファイルチェック
+            var isDir = ObjCBool(false)
+            if (!self.fileManager.fileExistsAtPath(rootDir.stringByAppendingPathComponent(content), isDirectory: &isDir)) {
+                continue
+            }
+            
+            // システムファイルはスキップ
+            if content[content.startIndex] == "_" || content[content.startIndex] == "." {
+                continue
+            }
+            
+            // ディレクトリの場合はサブディレクトリ検索
+            if (isDir) {
+                var paths: [String] = searchXmlFiles(rootDir.stringByAppendingPathComponent(content), ext:ext)!
+                filePaths += paths
+                continue
+            }
+            
+            // 拡張子をチェック
+            if content.pathExtension.lowercaseString == ext {
+                filePaths.append(rootDir.stringByAppendingPathComponent(content))
+            }
+        }
+        
+        return filePaths
+    }
+    
+    //
     // XMLファイルの読み込み
     //
-    func loadXmlFiles(xmlRootDir:String)->String {
-        Log(NSString(format: "xml_root_dir:%@", xmlRootDir))
-        if !(exists(xmlRootDir)) {
+    func loadXmlFiles(xmlFilePaths:[String], saveDir: String)->String {
+        Log(NSString(format: "xml_file_path:%@", xmlFilePaths))
+        if xmlFilePaths.count == 0 {
+            LogE(NSString(format: "No xml files. [%@]", xmlFilePaths))
             return ""
         }
         
-        // 内部ディレクトリを探索
-        let dirs = self.fileManager.contentsOfDirectoryAtPath(xmlRootDir, error: nil)!
-        var contentsDir:String = xmlRootDir
-        for dir in dirs {
-            var dir:String = dir as! String
-            Log(NSString(format: "dir:%@", dir))
-            // システムファイルはスキップ
-            if dir[dir.startIndex] == "_" || dir[dir.startIndex] == "." {
-                continue
-            }
-            contentsDir = xmlRootDir.stringByAppendingPathComponent(dir)
-            Log(NSString(format: "contentsDir:%@", contentsDir))
-            
-            var isDir = ObjCBool(true)
-            if (self.fileManager.fileExistsAtPath(contentsDir, isDirectory: &isDir)) {
-                break
-            }
-        }
-        // xmlファイルの上位フォルダ名をタイトル名に使う
-        let titleBaseName = contentsDir.lastPathComponent.stringByDeletingPathExtension
-        
         // コンテンツ読み出し
-        let contents = self.fileManager.contentsOfDirectoryAtPath(contentsDir, error: nil)!
         var brllist:BrlBuffer = BrlBuffer()
         brllist.Setinit()
         var file = File()
         file.DataSet(brllist)
-        for (index,xml) in enumerate(contents) {
-            var xmlFile:String = xml as! String
+        var headInfo: TDV_HEAD = TDV_HEAD()
+        memset(&headInfo, 0x00, sizeof(TDV_HEAD))
+        for (index,xml) in enumerate(xmlFilePaths) {
+            var xmlFile:String = xml
             Log(NSString(format: "xml:%@", xmlFile))
             
-            let tagetFile:[CChar] = contentsDir.stringByAppendingPathComponent(xmlFile).cStringUsingEncoding(NSUTF8StringEncoding)!
+            let tagetFile:[CChar] = xml.cStringUsingEncoding(NSUTF8StringEncoding)!
 //            var loadFile:UnsafePointer<Int8> = NSString(string: contentsDir.stringByAppendingPathComponent(xmlFile)).UTF8String
             let mode:Int32 = index == 0 ? 0 : 1
             file.LoadXmlFile(tagetFile, readMode: mode)
         }
         // 一時保存
-        let saveFileName:String = contentsDir.stringByAppendingPathComponent(titleBaseName + ".tdv")
-        Log(NSString(format: "save_to:%@", contentsDir.stringByAppendingPathComponent(titleBaseName + ".tdv")))
-        if file.SaveTdvFile(saveFileName.cStringUsingEncoding(NSUTF8StringEncoding)!) == 0 {
-            return saveFileName
+        let titleBaseName = saveDir.lastPathComponent.stringByDeletingPathExtension
+        let saveFileName:String = saveDir.stringByAppendingPathComponent(titleBaseName + ".tdv")
+        Log(NSString(format: "save_to:%@", saveFileName))
+        if !(file.SaveTdvFile(saveFileName.cStringUsingEncoding(NSUTF8StringEncoding)!, head:&headInfo)) {
+            LogE(NSString(format: "Failed to save tdv file. save_file[%@]", saveFileName))
+            return ""
         }
         
-        return ""
+        return saveFileName
     }
     
     //
