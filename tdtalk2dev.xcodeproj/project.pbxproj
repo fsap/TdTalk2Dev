@@ -11,6 +11,9 @@
 		825185941B6A884700196715 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 825185961B6A884700196715 /* Localizable.strings */; };
 		82A802FD1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 82A802FB1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld */; };
 		82A803021B73CC330027094D /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A803001B73CC330027094D /* DataManager.swift */; };
+		82E9FA901B82366C00796A9F /* DCMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9FA8F1B82366C00796A9F /* DCMetadata.swift */; };
+		82E9FA921B8238CF00796A9F /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9FA911B8238CF00796A9F /* libxml2.dylib */; };
+		82E9FA941B8243D100796A9F /* ManifestItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9FA931B8243D100796A9F /* ManifestItem.swift */; };
 		82F0969F1B725E96002E01BC /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F0969E1B725E96002E01BC /* Util.swift */; };
 		82F0C24C1B6BD213007D782A /* BRLBUF.M in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C2461B6BD213007D782A /* BRLBUF.M */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		82F0C24D1B6BD213007D782A /* file.m in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C2481B6BD213007D782A /* file.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -53,6 +56,9 @@
 		825185991B6A885900196715 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		82A802FC1B73CA9A0027094D /* tdtalk2dev.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = tdtalk2dev.xcdatamodel; sourceTree = "<group>"; };
 		82A803001B73CC330027094D /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataManager.swift; path = tdtalk2dev/Classes/DataManager.swift; sourceTree = SOURCE_ROOT; };
+		82E9FA8F1B82366C00796A9F /* DCMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DCMetadata.swift; path = tdtalk2dev/Classes/DCMetadata.swift; sourceTree = SOURCE_ROOT; };
+		82E9FA911B8238CF00796A9F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		82E9FA931B8243D100796A9F /* ManifestItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManifestItem.swift; path = tdtalk2dev/Classes/ManifestItem.swift; sourceTree = SOURCE_ROOT; };
 		82F0969E1B725E96002E01BC /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Util.swift; path = tdtalk2dev/Classes/Util.swift; sourceTree = SOURCE_ROOT; };
 		82F0C2451B6BD213007D782A /* BRLBUF.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BRLBUF.H; sourceTree = "<group>"; };
 		82F0C2461B6BD213007D782A /* BRLBUF.M */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BRLBUF.M; sourceTree = "<group>"; };
@@ -97,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82E9FA921B8238CF00796A9F /* libxml2.dylib in Frameworks */,
 				F0E35E241B6A4A5E00CC6A6B /* libz.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -115,6 +122,8 @@
 			isa = PBXGroup;
 			children = (
 				823439421B73E0C70066E942 /* BookEntity.swift */,
+				82E9FA8F1B82366C00796A9F /* DCMetadata.swift */,
+				82E9FA931B8243D100796A9F /* ManifestItem.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -136,6 +145,7 @@
 		F0E35DD11B6A490300CC6A6B = {
 			isa = PBXGroup;
 			children = (
+				82E9FA911B8238CF00796A9F /* libxml2.dylib */,
 				F0E35E231B6A4A5E00CC6A6B /* libz.dylib */,
 				F0E35DFF1B6A498D00CC6A6B /* BridgeHeader.h */,
 				F0E35DDC1B6A490300CC6A6B /* TdTalk2Dev */,
@@ -350,6 +360,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82E9FA901B82366C00796A9F /* DCMetadata.swift in Sources */,
 				F0E35E1F1B6A4A4B00CC6A6B /* TTAlertController.swift in Sources */,
 				F0E35E141B6A49D000CC6A6B /* unzip.c in Sources */,
 				F0E35E211B6A4A4B00CC6A6B /* TTError.swift in Sources */,
@@ -362,6 +373,7 @@
 				F0E35E1D1B6A4A4B00CC6A6B /* BookListViewController.swift in Sources */,
 				82F0C24D1B6BD213007D782A /* file.m in Sources */,
 				F0E35E111B6A49D000CC6A6B /* Main.m in Sources */,
+				82E9FA941B8243D100796A9F /* ManifestItem.swift in Sources */,
 				F0E35E201B6A4A4B00CC6A6B /* TTBookService.swift in Sources */,
 				82A803021B73CC330027094D /* DataManager.swift in Sources */,
 				823439431B73E0C70066E942 /* BookEntity.swift in Sources */,

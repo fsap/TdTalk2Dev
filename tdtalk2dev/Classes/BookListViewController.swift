@@ -102,6 +102,8 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     // セルが選択された
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        let book: BookEntity = self.bookList[indexPath.row]
+        Log(NSString(format: "--- selected book. title:%@ file:%@", book.title, book.filename))
     }
     
     // 編集可否の設定
@@ -118,19 +120,6 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         }
         return .None
     }
-    
-    // スワイプ時のアクション(iOS8用)
-//    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [AnyObject]? {
-//        let delAction = UITableViewRowAction(style: .Default, title: NSLocalizedString("row_action_delete", comment: "")) { (action, indexPath) -> Void in
-//            TTAlertController(nibName: nil, bundle: nil).show(
-//                self.view,
-//                title:NSLocalizedString("dialog_title_error", comment: ""),
-//                message:"削除")
-//        }
-//        delAction.backgroundColor = UIColor.redColor()
-//        
-//        return [delAction]
-//    }
     
     // 編集の確定タイミングで呼ばれる
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

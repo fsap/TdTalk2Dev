@@ -8,20 +8,23 @@
 
 import UIKit
 
-class TTAlertController : UIViewController {
+class TTAlertController : UIViewController, UIAlertViewDelegate {
 
     var actionOkBlock: (()->Void)
     var actionCancelBlock: (()->Void)
+    var alertView: UIAlertView
     
     required init(coder aDecoder: NSCoder) {
         self.actionOkBlock = {}
         self.actionCancelBlock = {}
+        self.alertView = UIAlertView()
         super.init(coder: aDecoder)
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         self.actionOkBlock = {}
         self.actionCancelBlock = {}
+        self.alertView = UIAlertView()
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     
@@ -39,8 +42,8 @@ class TTAlertController : UIViewController {
                 viewController.presentViewController(alertController, animated: true, completion: nil)
             }
         } else {
-            var alertView: UIAlertView = UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "OK")
-            alertView.show()
+            self.alertView = UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "OK")
+            self.alertView.show()
             self.actionOkBlock = actionOk
         }
     }
@@ -66,8 +69,8 @@ class TTAlertController : UIViewController {
                 viewController.presentViewController(alertController, animated: true, completion: nil)
             }
         } else {
-            var alertView: UIAlertView = UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "OK")
-            alertView.show()
+            self.alertView = UIAlertView(title: title, message: message, delegate: self, cancelButtonTitle: "OK")
+            self.alertView.show()
             self.actionOkBlock = actionOk
         }
     }
@@ -82,6 +85,7 @@ class TTAlertController : UIViewController {
             self.actionOkBlock()
         } else {
             // OK
+            self.actionOkBlock()
         }
     }
 }

@@ -97,6 +97,27 @@ class TTBookService {
         // 初期化
         self.fileManager.initImport()
         
+        // メタ情報が記載されているopfファイルをサーチ
+        let opfPath: String? = self.fileManager.detectOpfPath(expandDir)
+        if opfPath == nil {
+            LogE(NSString(format: "OPF file not found. root:%@", expandDir))
+            self.fileManager.deInitImport([importFilePath, expandDir])
+            return TTErrorCode.OpfFileNotFound
+        }
+        
+        // メタ情報を取得
+        self.fileManager.startParseXmlFormatFile(opfPath!, didParseSuccess: { (metaData, xmlItem) -> Void in
+            Log(NSString(format: "parse success meta:%@ xml:%@", metaData, xmlItem))
+            self.fileManager.deInitImport([importFilePath, expandDir])
+            
+        }) { (errorCode) -> Void in
+            LogE(NSString(format: "OPF file not found. root:%@", expandDir))
+            self.fileManager.deInitImport([importFilePath, expandDir])
+
+        }
+        return TTErrorCode.Normal
+        
+/* ToDo:見直し
         // 展開
         let xmlFiles: [String] = fileManager.searchXmlFiles(expandDir, ext: "xml")!
         let saveFilePath = fileManager.loadXmlFiles(xmlFiles, saveDir:expandDir)
@@ -128,6 +149,7 @@ class TTBookService {
         self.delegate?.importCompleted()
         
         return TTErrorCode.Normal
+*/
     }
     
     func getImportedFiles()->[String] {

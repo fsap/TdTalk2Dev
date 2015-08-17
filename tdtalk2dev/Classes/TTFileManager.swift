@@ -13,7 +13,7 @@ enum ImportableExtension: String {
     case ZIP = "zip"
 }
 
-class TTFileManager : NSObject {
+class TTFileManager : NSObject, NSXMLParserDelegate {
     
     // 定数
     struct Const {
@@ -25,6 +25,15 @@ class TTFileManager : NSObject {
     
     let fileManager : NSFileManager
     
+    private var didParseOpfSuccess: ((metaData: DCMetadata, xmlItem: ManifestItem)->Void)?
+    private var didParseOpfFailure: ((errorCode: TTErrorCode)->Void)?
+    private var metaData: DCMetadata
+    private var xmlItem: ManifestItem
+    private var isInDcMetadata: Bool
+    private var isInManifest: Bool
+    private var currentElement: String
+
+    
     class var sharedInstance : TTFileManager {
         struct Static {
             static let instance : TTFileManager = TTFileManager()
@@ -34,26 +43,36 @@ class TTFileManager : NSObject {
     
     override init() {
         self.fileManager = NSFileManager.defaultManager()
+        self.didParseOpfSuccess  = nil
+        self.didParseOpfFailure = nil
+        self.metaData = DCMetadata()
+        self.xmlItem = ManifestItem()
+        self.isInDcMetadata = false
+        self.isInManifest = false
+        self.currentElement = ""
     }
     
+    // 他アプリからエクスポートされたファイルの格納場所を取得
     static func getInboxDir()-> String {
-//        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-//        return (paths[0] as! String).stringByAppendingPathComponent(Const.kInboxDocumentPath)
         return NSHomeDirectory().stringByAppendingPathComponent(Const.kInboxDocumentPath)
     }
     
+    // 本棚のパスを取得
     static func getImportDir()->String {
         return NSHomeDirectory().stringByAppendingPathComponent(Const.kImportDocumentPath)
     }
     
+    // 作業用のパスを取得
     static func getTmpDir()->String {
         return NSHomeDirectory().stringByAppendingPathComponent(Const.kTmpDocumentPath)
     }
     
+    // 指定したファイル(ディレクトリ)が存在するか
     func exists(path : String)->Bool {
         return self.fileManager.fileExistsAtPath(path)
     }
     
+    // 有効な拡張子か
     static func isValiedExtension(filename : String)->Bool {
 //        return contains(Const.kAllowedExtensions, filename.pathExtension)
         switch filename.pathExtension {
@@ -67,30 +86,7 @@ class TTFileManager : NSObject {
         return false
     }
     
-    /**
-     * Inboxへのファイル複製はOSによって行われ、重複があった場合hはxxx-1.ext に自動でリネームされる
-     * なので取り込み済みのチェックはファイル展開時などに行うべき
-     */
-    func duplicated(filename : String)->Bool {
-        /*
-        var error : NSError? = nil
-        var filesAtPath = self.fileManager.contentsOfDirectoryAtPath(filename.stringByDeletingLastPathComponent, error: &error)!
-        if error != nil {
-            Log("No files. dir:" + filename.stringByDeletingLastPathComponent)
-            return false
-        }
-        
-        if let files = filesAtPath as Array {
-            for file in files {
-                if filename.lastPathComponent == file as! String {
-                    return true
-                }
-            }
-        }
-        */
-        return false
-    }
-    
+    // zip解凍
     func unzip(importFile : String, expandPath : String)->Bool {
         if (exists(expandPath)) {
             self.fileManager.removeItemAtPath(expandPath, error: nil)
@@ -98,6 +94,7 @@ class TTFileManager : NSObject {
         return Main.unzipFileAtPath(importFile, toDestination: expandPath)
     }
     
+    // 指定ファイルを削除
     func removeFile(path:String)->TTErrorCode {
         var err:NSError? = nil
         self.fileManager.removeItemAtPath(path, error: &err)
@@ -132,6 +129,70 @@ class TTFileManager : NSObject {
             }
             removeFile(path)
         }
+    }
+    
+    //
+    // 内部ディレクトリを検索してopfファイルのパスを返却
+    //
+    func detectOpfPath(rootDir: String)->String? {
+        Log(NSString(format: "root_dir:%@", rootDir))
+        
+        if !(exists(rootDir)) {
+            LogE(NSString(format: "Specified dircectory not found. [%@]", rootDir))
+            return nil
+        }
+        
+        let contents = self.fileManager.contentsOfDirectoryAtPath(rootDir, error: nil)!
+        for content in contents {
+            var content: String = content as! String
+            Log(NSString(format: "content:%@", content))
+            // 中身のファイルチェック
+            var isDir = ObjCBool(false)
+            if (!self.fileManager.fileExistsAtPath(rootDir.stringByAppendingPathComponent(content), isDirectory: &isDir)) {
+                continue
+            }
+            
+            // システムファイルはスキップ
+            if content[content.startIndex] == "_" || content[content.startIndex] == "." {
+                continue
+            }
+            
+            // ディレクトリの場合はサブディレクトリ検索
+            if (isDir) {
+                var path: String? = detectOpfPath(rootDir.stringByAppendingPathComponent(content))
+                if path != nil {
+                    return path
+                }
+                continue
+            }
+            
+            // 拡張子をチェック
+            if content.pathExtension.lowercaseString == "opf" {
+                return rootDir.stringByAppendingPathComponent(content)
+            }
+        }
+        return nil
+    }
+    
+    // XMLフォーマットのファイルの解析を開始
+    func startParseXmlFormatFile(xmlFilePath: String,
+        didParseSuccess: ((metaData: DCMetadata, xmlItem: ManifestItem)->Void),
+        didParseFailure:((errorCode: TTErrorCode)->Void))->Void
+    {
+        self.didParseOpfSuccess = didParseSuccess
+        self.didParseOpfFailure = didParseFailure
+        
+        let url: NSURL? = NSURL.fileURLWithPath(xmlFilePath)
+        let parser: NSXMLParser? = NSXMLParser(contentsOfURL: url)
+        
+        if parser == nil {
+            didParseFailure(errorCode: TTErrorCode.OpfFileNotFound)
+            return
+        }
+        
+        parser!.delegate = self
+        
+        parser!.parse()
     }
     
     //
@@ -256,4 +317,112 @@ class TTFileManager : NSObject {
 
         return TTErrorCode.Normal
     }
+    
+    
+    
+    //
+    // MARK: NSXMLParserDelegate
+    //
+    
+    // ファイルの読み込みを開始
+    func parserDidStartDocument(parser: NSXMLParser) {
+        LogM("--- start parse.")
+    }
+    
+    // 要素の開始タグを読み込み
+    func parser(parser: NSXMLParser,
+        didStartElement elementName: String,
+        namespaceURI: String?,
+        qualifiedName qName: String?,
+        attributes attributeDict: [NSObject : AnyObject])
+    {
+        Log(NSString(format: " - found element:[%@] attr[%@]", elementName, attributeDict))
+        
+        if elementName == DCMetadataTag.DC_Metadata.rawValue {
+            self.isInDcMetadata = true
+        } else if self.isInDcMetadata {
+            self.currentElement = elementName
+        }
+        
+        if elementName == ManifestTag.Manifest.rawValue {
+            self.isInManifest = true
+            
+        } else if self.isInManifest {
+            if elementName == ManifestTag.Item.rawValue {
+                // xmlファイル情報のみ取得
+                var attr: String = attributeDict[ManifestItemAttr.Id.rawValue] as! String
+                if attr == "xml" {
+                    self.xmlItem.id = attributeDict[ManifestItemAttr.Id.rawValue] as! String
+                    self.xmlItem.href = attributeDict[ManifestItemAttr.Href.rawValue] as! String
+                    self.xmlItem.mediaType = attributeDict[ManifestItemAttr.MediaType.rawValue] as! String
+                }
+            }
+        }
+        
+    }
+    
+    // valueを読み込み
+    func parser(parser: NSXMLParser, foundCharacters string: String?) {
+        Log(NSString(format: " - found value:[%@] current_elem:%@", string!, self.currentElement))
+        
+        if self.isInDcMetadata {
+            switch self.currentElement {
+            case DCMetadataTag.DC_Identifier.rawValue:
+                self.metaData.identifier = string!
+                break
+            case DCMetadataTag.DC_Title.rawValue:
+                self.metaData.title = string!
+                break
+            case DCMetadataTag.DC_Publisher.rawValue:
+                self.metaData.publisher = string!
+                break
+            case DCMetadataTag.DC_Subject.rawValue:
+                self.metaData.subject = string!
+                break
+            case DCMetadataTag.DC_Date.rawValue:
+                self.metaData.date = string!
+                break
+            case DCMetadataTag.DC_Creator.rawValue:
+                self.metaData.creator = string!
+                break
+            case DCMetadataTag.DC_Language.rawValue:
+                self.metaData.language = string!
+                break
+            case DCMetadataTag.DC_Format.rawValue:
+                self.metaData.format = string!
+                break
+            default:
+                break
+            }
+        }
+        
+    }
+    
+    // 要素の終了タグを読み込み
+    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        Log(NSString(format: " - found element:[%@]", elementName))
+        
+        if self.isInDcMetadata {
+            if elementName == DCMetadataTag.DC_Metadata.rawValue {
+                self.isInDcMetadata = false
+            }
+            self.currentElement = ""
+        }
+        if self.isInManifest {
+            if elementName == ManifestTag.Manifest.rawValue {
+                self.isInManifest = false
+            }
+        }
+    }
+
+    // ファイルの読み込みを終了
+    func parserDidEndDocument(parser: NSXMLParser) {
+        LogM("--- end parse.")
+        
+        if didParseOpfSuccess != nil {
+            self.didParseOpfSuccess!(metaData: self.metaData, xmlItem: self.xmlItem)
+        }
+    }
+    
+    
 }
