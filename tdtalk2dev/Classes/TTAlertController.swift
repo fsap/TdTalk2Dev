@@ -80,6 +80,7 @@ class TTAlertController : UIViewController, UIAlertViewDelegate {
     // MARK: UIAlertViewDelegate
     //
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        Log(NSString(format: "click button action.[%d]", buttonIndex))
         if buttonIndex == alertView.cancelButtonIndex {
             // Canceled
             self.actionOkBlock()

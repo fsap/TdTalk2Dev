@@ -192,6 +192,7 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
                         LogE(NSString(format: "Discinfo file not found. path:%@", discInfoPath))
                         didFailure(errorCode: errorCode)
                 }
+                return
             }
             
             // 拡張子をチェック
@@ -203,10 +204,15 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
                     LogE(NSString(format: "opf file not found. path:%@", opfPath))
                     didFailure(errorCode: TTErrorCode.OpfFileNotFound)
                 }
+                return
             }
         }
+        
+        LogE(NSString(format: "opf file not found. path:%@", rootDir))
+        didFailure(errorCode: TTErrorCode.OpfFileNotFound)
     }
     
+/*
     // XMLフォーマットのファイルの解析を開始
     func startParseXmlFormatFile(xmlFilePath: String,
         didParseSuccess: ((metaData: DCMetadata, xmlItem: ManifestItem)->Void),
@@ -227,6 +233,7 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
         
         parser!.parse()
     }
+
     
     //
     // 内部ディレクトリを探索して指定ファイルのリストを返却
@@ -270,6 +277,7 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
         
         return filePaths
     }
+*/
     
     //
     // XMLファイルの読み込み
@@ -362,7 +370,9 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
     
     // ローディング中のサウンド再生
     private func startLoadingSound()->Void {
-        sound_source = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+        LogM("register timer")
+        let queue = dispatch_queue_create("tdtalk2", nil)
+        sound_source = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
         
         // キャンセルハンドラ
         dispatch_source_set_cancel_handler(sound_source!, { () -> Void in
@@ -374,13 +384,14 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
         // タイマー
         dispatch_source_set_timer(
             sound_source!,
-            dispatch_time(DISPATCH_TIME_NOW, 0),
-            3 * NSEC_PER_SEC,
-            NSEC_PER_SEC / 10)
+            dispatch_time(DISPATCH_TIME_NOW, (Int64)(2 * NSEC_PER_SEC)),
+            2 * NSEC_PER_SEC,
+            0)
         
         dispatch_source_set_event_handler(sound_source!, { () -> Void in
             // システムサウンドを鳴らす
-            AudioServicesPlaySystemSound(1005)
+            LogM("sound...")
+            AudioServicesPlaySystemSound(1104)
         })
         
         dispatch_resume(sound_source!);

@@ -140,14 +140,17 @@ class TTBookService {
                 
                 self.delegate?.importCompleted()
                 
+                didSuccess()
+                
                 
             }) { (errorCode) -> Void in
                 // 取得失敗
+                LogE("Failed to parse opf file.")
                 didFailure(errorCode: errorCode)
             }
             
         }) { (errorCode) -> Void in
-            LogE(NSString(format: "OPF file not found. root:%@", expandDir))
+            LogE(NSString(format: "OPF file not found. [%d] root:%@", errorCode.rawValue, expandDir))
             self.fileManager.deInitImport([importFilePath, expandDir])
             didFailure(errorCode: errorCode)
         }
