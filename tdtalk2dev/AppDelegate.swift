@@ -92,21 +92,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         // インポート
-        ret = bookService.importDaisy(url.lastPathComponent)
-        if ret != TTErrorCode.Normal {
+        bookService.importDaisy(url.lastPathComponent, didSuccess: { () -> Void in
+            // 完了ダイアログ
             TTAlertController(nibName: nil, bundle: nil).show(
-                window?.rootViewController!,
+                self.window?.rootViewController!,
+                title:NSLocalizedString("dialog_title_notice", comment: ""),
+                message:NSLocalizedString("msg_import_success", comment: ""),
+                actionOk: {() -> Void in})
+        }) { (errorCode) -> Void in
+            // エラーダイアログ
+            TTAlertController(nibName: nil, bundle: nil).show(
+                self.window?.rootViewController!,
                 title:NSLocalizedString("dialog_title_error", comment: ""),
-                message:TTError.getErrorMessage(ret), actionOk: {() -> Void in})
-            return false
+                message:TTError.getErrorMessage(ret),
+                actionOk: {() -> Void in})
         }
-        
-        TTAlertController(nibName: nil, bundle: nil).show(
-            window?.rootViewController!,
-            title:NSLocalizedString("dialog_title_notice", comment: ""),
-            message:NSLocalizedString("msg_import_success", comment: ""),
-            actionOk: {() -> Void in})
-        
         return true
     }
 }

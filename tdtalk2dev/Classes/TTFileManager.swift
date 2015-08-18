@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import AudioToolbox
 
 enum ImportableExtension: String {
     case EXE = "exe"
@@ -24,6 +25,8 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
     }
     
     let fileManager : NSFileManager
+    
+    private var sound_source: dispatch_source_t?
     
     private var didParseOpfSuccess: ((metaData: DCMetadata, xmlItem: ManifestItem)->Void)?
     private var didParseOpfFailure: ((errorCode: TTErrorCode)->Void)?
@@ -192,7 +195,7 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
             }
             
             // 拡張子をチェック
-            if content.pathExtension.lowercaseString == "opf" {
+            if content.pathExtension.lowercaseString == OpfManager.Const.kOpfFileExtension {
                 var opfPath: String = rootDir.stringByAppendingPathComponent(content)
                 if exists(opfPath) {
                     didSuccess(opfPath: opfPath)
@@ -278,6 +281,8 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
             return ""
         }
         
+        startLoadingSound()
+        
         // コンテンツ読み出し
         var brllist:BrlBuffer = BrlBuffer()
         brllist.Setinit()
@@ -300,9 +305,11 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
         Log(NSString(format: "save_to:%@", saveFileName))
         if !(file.SaveTdvFile(saveFileName.cStringUsingEncoding(NSUTF8StringEncoding)!, head:&headInfo)) {
             LogE(NSString(format: "Failed to save tdv file. save_file[%@]", saveFileName))
+            stopLoadingSound()
             return ""
         }
         
+        stopLoadingSound()
         return saveFileName
     }
     
@@ -346,6 +353,44 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
         }
 
         return TTErrorCode.Normal
+    }
+    
+    
+    //
+    // MARK: Private
+    //
+    
+    // ローディング中のサウンド再生
+    private func startLoadingSound()->Void {
+        sound_source = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+        
+        // キャンセルハンドラ
+        dispatch_source_set_cancel_handler(sound_source!, { () -> Void in
+            if self.sound_source != nil {
+                self.sound_source = nil;
+            }
+        })
+        
+        // タイマー
+        dispatch_source_set_timer(
+            sound_source!,
+            dispatch_time(DISPATCH_TIME_NOW, 0),
+            3 * NSEC_PER_SEC,
+            NSEC_PER_SEC / 10)
+        
+        dispatch_source_set_event_handler(sound_source!, { () -> Void in
+            // システムサウンドを鳴らす
+            AudioServicesPlaySystemSound(1005)
+        })
+        
+        dispatch_resume(sound_source!);
+    }
+    
+    // ローディング中のサウンド停止
+    private func stopLoadingSound()->Void {
+        if sound_source != nil {
+            dispatch_source_cancel(sound_source!)
+        }
     }
     
     

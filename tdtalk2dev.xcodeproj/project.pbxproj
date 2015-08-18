@@ -20,6 +20,7 @@
 		82F0C24E1B6BD213007D782A /* LIST.M in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C24A1B6BD213007D782A /* LIST.M */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		F0836F061B82E79D006A7350 /* OpfManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F051B82E79D006A7350 /* OpfManager.swift */; };
 		F0836F081B82E7C8006A7350 /* OPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F071B82E7C8006A7350 /* OPF.swift */; };
+		F0836F0B1B837626006A7350 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0836F0A1B837626006A7350 /* AudioToolbox.framework */; };
 		F0C37B201B82CB2A0045E1D8 /* DiscInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */; };
 		F0C37B221B82D3A20045E1D8 /* DiscInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */; };
 		F0E35DE01B6A490300CC6A6B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35DDF1B6A490300CC6A6B /* AppDelegate.swift */; };
@@ -72,6 +73,7 @@
 		82F0C24A1B6BD213007D782A /* LIST.M */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LIST.M; sourceTree = "<group>"; };
 		F0836F051B82E79D006A7350 /* OpfManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpfManager.swift; path = tdtalk2dev/Classes/OpfManager.swift; sourceTree = SOURCE_ROOT; };
 		F0836F071B82E7C8006A7350 /* OPF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OPF.swift; path = tdtalk2dev/Classes/OPF.swift; sourceTree = SOURCE_ROOT; };
+		F0836F0A1B837626006A7350 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscInfoManager.swift; path = tdtalk2dev/Classes/DiscInfoManager.swift; sourceTree = SOURCE_ROOT; };
 		F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscInfo.swift; path = tdtalk2dev/Classes/DiscInfo.swift; sourceTree = SOURCE_ROOT; };
 		F0E35DDA1B6A490300CC6A6B /* tdtalk2dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tdtalk2dev.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,6 +113,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0836F0B1B837626006A7350 /* AudioToolbox.framework in Frameworks */,
 				82E9FA921B8238CF00796A9F /* libxml2.dylib in Frameworks */,
 				F0E35E241B6A4A5E00CC6A6B /* libz.dylib in Frameworks */,
 			);
@@ -155,6 +158,7 @@
 		F0E35DD11B6A490300CC6A6B = {
 			isa = PBXGroup;
 			children = (
+				F0836F0A1B837626006A7350 /* AudioToolbox.framework */,
 				82E9FA911B8238CF00796A9F /* libxml2.dylib */,
 				F0E35E231B6A4A5E00CC6A6B /* libz.dylib */,
 				F0E35DFF1B6A498D00CC6A6B /* BridgeHeader.h */,

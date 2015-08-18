@@ -10,7 +10,11 @@ import Foundation
 
 class OpfManager: NSObject, NSXMLParserDelegate {
     
-    
+    // 定数
+    struct Const {
+        static let kOpfFileExtension: String = "opf"
+    }
+
     private var didParseSuccess: ((opf: OPF)->Void)?
     private var didParseFailure: ((errorCode: TTErrorCode)->Void)?
     private var opf: OPF

@@ -47,3 +47,8 @@ func isOS8()->Bool {
         return false;
     }
 }
+
+// Voice Overが有効か
+func isVoiceOverEnabled()->Bool {
+    return UIAccessibilityIsVoiceOverRunning()
+}
