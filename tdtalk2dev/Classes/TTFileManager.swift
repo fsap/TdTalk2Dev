@@ -17,10 +17,10 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
     
     // 定数
     struct Const {
-        static let kInboxDocumentPath :String = "Documents/Inbox"
-        static let kTmpDocumentPath :String = "tmp"
-        static let kImportDocumentPath :String = "Library/Books"
-        static let kAllowedExtensions : Array = ["zip", "exe"]
+        static let kInboxDocumentPath: String = "Documents/Inbox"
+        static let kTmpDocumentPath: String = "tmp"
+        static let kImportDocumentPath: String = "Library/Books"
+        static let kAllowedExtensions: Array = ["zip", "exe"]
     }
     
     let fileManager : NSFileManager
@@ -133,15 +133,18 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
     
     //
     // 内部ディレクトリを検索してopfファイルのパスを返却
+    // Info: マルチDAISYはdiscinfo.html -> opf情報取得 -> xml情報取得
+    // Info: テキストDAISYは直下のopf -> xml情報取得
     //
-    func detectOpfPath(rootDir: String)->String? {
+    func detectOpfPath(rootDir: String, didSuccess:((opfPath: String)->Void), didFailure:((errorCode: TTErrorCode)->Void))->Void {
         Log(NSString(format: "root_dir:%@", rootDir))
         
         if !(exists(rootDir)) {
             LogE(NSString(format: "Specified dircectory not found. [%@]", rootDir))
-            return nil
+            didFailure(errorCode: TTErrorCode.OpfFileNotFound)
         }
         
+        // 直下のファイルを展開
         let contents = self.fileManager.contentsOfDirectoryAtPath(rootDir, error: nil)!
         for content in contents {
             var content: String = content as! String
@@ -158,6 +161,7 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
             }
             
             // ディレクトリの場合はサブディレクトリ検索
+            /*** 不要
             if (isDir) {
                 var path: String? = detectOpfPath(rootDir.stringByAppendingPathComponent(content))
                 if path != nil {
@@ -165,13 +169,39 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
                 }
                 continue
             }
+            */
+            
+            // マルチDAISYファイルの場合
+            if content == DiscInfoManager.Const.kMultiDaisyInfoFile {
+                var discInfoManager: DiscInfoManager = DiscInfoManager.sharedInstance
+                var discInfoPath: String = rootDir.stringByAppendingPathComponent(content)
+                discInfoManager.startParseDiscInfoFile(discInfoPath, didParseSuccess: { (discInfo) -> Void in
+                    Log(NSString(format: "parse success. xml:%@", discInfo))
+                    let opfPath: String = rootDir.stringByAppendingPathComponent(discInfo.opfFilePath)
+                    if self.exists(opfPath) {
+                        didSuccess(opfPath: opfPath)
+                    } else {
+                        LogE(NSString(format: "opf file not found. path:%@", opfPath))
+                        didFailure(errorCode: TTErrorCode.OpfFileNotFound)
+                    }
+                    
+                    }) { (errorCode) -> Void in
+                        LogE(NSString(format: "Discinfo file not found. path:%@", discInfoPath))
+                        didFailure(errorCode: errorCode)
+                }
+            }
             
             // 拡張子をチェック
             if content.pathExtension.lowercaseString == "opf" {
-                return rootDir.stringByAppendingPathComponent(content)
+                var opfPath: String = rootDir.stringByAppendingPathComponent(content)
+                if exists(opfPath) {
+                    didSuccess(opfPath: opfPath)
+                } else {
+                    LogE(NSString(format: "opf file not found. path:%@", opfPath))
+                    didFailure(errorCode: TTErrorCode.OpfFileNotFound)
+                }
             }
         }
-        return nil
     }
     
     // XMLフォーマットのファイルの解析を開始

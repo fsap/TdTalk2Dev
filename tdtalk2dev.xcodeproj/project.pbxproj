@@ -18,6 +18,10 @@
 		82F0C24C1B6BD213007D782A /* BRLBUF.M in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C2461B6BD213007D782A /* BRLBUF.M */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		82F0C24D1B6BD213007D782A /* file.m in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C2481B6BD213007D782A /* file.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		82F0C24E1B6BD213007D782A /* LIST.M in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C24A1B6BD213007D782A /* LIST.M */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		F0836F061B82E79D006A7350 /* OpfManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F051B82E79D006A7350 /* OpfManager.swift */; };
+		F0836F081B82E7C8006A7350 /* OPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F071B82E7C8006A7350 /* OPF.swift */; };
+		F0C37B201B82CB2A0045E1D8 /* DiscInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */; };
+		F0C37B221B82D3A20045E1D8 /* DiscInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */; };
 		F0E35DE01B6A490300CC6A6B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35DDF1B6A490300CC6A6B /* AppDelegate.swift */; };
 		F0E35DE21B6A490300CC6A6B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35DE11B6A490300CC6A6B /* ViewController.swift */; };
 		F0E35DE51B6A490300CC6A6B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0E35DE31B6A490300CC6A6B /* Main.storyboard */; };
@@ -66,6 +70,10 @@
 		82F0C2481B6BD213007D782A /* file.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = file.m; sourceTree = "<group>"; };
 		82F0C2491B6BD213007D782A /* LIST.H */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LIST.H; sourceTree = "<group>"; };
 		82F0C24A1B6BD213007D782A /* LIST.M */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = LIST.M; sourceTree = "<group>"; };
+		F0836F051B82E79D006A7350 /* OpfManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpfManager.swift; path = tdtalk2dev/Classes/OpfManager.swift; sourceTree = SOURCE_ROOT; };
+		F0836F071B82E7C8006A7350 /* OPF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OPF.swift; path = tdtalk2dev/Classes/OPF.swift; sourceTree = SOURCE_ROOT; };
+		F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscInfoManager.swift; path = tdtalk2dev/Classes/DiscInfoManager.swift; sourceTree = SOURCE_ROOT; };
+		F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscInfo.swift; path = tdtalk2dev/Classes/DiscInfo.swift; sourceTree = SOURCE_ROOT; };
 		F0E35DDA1B6A490300CC6A6B /* tdtalk2dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tdtalk2dev.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0E35DDE1B6A490300CC6A6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0E35DDF1B6A490300CC6A6B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -121,9 +129,11 @@
 		82A802FE1B73CAEB0027094D /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				823439421B73E0C70066E942 /* BookEntity.swift */,
+				F0836F071B82E7C8006A7350 /* OPF.swift */,
 				82E9FA8F1B82366C00796A9F /* DCMetadata.swift */,
 				82E9FA931B8243D100796A9F /* ManifestItem.swift */,
+				823439421B73E0C70066E942 /* BookEntity.swift */,
+				F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -246,6 +256,8 @@
 			isa = PBXGroup;
 			children = (
 				82A803001B73CC330027094D /* DataManager.swift */,
+				F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */,
+				F0836F051B82E79D006A7350 /* OpfManager.swift */,
 				82A802FE1B73CAEB0027094D /* Models */,
 				82F0969E1B725E96002E01BC /* Util.swift */,
 				F0E35E171B6A4A4B00CC6A6B /* BookListViewController.swift */,
@@ -369,9 +381,13 @@
 				F0E35E221B6A4A4B00CC6A6B /* TTFileManager.swift in Sources */,
 				F0E35DE01B6A490300CC6A6B /* AppDelegate.swift in Sources */,
 				F0E35E121B6A49D000CC6A6B /* ioapi.c in Sources */,
+				F0836F081B82E7C8006A7350 /* OPF.swift in Sources */,
 				F0E35E151B6A49D000CC6A6B /* zip.c in Sources */,
+				F0C37B201B82CB2A0045E1D8 /* DiscInfoManager.swift in Sources */,
+				F0836F061B82E79D006A7350 /* OpfManager.swift in Sources */,
 				F0E35E1D1B6A4A4B00CC6A6B /* BookListViewController.swift in Sources */,
 				82F0C24D1B6BD213007D782A /* file.m in Sources */,
+				F0C37B221B82D3A20045E1D8 /* DiscInfo.swift in Sources */,
 				F0E35E111B6A49D000CC6A6B /* Main.m in Sources */,
 				82E9FA941B8243D100796A9F /* ManifestItem.swift in Sources */,
 				F0E35E201B6A4A4B00CC6A6B /* TTBookService.swift in Sources */,
