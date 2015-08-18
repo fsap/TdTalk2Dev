@@ -9,7 +9,8 @@
 #ifndef TdTalk2Dev_BridgeHeader_h
 #define TdTalk2Dev_BridgeHeader_h
 
-#import <ZipArchive/Main.h>
+//#import <ZipArchive/Main.h>
+#import "SSZipArchive.h"
 #import "file.h"
 #import "brlbuf.h"
 

@@ -11,6 +11,15 @@
 		825185941B6A884700196715 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 825185961B6A884700196715 /* Localizable.strings */; };
 		82A802FD1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 82A802FB1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld */; };
 		82A803021B73CC330027094D /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A803001B73CC330027094D /* DataManager.swift */; };
+		82B988631B839E7F00EA3408 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 82B988531B839E7F00EA3408 /* .gitignore */; };
+		82B988641B839E7F00EA3408 /* Changelog.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 82B988541B839E7F00EA3408 /* Changelog.markdown */; };
+		82B988651B839E7F00EA3408 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 82B988551B839E7F00EA3408 /* LICENSE */; };
+		82B988661B839E7F00EA3408 /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B988581B839E7F00EA3408 /* ioapi.c */; };
+		82B988671B839E7F00EA3408 /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B9885A1B839E7F00EA3408 /* mztools.c */; };
+		82B988681B839E7F00EA3408 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B9885C1B839E7F00EA3408 /* unzip.c */; };
+		82B988691B839E7F00EA3408 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B9885E1B839E7F00EA3408 /* zip.c */; };
+		82B9886A1B839E7F00EA3408 /* Readme.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 82B988601B839E7F00EA3408 /* Readme.markdown */; };
+		82B9886B1B839E7F00EA3408 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 82B988621B839E7F00EA3408 /* SSZipArchive.m */; };
 		82E9FA901B82366C00796A9F /* DCMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9FA8F1B82366C00796A9F /* DCMetadata.swift */; };
 		82E9FA921B8238CF00796A9F /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9FA911B8238CF00796A9F /* libxml2.dylib */; };
 		82E9FA941B8243D100796A9F /* ManifestItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9FA931B8243D100796A9F /* ManifestItem.swift */; };
@@ -29,12 +38,6 @@
 		F0E35DE71B6A490300CC6A6B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0E35DE61B6A490300CC6A6B /* Images.xcassets */; };
 		F0E35DEA1B6A490300CC6A6B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F0E35DE81B6A490300CC6A6B /* LaunchScreen.xib */; };
 		F0E35DF61B6A490300CC6A6B /* TdTalk2DevTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35DF51B6A490300CC6A6B /* TdTalk2DevTests.swift */; };
-		F0E35E101B6A49D000CC6A6B /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F0E35E021B6A49D000CC6A6B /* Info.plist */; };
-		F0E35E111B6A49D000CC6A6B /* Main.m in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E041B6A49D000CC6A6B /* Main.m */; };
-		F0E35E121B6A49D000CC6A6B /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E071B6A49D000CC6A6B /* ioapi.c */; };
-		F0E35E131B6A49D000CC6A6B /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E091B6A49D000CC6A6B /* mztools.c */; };
-		F0E35E141B6A49D000CC6A6B /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E0B1B6A49D000CC6A6B /* unzip.c */; };
-		F0E35E151B6A49D000CC6A6B /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E0D1B6A49D000CC6A6B /* zip.c */; };
 		F0E35E1D1B6A4A4B00CC6A6B /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E171B6A4A4B00CC6A6B /* BookListViewController.swift */; };
 		F0E35E1F1B6A4A4B00CC6A6B /* TTAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E191B6A4A4B00CC6A6B /* TTAlertController.swift */; };
 		F0E35E201B6A4A4B00CC6A6B /* TTBookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E1A1B6A4A4B00CC6A6B /* TTBookService.swift */; };
@@ -61,6 +64,21 @@
 		825185991B6A885900196715 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		82A802FC1B73CA9A0027094D /* tdtalk2dev.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = tdtalk2dev.xcdatamodel; sourceTree = "<group>"; };
 		82A803001B73CC330027094D /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataManager.swift; path = tdtalk2dev/Classes/DataManager.swift; sourceTree = SOURCE_ROOT; };
+		82B988531B839E7F00EA3408 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		82B988541B839E7F00EA3408 /* Changelog.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Changelog.markdown; sourceTree = "<group>"; };
+		82B988551B839E7F00EA3408 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		82B988571B839E7F00EA3408 /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
+		82B988581B839E7F00EA3408 /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
+		82B988591B839E7F00EA3408 /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
+		82B9885A1B839E7F00EA3408 /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
+		82B9885B1B839E7F00EA3408 /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
+		82B9885C1B839E7F00EA3408 /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
+		82B9885D1B839E7F00EA3408 /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
+		82B9885E1B839E7F00EA3408 /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
+		82B9885F1B839E7F00EA3408 /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
+		82B988601B839E7F00EA3408 /* Readme.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.markdown; sourceTree = "<group>"; };
+		82B988611B839E7F00EA3408 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
+		82B988621B839E7F00EA3408 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
 		82E9FA8F1B82366C00796A9F /* DCMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DCMetadata.swift; path = tdtalk2dev/Classes/DCMetadata.swift; sourceTree = SOURCE_ROOT; };
 		82E9FA911B8238CF00796A9F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		82E9FA931B8243D100796A9F /* ManifestItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManifestItem.swift; path = tdtalk2dev/Classes/ManifestItem.swift; sourceTree = SOURCE_ROOT; };
@@ -87,19 +105,6 @@
 		F0E35DF41B6A490300CC6A6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0E35DF51B6A490300CC6A6B /* TdTalk2DevTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TdTalk2DevTests.swift; sourceTree = "<group>"; };
 		F0E35DFF1B6A498D00CC6A6B /* BridgeHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgeHeader.h; sourceTree = "<group>"; };
-		F0E35E021B6A49D000CC6A6B /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F0E35E031B6A49D000CC6A6B /* Main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Main.h; sourceTree = "<group>"; };
-		F0E35E041B6A49D000CC6A6B /* Main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Main.m; sourceTree = "<group>"; };
-		F0E35E061B6A49D000CC6A6B /* crypt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crypt.h; sourceTree = "<group>"; };
-		F0E35E071B6A49D000CC6A6B /* ioapi.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ioapi.c; sourceTree = "<group>"; };
-		F0E35E081B6A49D000CC6A6B /* ioapi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ioapi.h; sourceTree = "<group>"; };
-		F0E35E091B6A49D000CC6A6B /* mztools.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mztools.c; sourceTree = "<group>"; };
-		F0E35E0A1B6A49D000CC6A6B /* mztools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mztools.h; sourceTree = "<group>"; };
-		F0E35E0B1B6A49D000CC6A6B /* unzip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = unzip.c; sourceTree = "<group>"; };
-		F0E35E0C1B6A49D000CC6A6B /* unzip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = unzip.h; sourceTree = "<group>"; };
-		F0E35E0D1B6A49D000CC6A6B /* zip.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zip.c; sourceTree = "<group>"; };
-		F0E35E0E1B6A49D000CC6A6B /* zip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zip.h; sourceTree = "<group>"; };
-		F0E35E0F1B6A49D000CC6A6B /* ZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipArchive.h; sourceTree = "<group>"; };
 		F0E35E171B6A4A4B00CC6A6B /* BookListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookListViewController.swift; sourceTree = "<group>"; };
 		F0E35E191B6A4A4B00CC6A6B /* TTAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TTAlertController.swift; sourceTree = "<group>"; };
 		F0E35E1A1B6A4A4B00CC6A6B /* TTBookService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TTBookService.swift; sourceTree = "<group>"; };
@@ -139,6 +144,37 @@
 				F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		82B988521B839E7F00EA3408 /* ssziparchive */ = {
+			isa = PBXGroup;
+			children = (
+				82B988531B839E7F00EA3408 /* .gitignore */,
+				82B988541B839E7F00EA3408 /* Changelog.markdown */,
+				82B988551B839E7F00EA3408 /* LICENSE */,
+				82B988561B839E7F00EA3408 /* minizip */,
+				82B988601B839E7F00EA3408 /* Readme.markdown */,
+				82B988611B839E7F00EA3408 /* SSZipArchive.h */,
+				82B988621B839E7F00EA3408 /* SSZipArchive.m */,
+			);
+			name = ssziparchive;
+			path = tdtalk2dev/libs/ssziparchive;
+			sourceTree = SOURCE_ROOT;
+		};
+		82B988561B839E7F00EA3408 /* minizip */ = {
+			isa = PBXGroup;
+			children = (
+				82B988571B839E7F00EA3408 /* crypt.h */,
+				82B988581B839E7F00EA3408 /* ioapi.c */,
+				82B988591B839E7F00EA3408 /* ioapi.h */,
+				82B9885A1B839E7F00EA3408 /* mztools.c */,
+				82B9885B1B839E7F00EA3408 /* mztools.h */,
+				82B9885C1B839E7F00EA3408 /* unzip.c */,
+				82B9885D1B839E7F00EA3408 /* unzip.h */,
+				82B9885E1B839E7F00EA3408 /* zip.c */,
+				82B9885F1B839E7F00EA3408 /* zip.h */,
+			);
+			path = minizip;
 			sourceTree = "<group>";
 		};
 		82F0C2441B6BD213007D782A /* loadxml */ = {
@@ -222,38 +258,10 @@
 		F0E35E001B6A49D000CC6A6B /* Libs */ = {
 			isa = PBXGroup;
 			children = (
+				82B988521B839E7F00EA3408 /* ssziparchive */,
 				82F0C2441B6BD213007D782A /* loadxml */,
-				F0E35E011B6A49D000CC6A6B /* ZipArchive */,
 			);
 			path = Libs;
-			sourceTree = "<group>";
-		};
-		F0E35E011B6A49D000CC6A6B /* ZipArchive */ = {
-			isa = PBXGroup;
-			children = (
-				F0E35E021B6A49D000CC6A6B /* Info.plist */,
-				F0E35E031B6A49D000CC6A6B /* Main.h */,
-				F0E35E041B6A49D000CC6A6B /* Main.m */,
-				F0E35E051B6A49D000CC6A6B /* minizip */,
-				F0E35E0F1B6A49D000CC6A6B /* ZipArchive.h */,
-			);
-			path = ZipArchive;
-			sourceTree = "<group>";
-		};
-		F0E35E051B6A49D000CC6A6B /* minizip */ = {
-			isa = PBXGroup;
-			children = (
-				F0E35E061B6A49D000CC6A6B /* crypt.h */,
-				F0E35E071B6A49D000CC6A6B /* ioapi.c */,
-				F0E35E081B6A49D000CC6A6B /* ioapi.h */,
-				F0E35E091B6A49D000CC6A6B /* mztools.c */,
-				F0E35E0A1B6A49D000CC6A6B /* mztools.h */,
-				F0E35E0B1B6A49D000CC6A6B /* unzip.c */,
-				F0E35E0C1B6A49D000CC6A6B /* unzip.h */,
-				F0E35E0D1B6A49D000CC6A6B /* zip.c */,
-				F0E35E0E1B6A49D000CC6A6B /* zip.h */,
-			);
-			path = minizip;
 			sourceTree = "<group>";
 		};
 		F0E35E161B6A4A4B00CC6A6B /* Classes */ = {
@@ -355,9 +363,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				825185941B6A884700196715 /* Localizable.strings in Resources */,
-				F0E35E101B6A49D000CC6A6B /* Info.plist in Resources */,
 				F0E35DE51B6A490300CC6A6B /* Main.storyboard in Resources */,
+				82B988651B839E7F00EA3408 /* LICENSE in Resources */,
 				F0E35DEA1B6A490300CC6A6B /* LaunchScreen.xib in Resources */,
+				82B988631B839E7F00EA3408 /* .gitignore in Resources */,
 				F0E35DE71B6A490300CC6A6B /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -378,29 +387,31 @@
 			files = (
 				82E9FA901B82366C00796A9F /* DCMetadata.swift in Sources */,
 				F0E35E1F1B6A4A4B00CC6A6B /* TTAlertController.swift in Sources */,
-				F0E35E141B6A49D000CC6A6B /* unzip.c in Sources */,
+				82B988681B839E7F00EA3408 /* unzip.c in Sources */,
+				82B988691B839E7F00EA3408 /* zip.c in Sources */,
+				82B9886B1B839E7F00EA3408 /* SSZipArchive.m in Sources */,
 				F0E35E211B6A4A4B00CC6A6B /* TTError.swift in Sources */,
 				82F0969F1B725E96002E01BC /* Util.swift in Sources */,
 				F0E35DE21B6A490300CC6A6B /* ViewController.swift in Sources */,
 				F0E35E221B6A4A4B00CC6A6B /* TTFileManager.swift in Sources */,
 				F0E35DE01B6A490300CC6A6B /* AppDelegate.swift in Sources */,
-				F0E35E121B6A49D000CC6A6B /* ioapi.c in Sources */,
 				F0836F081B82E7C8006A7350 /* OPF.swift in Sources */,
-				F0E35E151B6A49D000CC6A6B /* zip.c in Sources */,
 				F0C37B201B82CB2A0045E1D8 /* DiscInfoManager.swift in Sources */,
 				F0836F061B82E79D006A7350 /* OpfManager.swift in Sources */,
 				F0E35E1D1B6A4A4B00CC6A6B /* BookListViewController.swift in Sources */,
 				82F0C24D1B6BD213007D782A /* file.m in Sources */,
+				82B988661B839E7F00EA3408 /* ioapi.c in Sources */,
 				F0C37B221B82D3A20045E1D8 /* DiscInfo.swift in Sources */,
-				F0E35E111B6A49D000CC6A6B /* Main.m in Sources */,
+				82B988671B839E7F00EA3408 /* mztools.c in Sources */,
 				82E9FA941B8243D100796A9F /* ManifestItem.swift in Sources */,
 				F0E35E201B6A4A4B00CC6A6B /* TTBookService.swift in Sources */,
+				82B988641B839E7F00EA3408 /* Changelog.markdown in Sources */,
 				82A803021B73CC330027094D /* DataManager.swift in Sources */,
 				823439431B73E0C70066E942 /* BookEntity.swift in Sources */,
 				82A802FD1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld in Sources */,
 				82F0C24E1B6BD213007D782A /* LIST.M in Sources */,
+				82B9886A1B839E7F00EA3408 /* Readme.markdown in Sources */,
 				82F0C24C1B6BD213007D782A /* BRLBUF.M in Sources */,
-				F0E35E131B6A49D000CC6A6B /* mztools.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

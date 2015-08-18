@@ -8,12 +8,21 @@
 
 import Foundation
 
+enum DiscinfoTag: String {
+    case Body = "body"
+    case A = "a"
+}
+
+enum DiscinfoAttr: String {
+    case Href = "href"
+}
+
 class DiscInfo: NSObject {
     
-    var opfFilePath: String
+    var href: String
     
     override init() {
-        self.opfFilePath = ""
+        self.href = ""
         super.init()
     }
 }

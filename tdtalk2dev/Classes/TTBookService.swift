@@ -83,6 +83,12 @@ class TTBookService {
         
         if (filename.pathExtension == ImportableExtension.EXE.rawValue) {
             // exe展開
+            if !(self.fileManager.unzip(importFilePath, expandPath: expandDir)) {
+                self.fileManager.deInitImport([importFilePath])
+                LogE(NSString(format: "Unable to expand:%@", filename))
+                didFailure(errorCode:TTErrorCode.UnsupportedFileType)
+                return
+            }
             
         } else if (filename.pathExtension == ImportableExtension.ZIP.rawValue) {
             // zip解凍
@@ -100,54 +106,59 @@ class TTBookService {
         
         // メタ情報が記載されているopfファイルをサーチ
         self.fileManager.detectOpfPath(expandDir, didSuccess: { (opfPath) -> Void in
-            // メタ情報を取得
-            var opfManager: OpfManager = OpfManager.sharedInstance
-            opfManager.startParseOpfFile(opfPath, didParseSuccess: { (opf) -> Void in
-                // 取得成功
-                Log(NSString(format: "parse success meta:%@ xml:%@", opf.dcMetadata, opf.manifestItem))
-
-                // 展開
-                let xmlFilePath: String = expandDir.stringByAppendingPathComponent(opf.manifestItem.href)
-                let saveFilePath = self.fileManager.loadXmlFiles([xmlFilePath], saveDir:expandDir)
-                if saveFilePath == "" {
+            let queue: dispatch_queue_t = dispatch_queue_create("opfMetaData", nil)
+            dispatch_async(queue, { () -> Void in
+                
+                // メタ情報を取得
+                var opfManager: OpfManager = OpfManager.sharedInstance
+                opfManager.startParseOpfFile(opfPath, didParseSuccess: { (opf) -> Void in
+                    // 取得成功
+                    Log(NSString(format: "parse success meta:%@ xml:%@", opf.dcMetadata, opf.manifestItem))
+                    
+                    // 展開
+                    let xmlFilePath: String = expandDir.stringByAppendingPathComponent(opf.manifestItem.href)
+                    let saveFilePath = self.fileManager.loadXmlFiles([xmlFilePath], saveDir:expandDir)
+                    if saveFilePath == "" {
+                        self.fileManager.deInitImport([importFilePath, expandDir])
+                        didFailure(errorCode:TTErrorCode.FailedToLoadFile)
+                        return
+                    }
+                    
+                    // 本棚へ登録
+                    var result = self.fileManager.saveToBook(saveFilePath)
+                    if result != TTErrorCode.Normal {
+                        self.fileManager.deInitImport([importFilePath, expandDir])
+                        didFailure(errorCode:result)
+                        return
+                    }
+                    
+                    // 図書情報をDBに保存
+                    var book: BookEntity = self.dataManager.getEntity(DataManager.Const.kBookEntityName) as! BookEntity
+                    book.title = opf.dcMetadata.title
+                    book.filename = TTFileManager.getImportDir().stringByAppendingPathComponent(saveFilePath.lastPathComponent.stringByDeletingPathExtension)
+                    book.sort_num = self.getBookList().count
+                    var ret = self.dataManager.save()
+                    if ret != TTErrorCode.Normal {
+                        self.fileManager.deInitImport([importFilePath, expandDir])
+                        didFailure(errorCode:ret)
+                        return
+                    }
+                    
+                    // 終了処理
                     self.fileManager.deInitImport([importFilePath, expandDir])
-                    didFailure(errorCode:TTErrorCode.FailedToLoadFile)
-                    return
+                    
+                    self.delegate?.importCompleted()
+                    
+                    didSuccess()
+                    
+                    
+                }) { (errorCode) -> Void in
+                    // 取得失敗
+                    LogE("Failed to parse opf file.")
+                    didFailure(errorCode: errorCode)
                 }
-
-                // 本棚へ登録
-                var result = self.fileManager.saveToBook(saveFilePath)
-                if result != TTErrorCode.Normal {
-                    self.fileManager.deInitImport([importFilePath, expandDir])
-                    didFailure(errorCode:result)
-                    return
-                }
-                
-                // 図書情報をDBに保存
-                var book: BookEntity = self.dataManager.getEntity(DataManager.Const.kBookEntityName) as! BookEntity
-                book.title = opf.dcMetadata.title
-                book.filename = TTFileManager.getImportDir().stringByAppendingPathComponent(saveFilePath.lastPathComponent.stringByDeletingPathExtension)
-                book.sort_num = self.getBookList().count
-                var ret = self.dataManager.save()
-                if ret != TTErrorCode.Normal {
-                    self.fileManager.deInitImport([importFilePath, expandDir])
-                    didFailure(errorCode:ret)
-                    return
-                }
-                
-                // 終了処理
-                self.fileManager.deInitImport([importFilePath, expandDir])
-                
-                self.delegate?.importCompleted()
-                
-                didSuccess()
-                
-                
-            }) { (errorCode) -> Void in
-                // 取得失敗
-                LogE("Failed to parse opf file.")
-                didFailure(errorCode: errorCode)
-            }
+            })
+            
             
         }) { (errorCode) -> Void in
             LogE(NSString(format: "OPF file not found. [%d] root:%@", errorCode.rawValue, expandDir))
@@ -155,40 +166,6 @@ class TTBookService {
             didFailure(errorCode: errorCode)
         }
         
-        
-/* ToDo:見直し
-        // 展開
-        let xmlFiles: [String] = fileManager.searchXmlFiles(expandDir, ext: "xml")!
-        let saveFilePath = fileManager.loadXmlFiles(xmlFiles, saveDir:expandDir)
-        if saveFilePath == "" {
-            fileManager.deInitImport([importFilePath, expandDir])
-            return TTErrorCode.FailedToLoadFile
-        }
-        
-        // 本棚へ登録
-        var result = fileManager.saveToBook(saveFilePath)
-        if result != TTErrorCode.Normal {
-            return result
-        }
-        
-        // 図書情報をDBに保存
-        var book: BookEntity = self.dataManager.getEntity(DataManager.Const.kBookEntityName) as! BookEntity
-        book.title = saveFilePath.lastPathComponent.stringByDeletingPathExtension
-        book.filename = TTFileManager.getImportDir().stringByAppendingPathComponent(saveFilePath.lastPathComponent.stringByDeletingPathExtension)
-        book.sort_num = self.getBookList().count
-        var ret = self.dataManager.save()
-        if ret != TTErrorCode.Normal {
-            self.fileManager.deInitImport([importFilePath, expandDir])
-            return ret
-        }
-        
-        // 終了処理
-        self.fileManager.deInitImport([importFilePath, expandDir])
-        
-        self.delegate?.importCompleted()
-        
-        return TTErrorCode.Normal
-*/
     }
     
     func getImportedFiles()->[String] {

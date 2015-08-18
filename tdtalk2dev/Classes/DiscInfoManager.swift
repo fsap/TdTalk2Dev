@@ -18,7 +18,7 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
     private var didParseSuccess: ((discInfo: DiscInfo)->Void)?
     private var didParseFailure: ((errorCode: TTErrorCode)->Void)?
     private var discInfo: DiscInfo
-    private var isInMetadata: Bool
+    private var isInBody: Bool
     private var currentElement: String
 
 
@@ -33,7 +33,7 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
         self.didParseSuccess = nil
         self.didParseFailure = nil
         self.discInfo = DiscInfo()
-        self.isInMetadata = false
+        self.isInBody = false
         self.currentElement = ""
         
         super.init()
@@ -77,6 +77,21 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
     {
         Log(NSString(format: " - found element:[%@] attr[%@]", elementName, attributeDict))
         
+        if elementName == DiscinfoTag.Body.rawValue {
+            self.isInBody = true
+        } else if self.isInBody {
+            self.currentElement = elementName
+        }
+        
+        if elementName == DiscinfoTag.Body.rawValue {
+            self.isInBody = true
+            
+        } else if self.isInBody {
+            if elementName == DiscinfoTag.A.rawValue {
+                // xmlファイル情報のみ取得
+                self.discInfo.href = attributeDict[DiscinfoAttr.Href.rawValue] as! String
+            }
+        }
     }
     
     // valueを読み込み
@@ -89,6 +104,12 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
     func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         Log(NSString(format: " - found element:[%@]", elementName))
         
+        if self.isInBody {
+            if elementName == DiscinfoTag.A.rawValue {
+                self.isInBody = false
+            }
+            self.currentElement = ""
+        }
     }
     
     // ファイルの読み込みを終了

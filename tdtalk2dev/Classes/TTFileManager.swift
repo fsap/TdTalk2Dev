@@ -14,7 +14,7 @@ enum ImportableExtension: String {
     case ZIP = "zip"
 }
 
-class TTFileManager : NSObject, NSXMLParserDelegate {
+class TTFileManager : NSObject {
     
     // 定数
     struct Const {
@@ -94,7 +94,8 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
         if (exists(expandPath)) {
             self.fileManager.removeItemAtPath(expandPath, error: nil)
         }
-        return Main.unzipFileAtPath(importFile, toDestination: expandPath)
+        return SSZipArchive.unzipFileAtPath(importFile, toDestination: expandPath)
+//        return Main.unzipFileAtPath(importFile, toDestination: expandPath)
     }
     
     // 指定ファイルを削除
@@ -164,15 +165,15 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
             }
             
             // ディレクトリの場合はサブディレクトリ検索
-            /*** 不要
             if (isDir) {
-                var path: String? = detectOpfPath(rootDir.stringByAppendingPathComponent(content))
-                if path != nil {
-                    return path
-                }
+                detectOpfPath(rootDir.stringByAppendingPathComponent(content),
+                    didSuccess: { (opfPath) -> Void in
+                        didSuccess(opfPath: opfPath)
+                }, didFailure: { (errorCode) -> Void in
+                    //
+                })
                 continue
             }
-            */
             
             // マルチDAISYファイルの場合
             if content == DiscInfoManager.Const.kMultiDaisyInfoFile {
@@ -180,7 +181,7 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
                 var discInfoPath: String = rootDir.stringByAppendingPathComponent(content)
                 discInfoManager.startParseDiscInfoFile(discInfoPath, didParseSuccess: { (discInfo) -> Void in
                     Log(NSString(format: "parse success. xml:%@", discInfo))
-                    let opfPath: String = rootDir.stringByAppendingPathComponent(discInfo.opfFilePath)
+                    let opfPath: String = rootDir.stringByAppendingPathComponent(discInfo.href)
                     if self.exists(opfPath) {
                         didSuccess(opfPath: opfPath)
                     } else {
@@ -211,73 +212,6 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
         LogE(NSString(format: "opf file not found. path:%@", rootDir))
         didFailure(errorCode: TTErrorCode.OpfFileNotFound)
     }
-    
-/*
-    // XMLフォーマットのファイルの解析を開始
-    func startParseXmlFormatFile(xmlFilePath: String,
-        didParseSuccess: ((metaData: DCMetadata, xmlItem: ManifestItem)->Void),
-        didParseFailure:((errorCode: TTErrorCode)->Void))->Void
-    {
-        self.didParseOpfSuccess = didParseSuccess
-        self.didParseOpfFailure = didParseFailure
-        
-        let url: NSURL? = NSURL.fileURLWithPath(xmlFilePath)
-        let parser: NSXMLParser? = NSXMLParser(contentsOfURL: url)
-        
-        if parser == nil {
-            didParseFailure(errorCode: TTErrorCode.OpfFileNotFound)
-            return
-        }
-        
-        parser!.delegate = self
-        
-        parser!.parse()
-    }
-
-    
-    //
-    // 内部ディレクトリを探索して指定ファイルのリストを返却
-    //
-    func searchXmlFiles(rootDir: String, ext: String)->[String]? {
-        Log(NSString(format: "root_dir:%@", rootDir))
-        
-        if !(exists(rootDir)) {
-            LogE(NSString(format: "Specified dircectory not found. [%@]", rootDir))
-            return nil
-        }
-        
-        var filePaths: [String] = []
-        let contents = self.fileManager.contentsOfDirectoryAtPath(rootDir, error: nil)!
-        for content in contents {
-            var content: String = content as! String
-            Log(NSString(format: "content:%@", content))
-            // 中身のファイルチェック
-            var isDir = ObjCBool(false)
-            if (!self.fileManager.fileExistsAtPath(rootDir.stringByAppendingPathComponent(content), isDirectory: &isDir)) {
-                continue
-            }
-            
-            // システムファイルはスキップ
-            if content[content.startIndex] == "_" || content[content.startIndex] == "." {
-                continue
-            }
-            
-            // ディレクトリの場合はサブディレクトリ検索
-            if (isDir) {
-                var paths: [String] = searchXmlFiles(rootDir.stringByAppendingPathComponent(content), ext:ext)!
-                filePaths += paths
-                continue
-            }
-            
-            // 拡張子をチェック
-            if content.pathExtension.lowercaseString == ext {
-                filePaths.append(rootDir.stringByAppendingPathComponent(content))
-            }
-        }
-        
-        return filePaths
-    }
-*/
     
     //
     // XMLファイルの読み込み
@@ -404,111 +338,5 @@ class TTFileManager : NSObject, NSXMLParserDelegate {
         }
     }
     
-    
-    
-    //
-    // MARK: NSXMLParserDelegate
-    //
-    
-    // ファイルの読み込みを開始
-    func parserDidStartDocument(parser: NSXMLParser) {
-        LogM("--- start parse.")
-    }
-    
-    // 要素の開始タグを読み込み
-    func parser(parser: NSXMLParser,
-        didStartElement elementName: String,
-        namespaceURI: String?,
-        qualifiedName qName: String?,
-        attributes attributeDict: [NSObject : AnyObject])
-    {
-        Log(NSString(format: " - found element:[%@] attr[%@]", elementName, attributeDict))
         
-        if elementName == DCMetadataTag.DC_Metadata.rawValue {
-            self.isInDcMetadata = true
-        } else if self.isInDcMetadata {
-            self.currentElement = elementName
-        }
-        
-        if elementName == ManifestTag.Manifest.rawValue {
-            self.isInManifest = true
-            
-        } else if self.isInManifest {
-            if elementName == ManifestTag.Item.rawValue {
-                // xmlファイル情報のみ取得
-                var attr: String = attributeDict[ManifestItemAttr.Id.rawValue] as! String
-                if attr == "xml" {
-                    self.xmlItem.id = attributeDict[ManifestItemAttr.Id.rawValue] as! String
-                    self.xmlItem.href = attributeDict[ManifestItemAttr.Href.rawValue] as! String
-                    self.xmlItem.mediaType = attributeDict[ManifestItemAttr.MediaType.rawValue] as! String
-                }
-            }
-        }
-        
-    }
-    
-    // valueを読み込み
-    func parser(parser: NSXMLParser, foundCharacters string: String?) {
-        Log(NSString(format: " - found value:[%@] current_elem:%@", string!, self.currentElement))
-        
-        if self.isInDcMetadata {
-            switch self.currentElement {
-            case DCMetadataTag.DC_Identifier.rawValue:
-                self.metaData.identifier = string!
-                break
-            case DCMetadataTag.DC_Title.rawValue:
-                self.metaData.title = string!
-                break
-            case DCMetadataTag.DC_Publisher.rawValue:
-                self.metaData.publisher = string!
-                break
-            case DCMetadataTag.DC_Subject.rawValue:
-                self.metaData.subject = string!
-                break
-            case DCMetadataTag.DC_Date.rawValue:
-                self.metaData.date = string!
-                break
-            case DCMetadataTag.DC_Creator.rawValue:
-                self.metaData.creator = string!
-                break
-            case DCMetadataTag.DC_Language.rawValue:
-                self.metaData.language = string!
-                break
-            case DCMetadataTag.DC_Format.rawValue:
-                self.metaData.format = string!
-                break
-            default:
-                break
-            }
-        }
-        
-    }
-    
-    // 要素の終了タグを読み込み
-    func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        Log(NSString(format: " - found element:[%@]", elementName))
-        
-        if self.isInDcMetadata {
-            if elementName == DCMetadataTag.DC_Metadata.rawValue {
-                self.isInDcMetadata = false
-            }
-            self.currentElement = ""
-        }
-        if self.isInManifest {
-            if elementName == ManifestTag.Manifest.rawValue {
-                self.isInManifest = false
-            }
-        }
-    }
-
-    // ファイルの読み込みを終了
-    func parserDidEndDocument(parser: NSXMLParser) {
-        LogM("--- end parse.")
-        
-        if didParseOpfSuccess != nil {
-            self.didParseOpfSuccess!(metaData: self.metaData, xmlItem: self.xmlItem)
-        }
-    }
-    
-    
 }
