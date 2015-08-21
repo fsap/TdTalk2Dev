@@ -30,6 +30,11 @@
 		F0836F061B82E79D006A7350 /* OpfManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F051B82E79D006A7350 /* OpfManager.swift */; };
 		F0836F081B82E7C8006A7350 /* OPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F071B82E7C8006A7350 /* OPF.swift */; };
 		F0836F0B1B837626006A7350 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0836F0A1B837626006A7350 /* AudioToolbox.framework */; };
+		F0836F121B873072006A7350 /* DaisyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F111B873072006A7350 /* DaisyManager.swift */; };
+		F0836F141B8752AE006A7350 /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F131B8752AE006A7350 /* Navigation.swift */; };
+		F0836F161B875377006A7350 /* Daisy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F151B875377006A7350 /* Daisy.swift */; };
+		F0836F181B875448006A7350 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F171B875448006A7350 /* Constants.swift */; };
+		F0836F1A1B875B93006A7350 /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F191B875B93006A7350 /* FileManager.swift */; };
 		F0C37B201B82CB2A0045E1D8 /* DiscInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */; };
 		F0C37B221B82D3A20045E1D8 /* DiscInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */; };
 		F0E35DE01B6A490300CC6A6B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35DDF1B6A490300CC6A6B /* AppDelegate.swift */; };
@@ -92,6 +97,11 @@
 		F0836F051B82E79D006A7350 /* OpfManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OpfManager.swift; path = tdtalk2dev/Classes/OpfManager.swift; sourceTree = SOURCE_ROOT; };
 		F0836F071B82E7C8006A7350 /* OPF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OPF.swift; path = tdtalk2dev/Classes/OPF.swift; sourceTree = SOURCE_ROOT; };
 		F0836F0A1B837626006A7350 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		F0836F111B873072006A7350 /* DaisyManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DaisyManager.swift; path = tdtalk2dev/Classes/DaisyManager.swift; sourceTree = SOURCE_ROOT; };
+		F0836F131B8752AE006A7350 /* Navigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Navigation.swift; path = tdtalk2dev/Classes/Navigation.swift; sourceTree = SOURCE_ROOT; };
+		F0836F151B875377006A7350 /* Daisy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Daisy.swift; path = tdtalk2dev/Classes/Daisy.swift; sourceTree = SOURCE_ROOT; };
+		F0836F171B875448006A7350 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = tdtalk2dev/Classes/Constants.swift; sourceTree = SOURCE_ROOT; };
+		F0836F191B875B93006A7350 /* FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileManager.swift; path = tdtalk2dev/Classes/FileManager.swift; sourceTree = SOURCE_ROOT; };
 		F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscInfoManager.swift; path = tdtalk2dev/Classes/DiscInfoManager.swift; sourceTree = SOURCE_ROOT; };
 		F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscInfo.swift; path = tdtalk2dev/Classes/DiscInfo.swift; sourceTree = SOURCE_ROOT; };
 		F0E35DDA1B6A490300CC6A6B /* tdtalk2dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tdtalk2dev.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,6 +152,8 @@
 				82E9FA931B8243D100796A9F /* ManifestItem.swift */,
 				823439421B73E0C70066E942 /* BookEntity.swift */,
 				F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */,
+				F0836F131B8752AE006A7350 /* Navigation.swift */,
+				F0836F151B875377006A7350 /* Daisy.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -270,13 +282,16 @@
 				82A803001B73CC330027094D /* DataManager.swift */,
 				F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */,
 				F0836F051B82E79D006A7350 /* OpfManager.swift */,
+				F0836F111B873072006A7350 /* DaisyManager.swift */,
 				82A802FE1B73CAEB0027094D /* Models */,
 				82F0969E1B725E96002E01BC /* Util.swift */,
+				F0836F171B875448006A7350 /* Constants.swift */,
 				F0E35E171B6A4A4B00CC6A6B /* BookListViewController.swift */,
 				F0E35E191B6A4A4B00CC6A6B /* TTAlertController.swift */,
 				F0E35E1A1B6A4A4B00CC6A6B /* TTBookService.swift */,
 				F0E35E1B1B6A4A4B00CC6A6B /* TTError.swift */,
 				F0E35E1C1B6A4A4B00CC6A6B /* TTFileManager.swift */,
+				F0836F191B875B93006A7350 /* FileManager.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -392,9 +407,12 @@
 				82B9886B1B839E7F00EA3408 /* SSZipArchive.m in Sources */,
 				F0E35E211B6A4A4B00CC6A6B /* TTError.swift in Sources */,
 				82F0969F1B725E96002E01BC /* Util.swift in Sources */,
+				F0836F1A1B875B93006A7350 /* FileManager.swift in Sources */,
 				F0E35DE21B6A490300CC6A6B /* ViewController.swift in Sources */,
 				F0E35E221B6A4A4B00CC6A6B /* TTFileManager.swift in Sources */,
+				F0836F181B875448006A7350 /* Constants.swift in Sources */,
 				F0E35DE01B6A490300CC6A6B /* AppDelegate.swift in Sources */,
+				F0836F161B875377006A7350 /* Daisy.swift in Sources */,
 				F0836F081B82E7C8006A7350 /* OPF.swift in Sources */,
 				F0C37B201B82CB2A0045E1D8 /* DiscInfoManager.swift in Sources */,
 				F0836F061B82E79D006A7350 /* OpfManager.swift in Sources */,
@@ -407,11 +425,13 @@
 				F0E35E201B6A4A4B00CC6A6B /* TTBookService.swift in Sources */,
 				82B988641B839E7F00EA3408 /* Changelog.markdown in Sources */,
 				82A803021B73CC330027094D /* DataManager.swift in Sources */,
+				F0836F121B873072006A7350 /* DaisyManager.swift in Sources */,
 				823439431B73E0C70066E942 /* BookEntity.swift in Sources */,
 				82A802FD1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld in Sources */,
 				82F0C24E1B6BD213007D782A /* LIST.M in Sources */,
 				82B9886A1B839E7F00EA3408 /* Readme.markdown in Sources */,
 				82F0C24C1B6BD213007D782A /* BRLBUF.M in Sources */,
+				F0836F141B8752AE006A7350 /* Navigation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

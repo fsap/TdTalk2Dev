@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+/*
+    ログ
+*/
 // デバッグログ出力(DEBUGビルド時のみ)
 // formatして出力したい時
 func Log(message: NSString,
@@ -38,6 +41,9 @@ func LogE(message: NSString,
     NSLog("ERR:%@(%d) %@", function, line, message)
 }
 
+/*
+    システム系
+*/
 // iOS8判定
 func isOS8()->Bool {
     switch UIDevice.currentDevice().systemVersion.compare("8.0.0", options: NSStringCompareOptions.NumericSearch) {
