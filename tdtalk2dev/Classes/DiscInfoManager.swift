@@ -8,16 +8,21 @@
 
 import Foundation
 
+enum DiscinfoTag: String {
+    case Body = "body"
+    case A = "a"
+}
+
+enum DiscinfoAttr: String {
+    case Href = "href"
+}
+
+
 class DiscInfoManager: NSObject, NSXMLParserDelegate {
     
-    // 定数
-    struct Const {
-        static let kMultiDaisyInfoFile: String = "discinfo.html"
-    }
-    
-    private var didParseSuccess: ((discInfo: DiscInfo)->Void)?
+    private var didParseSuccess: ((discInfos: [DiscInfo])->Void)?
     private var didParseFailure: ((errorCode: TTErrorCode)->Void)?
-    private var discInfo: DiscInfo
+    private var discInfos: [DiscInfo]
     private var isInBody: Bool
     private var currentElement: String
 
@@ -32,7 +37,7 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
     override init() {
         self.didParseSuccess = nil
         self.didParseFailure = nil
-        self.discInfo = DiscInfo()
+        self.discInfos = []
         self.isInBody = false
         self.currentElement = ""
         
@@ -40,7 +45,7 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
     }
     
     func startParseDiscInfoFile(discinfoFilePath: String,
-        didParseSuccess: ((discInfo: DiscInfo)->Void),
+        didParseSuccess: ((discInfos: [DiscInfo])->Void),
         didParseFailure:((errorCode: TTErrorCode)->Void))->Void
     {
         self.didParseSuccess = didParseSuccess
@@ -50,7 +55,7 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
         let parser: NSXMLParser? = NSXMLParser(contentsOfURL: url)
         
         if parser == nil {
-            didParseFailure(errorCode: TTErrorCode.OpfFileNotFound)
+            didParseFailure(errorCode: TTErrorCode.MetadataFileNotFound)
             return
         }
         
@@ -81,15 +86,11 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
             self.isInBody = true
         } else if self.isInBody {
             self.currentElement = elementName
-        }
-        
-        if elementName == DiscinfoTag.Body.rawValue {
-            self.isInBody = true
-            
-        } else if self.isInBody {
             if elementName == DiscinfoTag.A.rawValue {
                 // xmlファイル情報のみ取得
-                self.discInfo.href = attributeDict[DiscinfoAttr.Href.rawValue] as! String
+                var discInfo: DiscInfo = DiscInfo()
+                discInfo.href = attributeDict[DiscinfoAttr.Href.rawValue] as! String
+                self.discInfos.append(discInfo)
             }
         }
     }
@@ -117,7 +118,7 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
         LogM("--- end parse.")
         
         if didParseSuccess != nil {
-            self.didParseSuccess!(discInfo: self.discInfo)
+            self.didParseSuccess!(discInfos: self.discInfos)
         }
     }
     

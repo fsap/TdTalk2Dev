@@ -8,21 +8,17 @@
 
 import Foundation
 
-enum DiscinfoTag: String {
-    case Body = "body"
-    case A = "a"
-}
-
-enum DiscinfoAttr: String {
-    case Href = "href"
-}
-
 class DiscInfo: NSObject {
     
     var href: String
     
     override init() {
         self.href = ""
+        super.init()
+    }
+    
+    init(href: String) {
+        self.href = href
         super.init()
     }
 }

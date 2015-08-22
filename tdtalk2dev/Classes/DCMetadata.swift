@@ -23,27 +23,13 @@ enum DCMetadataTag: String {
 }
 
 
-class DCMetadata: NSObject {
+class DCMetadata: Metadata {
     
-    var identifier: String
-    var title: String
     var rights: String
-    var publisher: String
     var subject: String
-    var date: String
-    var creator: String
-    var language: String
-    var format: String
     
     override init() {
-        identifier = ""
-        title = ""
         rights = ""
-        publisher = ""
         subject = ""
-        date = ""
-        creator = ""
-        language = ""
-        format = ""
     }
 }

@@ -20,6 +20,9 @@
 		82B988691B839E7F00EA3408 /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B9885E1B839E7F00EA3408 /* zip.c */; };
 		82B9886A1B839E7F00EA3408 /* Readme.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 82B988601B839E7F00EA3408 /* Readme.markdown */; };
 		82B9886B1B839E7F00EA3408 /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 82B988621B839E7F00EA3408 /* SSZipArchive.m */; };
+		82D8D0951B87CD7200360A39 /* NccManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D8D0941B87CD7200360A39 /* NccManager.swift */; };
+		82D8D0971B87D07900360A39 /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D8D0961B87D07900360A39 /* Metadata.swift */; };
+		82D8D09A1B88B5A900360A39 /* LodingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D8D0991B88B5A900360A39 /* LodingView.swift */; };
 		82E9FA901B82366C00796A9F /* DCMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9FA8F1B82366C00796A9F /* DCMetadata.swift */; };
 		82E9FA921B8238CF00796A9F /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9FA911B8238CF00796A9F /* libxml2.dylib */; };
 		82E9FA941B8243D100796A9F /* ManifestItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9FA931B8243D100796A9F /* ManifestItem.swift */; };
@@ -84,6 +87,9 @@
 		82B988601B839E7F00EA3408 /* Readme.markdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.markdown; sourceTree = "<group>"; };
 		82B988611B839E7F00EA3408 /* SSZipArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSZipArchive.h; sourceTree = "<group>"; };
 		82B988621B839E7F00EA3408 /* SSZipArchive.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSZipArchive.m; sourceTree = "<group>"; };
+		82D8D0941B87CD7200360A39 /* NccManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NccManager.swift; path = tdtalk2dev/Classes/NccManager.swift; sourceTree = SOURCE_ROOT; };
+		82D8D0961B87D07900360A39 /* Metadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Metadata.swift; path = tdtalk2dev/Classes/Metadata.swift; sourceTree = SOURCE_ROOT; };
+		82D8D0991B88B5A900360A39 /* LodingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LodingView.swift; path = tdtalk2dev/LodingView.swift; sourceTree = SOURCE_ROOT; };
 		82E9FA8F1B82366C00796A9F /* DCMetadata.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DCMetadata.swift; path = tdtalk2dev/Classes/DCMetadata.swift; sourceTree = SOURCE_ROOT; };
 		82E9FA911B8238CF00796A9F /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		82E9FA931B8243D100796A9F /* ManifestItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ManifestItem.swift; path = tdtalk2dev/Classes/ManifestItem.swift; sourceTree = SOURCE_ROOT; };
@@ -148,12 +154,13 @@
 			isa = PBXGroup;
 			children = (
 				F0836F071B82E7C8006A7350 /* OPF.swift */,
+				F0836F151B875377006A7350 /* Daisy.swift */,
+				82D8D0961B87D07900360A39 /* Metadata.swift */,
 				82E9FA8F1B82366C00796A9F /* DCMetadata.swift */,
 				82E9FA931B8243D100796A9F /* ManifestItem.swift */,
 				823439421B73E0C70066E942 /* BookEntity.swift */,
 				F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */,
 				F0836F131B8752AE006A7350 /* Navigation.swift */,
-				F0836F151B875377006A7350 /* Daisy.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -187,6 +194,14 @@
 				82B9885F1B839E7F00EA3408 /* zip.h */,
 			);
 			path = minizip;
+			sourceTree = "<group>";
+		};
+		82D8D0981B88B59800360A39 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				82D8D0991B88B5A900360A39 /* LodingView.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		82F0C2441B6BD213007D782A /* loadxml */ = {
@@ -228,6 +243,7 @@
 		F0E35DDC1B6A490300CC6A6B /* TdTalk2Dev */ = {
 			isa = PBXGroup;
 			children = (
+				82D8D0981B88B59800360A39 /* Views */,
 				F0E35E161B6A4A4B00CC6A6B /* Classes */,
 				F0E35E001B6A49D000CC6A6B /* Libs */,
 				F0E35DDF1B6A490300CC6A6B /* AppDelegate.swift */,
@@ -281,8 +297,10 @@
 			children = (
 				82A803001B73CC330027094D /* DataManager.swift */,
 				F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */,
+				82D8D0941B87CD7200360A39 /* NccManager.swift */,
 				F0836F051B82E79D006A7350 /* OpfManager.swift */,
 				F0836F111B873072006A7350 /* DaisyManager.swift */,
+				F0836F191B875B93006A7350 /* FileManager.swift */,
 				82A802FE1B73CAEB0027094D /* Models */,
 				82F0969E1B725E96002E01BC /* Util.swift */,
 				F0836F171B875448006A7350 /* Constants.swift */,
@@ -291,7 +309,6 @@
 				F0E35E1A1B6A4A4B00CC6A6B /* TTBookService.swift */,
 				F0E35E1B1B6A4A4B00CC6A6B /* TTError.swift */,
 				F0E35E1C1B6A4A4B00CC6A6B /* TTFileManager.swift */,
-				F0836F191B875B93006A7350 /* FileManager.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -422,6 +439,7 @@
 				F0C37B221B82D3A20045E1D8 /* DiscInfo.swift in Sources */,
 				82B988671B839E7F00EA3408 /* mztools.c in Sources */,
 				82E9FA941B8243D100796A9F /* ManifestItem.swift in Sources */,
+				82D8D0971B87D07900360A39 /* Metadata.swift in Sources */,
 				F0E35E201B6A4A4B00CC6A6B /* TTBookService.swift in Sources */,
 				82B988641B839E7F00EA3408 /* Changelog.markdown in Sources */,
 				82A803021B73CC330027094D /* DataManager.swift in Sources */,
@@ -430,7 +448,9 @@
 				82A802FD1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld in Sources */,
 				82F0C24E1B6BD213007D782A /* LIST.M in Sources */,
 				82B9886A1B839E7F00EA3408 /* Readme.markdown in Sources */,
+				82D8D0951B87CD7200360A39 /* NccManager.swift in Sources */,
 				82F0C24C1B6BD213007D782A /* BRLBUF.M in Sources */,
+				82D8D09A1B88B5A900360A39 /* LodingView.swift in Sources */,
 				F0836F141B8752AE006A7350 /* Navigation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,6 +18,8 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     
     var bookList :[BookEntity] = []
     var manager: DataManager = DataManager.sharedInstance
+    var alertController: TTAlertController = TTAlertController(nibName: nil, bundle: nil)
+    var loadingView: LoadingView?
     
     
     override func viewDidLoad() {
@@ -49,6 +51,10 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         self.bookListTableView?.setEditing(editing, animated: animated)
     }
     
+    //
+    // MARK: Private
+    //
+    
     // test
     private func createBooks()->Void {
         
@@ -68,6 +74,20 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         }
         self.bookListTableView.reloadData()
     }
+    
+    // ローディング中の処理
+    private func startLoading()->Void {
+        LogM("start loading")
+        
+        self.loadingView = LoadingView(parentView: self.view)
+        self.loadingView?.start()
+    }
+    
+    // ローディング中のサウンド停止
+    private func stopLoading()->Void {
+        self.loadingView?.stop()
+    }
+    
     
     
     //
@@ -126,7 +146,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         switch editingStyle {
         case .Delete:
             // 確認を取る
-            TTAlertController(nibName: nil, bundle: nil).show(self,
+            self.alertController.show(self,
                 title: NSLocalizedString("dialog_title_notice", comment: ""),
                 message: NSLocalizedString("dialog_msg_delete", comment: ""),
                 actionOk: { () -> Void in
@@ -137,7 +157,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
                         self.bookListTableView?.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
                         self.refreshSort()
                     } else {
-                        TTAlertController(nibName: nil, bundle: nil).show(self,
+                        self.alertController.show(self,
                             title: NSLocalizedString("dialog_title_error", comment: ""),
                             message: TTError.getErrorMessage(result), actionOk: { () -> Void in})
                     }
@@ -168,11 +188,30 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     // MARK: BookServiceDelegate
     //
     
-    func importCompleted() {
-        LogM("importCompleted")
+    func importStarted() {
+        LogM("import started.")
+        
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.view.backgroundColor = UIColor.grayColor()
+            self.startLoading()
+        })
+    }
+    
+    func importCompleted() {
+        LogM("import completed.")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.stopLoading()
+            self.view.backgroundColor = UIColor.whiteColor()
             self.bookList = TTBookService.sharedInstance.getBookList()
             self.bookListTableView.reloadData()
+        })
+    }
+    
+    func importFailed() {
+        LogM("import failed.")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.stopLoading()
+            self.view.backgroundColor = UIColor.whiteColor()
         })
     }
 }

@@ -145,7 +145,7 @@ class TTFileManager : NSObject {
         
         if !(exists(rootDir)) {
             LogE(NSString(format: "Specified dircectory not found. [%@]", rootDir))
-            didFailure(errorCode: TTErrorCode.OpfFileNotFound)
+            didFailure(errorCode: TTErrorCode.MetadataFileNotFound)
         }
         
         // 直下のファイルを展開
@@ -176,17 +176,18 @@ class TTFileManager : NSObject {
             }
             
             // マルチDAISYファイルの場合
-            if content == DiscInfoManager.Const.kMultiDaisyInfoFile {
+            if content == Constants.kMultiDaisyInfoFile {
                 var discInfoManager: DiscInfoManager = DiscInfoManager.sharedInstance
                 var discInfoPath: String = rootDir.stringByAppendingPathComponent(content)
-                discInfoManager.startParseDiscInfoFile(discInfoPath, didParseSuccess: { (discInfo) -> Void in
-                    Log(NSString(format: "parse success. xml:%@", discInfo))
+                discInfoManager.startParseDiscInfoFile(discInfoPath, didParseSuccess: { (discInfos) -> Void in
+                    Log(NSString(format: "parse success. xml:%@", discInfos))
+                    let discInfo: DiscInfo = discInfos[0]
                     let opfPath: String = rootDir.stringByAppendingPathComponent(discInfo.href)
                     if self.exists(opfPath) {
                         didSuccess(opfPath: opfPath)
                     } else {
                         LogE(NSString(format: "opf file not found. path:%@", opfPath))
-                        didFailure(errorCode: TTErrorCode.OpfFileNotFound)
+                        didFailure(errorCode: TTErrorCode.MetadataFileNotFound)
                     }
                     
                     }) { (errorCode) -> Void in
@@ -203,14 +204,14 @@ class TTFileManager : NSObject {
                     didSuccess(opfPath: opfPath)
                 } else {
                     LogE(NSString(format: "opf file not found. path:%@", opfPath))
-                    didFailure(errorCode: TTErrorCode.OpfFileNotFound)
+                    didFailure(errorCode: TTErrorCode.MetadataFileNotFound)
                 }
                 return
             }
         }
         
         LogE(NSString(format: "opf file not found. path:%@", rootDir))
-        didFailure(errorCode: TTErrorCode.OpfFileNotFound)
+        didFailure(errorCode: TTErrorCode.MetadataFileNotFound)
     }
     
     //
@@ -222,8 +223,6 @@ class TTFileManager : NSObject {
             LogE(NSString(format: "No xml files. [%@]", xmlFilePaths))
             return ""
         }
-        
-        startLoadingSound()
         
         // コンテンツ読み出し
         var brllist:BrlBuffer = BrlBuffer()
@@ -251,7 +250,6 @@ class TTFileManager : NSObject {
             return ""
         }
         
-        stopLoadingSound()
         return saveFileName
     }
     

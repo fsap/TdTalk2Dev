@@ -14,14 +14,16 @@ class Daisy: NSObject {
     // Daisyバージョン
     var version: CGFloat
     // メタデータ
-    var metadadta: DCMetadata
+    var dcMetadadta: DCMetadata
+    var metadata: Metadata
     // 目次情報
     var navigation: Navigation
     
 
     override init() {
         self.version = 2.02
-        self.metadadta = DCMetadata()
+        self.dcMetadadta = DCMetadata()
+        self.metadata = Metadata()
         self.navigation = Navigation()
     }
 }

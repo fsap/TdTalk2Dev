@@ -8,9 +8,15 @@
 
 import Foundation
 
+enum MediaTypes: String {
+    case XML = "application/x-dtbook+xml"
+}
+
 class Navigation: NSObject {
     
+    var contentsPaths: [String]
+    
     override init() {
-        
+        self.contentsPaths = []
     }
 }

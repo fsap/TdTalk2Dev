@@ -18,8 +18,8 @@ enum TTErrorCode :Int {
         FileAlreadyExists,
         FailedToSaveFile,
         FailedToDeleteFile,
-        OpfFileNotFound,
-        FiledToParseOpfFile
+        MetadataFileNotFound,
+        FiledToParseMetadataFile
     // 2xx : DBに関するエラー
     case FailedToSaveDB = 201
 }
