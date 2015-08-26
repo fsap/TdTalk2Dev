@@ -237,8 +237,8 @@ class FileManager: NSObject {
         case Languages.ja.langString():
             headInfo.VoiceItem = Languages.ja.rawValue
             break
-        case Languages.en.langString():
-            headInfo.VoiceItem = Languages.en.rawValue
+        case Languages.en_us.langString():
+            headInfo.VoiceItem = Languages.en_us.rawValue
             break
         default:
             break
