@@ -69,7 +69,8 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     // 並び順をリフレッシュする
     private func refreshSort()->Void {
         for (index, book: BookEntity) in enumerate(self.bookList) {
-            book.sort_num = index
+            // 降順で並べるため
+            book.sort_num = self.bookList.count - index
             self.manager.save()
         }
         self.bookListTableView.reloadData()

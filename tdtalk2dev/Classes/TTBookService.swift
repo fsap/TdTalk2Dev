@@ -184,7 +184,7 @@ class TTBookService {
     // 保存済み図書リストを取得
     //
     func getBookList()->[BookEntity] {
-        let sortDescriptor = NSSortDescriptor(key: "sort_num", ascending: true)
+        let sortDescriptor = NSSortDescriptor(key: "sort_num", ascending: false)
         let results: [BookEntity] = self.dataManager.find(DataManager.Const.kBookEntityName, condition: nil, sort: [sortDescriptor]) as! [BookEntity]
 
         return results
