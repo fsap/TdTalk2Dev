@@ -235,10 +235,10 @@ class FileManager: NSObject {
         // メタ情報の設定
         switch metadata.language.lowercaseString {
         case Languages.ja.langString():
-            headInfo.VoiceItem = Languages.ja.rawValue
+            headInfo.VoiceGengo = Languages.ja.rawValue
             break
         case Languages.en_us.langString():
-            headInfo.VoiceItem = Languages.en_us.rawValue
+            headInfo.VoiceGengo = Languages.en_us.rawValue
             break
         default:
             break

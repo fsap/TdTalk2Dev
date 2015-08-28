@@ -1,4 +1,4 @@
-﻿#import <Foundation/Foundation.h>    
+#import <Foundation/Foundation.h>    
 #import "file.h"
 #import "brlbuf.h"
 #include <string.h>
@@ -8,10 +8,16 @@
 }
 
 - (int)LoadXmlFile:(const char *)filename ReadMode:(int)RMode {
+//	FILE *fp;
 	FILE *InFp;
 	if((InFp = fopen(filename,"r")) == NULL) {
-		return(-1);
+		return -1;
 	}
+/*
+fp = fopen("log.txt", "a");
+fprintf(fp, "%s\n",filename);
+fclose(fp);
+*/
 	if (RMode) {
 		[m_EditBuffer End];
 	}
@@ -19,15 +25,15 @@
 		[m_EditBuffer Remove];
 	}
 	char TmpDat[1024];
-	char rStr[512];
+	char rStr[1024];
 	int Start, End, End2;
 	int Body = 0;
 	int Midashi = 0;
 	int Level = 0;
 	int MidashiBak = 0;
+	int Sent = 0;
 	int reply = 0;
 	int Ix = 0;
-	unsigned short LineCount = 0;
 	memset(m_EditData.Data,0x00,BRLDOC_DAT_SIZE);
 	while (1) {
 		if (MidashiBak) {
@@ -63,6 +69,20 @@
 		    !(strlen(TmpDat) > 600 && !strncmp(TmpDat + strlen(TmpDat) - 3, "、", 3))) {
 			Ix++;
 			continue;
+		}
+		Ix = strlen(TmpDat)-1;
+		while (Ix) {
+			if (TmpDat[Ix] == '>') {
+				TmpDat[Ix+1] = 0;
+				break;
+			}
+			if (TmpDat[Ix] == 0x0a ||
+			    TmpDat[Ix] == 0x0d ||
+			    TmpDat[Ix] == 0x20) {
+				Ix--;
+				continue;
+			}
+			break;
 		}
 		if (TmpDat[strlen(TmpDat)-1] == 0x0a) {
 			TmpDat[strlen(TmpDat) - 1] = 0;
@@ -169,13 +189,14 @@
 			memset(rStr, 0x00, sizeof(rStr));
 			[self SetRuby:TmpDat rStr:rStr];
 			[self SetBuf:rStr];
+			Sent = 0;
 			Midashi = 0;
 			Level = 0;
 			memset(TmpDat, 0x00, sizeof(TmpDat));
 			Ix = 0;
 			continue;
 		}
-		else if (!strncmp(TmpDat + Start, "<pagenum id=" ,12)) {
+		else if (!strncmp(TmpDat + Start, "<pagenum " ,9)) {
 			if (strlen(rStr)) {
 				m_EditData.Block.LineAttr.Map.Midashi = Midashi;
 				m_EditData.Block.LineAttr.Map.Level = Level;
@@ -247,10 +268,11 @@
 	}
 	fclose(InFp);
 	[m_EditBuffer Top];
-	return(0);
+	return 0;
 }
 
 - (int)LoadTdvFile:(const char *)filename Head:(TDV_HEAD *)HeadInfo {
+	FILE *fp;
 	FILE *InFp;
 	[m_EditBuffer Remove];
 	if((InFp = fopen(filename,"rb")) == NULL) {
@@ -261,17 +283,16 @@
 	memset(TmpDat,0x00,sizeof(TmpDat));
 	if(!fread(TmpDat,256,1,InFp)) {
 		fclose(InFp);
-		return FALSE;
+		return -1;
 	}
 	memcpy(HeadInfo,TmpDat,BRLDOC_HEAD_SIZE);
-	unsigned short LineCount = 0;
+	short IpLen = 0;
 	while(1) {
 		memset(m_EditData.Data,0x00,BRLDOC_DAT_SIZE);
 		if(!fread(m_EditData.Data, 256, 1, InFp)) {
 			break;
 		}
 		[m_EditBuffer Ins:m_EditData.Data];
-		LineCount++;
 	}
 	fclose(InFp);
 	[m_EditBuffer SetLine:HeadInfo->CurLine];
@@ -441,6 +462,7 @@ FILE *fp;
 }
 
 - (void)SetBuf:(char *)Str {
+	[self SetCho:(unsigned char *)Str];
 	int Ix;
 	start3:
 	if (strlen(Str) <= 254) {
@@ -465,6 +487,137 @@ FILE *fp;
 			strcpy(Str, Str + 254);
 			goto start3;
 		}
+	}
+}
+
+- (void)SetCho:(unsigned char *)Str {
+	int Ix = 0;
+	while (Str[Ix]) {
+		if (!strncmp(Str + Ix, "ー", 3) && Ix >= 3) {
+			if (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x81 &&
+			    Str[Ix-1] >= 0x81 &&
+			    Str[Ix-1] <= 0xa3) {
+				int Jx = Str[Ix-1] - 0x81;
+				Jx %= 10;
+				Jx /= 2;
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x80+Jx*2+2;
+				Ix += 3;
+				continue;
+			}	
+			else if (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x81 &&
+			    Str[Ix-1] >= 0xa4 &&
+			    Str[Ix-1] <= 0xa9) {
+				int Jx = Str[Ix-1] - 0xa0;
+				Jx %= 10;
+				Jx /= 2;
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x80+Jx*2+2;
+				Ix += 3;
+				continue;
+			}	
+			else if (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x81 &&
+			    Str[Ix-1] >= 0xaa &&
+			    Str[Ix-1] <= 0xae) {
+				int Jx = Str[Ix-1] - 0xaa;
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x80+Jx*2+2;
+				Ix += 3;
+				continue;
+			}	
+			else if (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x81 &&
+			    Str[Ix-1] >= 0xaf &&
+			    Str[Ix-1] <= 0xbd) {
+				int Jx = Str[Ix-1] - 0xaf;
+				Jx /= 3;
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x80+Jx*2+2;
+				Ix += 3;
+				continue;
+			}	
+			else if (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x82 &&
+			    Str[Ix-1] >= 0x89 &&
+			    Str[Ix-1] <= 0x8d) {
+				int Jx = Str[Ix-1] - 0x89;
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x80+Jx*2+2;
+				Ix += 3;
+				continue;
+			}	
+			else if ((Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x81 &&
+			    Str[Ix-1] == 0xbe) ||
+			    (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x82 &&
+			    (Str[Ix-1] == 0x83 ||
+			     Str[Ix-1] == 0x84 ||
+			     Str[Ix-1] == 0x8e ||
+			     Str[Ix-1] == 0x8f))) {
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x82;
+				Ix += 3;
+				continue;
+			}	
+			else if ((Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x81 &&
+			    Str[Ix-1] == 0xbf) ||
+			    (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x82 &&
+			    Str[Ix-1] == 0x90)) {
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x84;
+				Ix += 3;
+				continue;
+			}	
+			else if (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x82 &&
+			    (Str[Ix-1] == 0x80 ||
+			     Str[Ix-1] == 0x85 ||
+			     Str[Ix-1] == 0x86 ||
+			     Str[Ix-1] == 0x90 ||
+			     Str[Ix-1] == 0x93)) {
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x86;
+				Ix += 3;
+				continue;
+			}	
+			else if (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x82 &&
+			    (Str[Ix-1] == 0x81 ||
+			     Str[Ix-1] == 0x91)) {
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x88;
+				Ix += 3;
+				continue;
+			}	
+			else if (Str[Ix-3] == 0xe3 &&
+			    Str[Ix-2] == 0x82 &&
+			    (Str[Ix-1] == 0x82 ||
+			     Str[Ix-1] == 0x87 ||
+			     Str[Ix-1] == 0x88 ||
+			     Str[Ix-1] == 0x92)) {
+				Str[Ix] = 0xe3;
+				Str[Ix+1] = 0x81;
+				Str[Ix+2] = 0x8a;
+				Ix += 3;
+				continue;
+			}	
+		}
+		Ix++;
 	}
 }
 @end

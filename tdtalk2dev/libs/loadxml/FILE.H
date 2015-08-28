@@ -8,7 +8,7 @@
 #define BRLDOC_REV_MAP_SIZE	4
 #define BRLDOC_SUBTTL_SIZE	30
 #define SEP_NAME_SIZE	192
-#define BES_FILE_ATTR	4	// ＩＢＭ－ＢＥＳ形式(*.bes)
+#define BES_FILE_ATTR	4	// ＩＢＭ−ＢＥＳ形式(*.bes)
 #define BET_FILE_ATTR	5	// ＢＥ形式(*.bet)
 #define BRLDOC_DAT_SIZE	256
 #define BRLDOC_DAT_LENGTH 254
@@ -32,11 +32,12 @@ typedef struct {
 	unsigned short AllLine;	// 総行
 	unsigned short CurLine;	// 現在行
 	unsigned char Move;	// 移動単位
-	unsigned char VoiceItem;	// 音声種類（言語）
+	unsigned char VoiceGengo;	// 音声言語
+	unsigned char VoiceItem;	// 音声種類
 	unsigned char VoiceSpeed;	// 音声スピード
 	unsigned char VoiceTone;	// 音声トーン
 	unsigned char VoiceVolume;	// 音声ボリューム
-	unsigned char fILLE1[7];	// 予備1
+	unsigned char fILLE1[6];	// 予備1
 	char SearchWord[80];	// 検索語
 	char YomikaeFileName[80];	// 読替ファイル名
 	char fILLE2[80];	// 予備1
@@ -89,18 +90,20 @@ typedef union {
 
 @interface File : NSObject {
 	id m_EditBuffer;
-	TDV_HEAD m_EditHeadder;	// 文書ヘッダ
 	BRLDOC_DAT m_EditData;	// １行バッファ
 }
 - (void)DataSet:(id)Bufid;
 - (int)LoadXmlFile:(const char *)filename ReadMode:(int)RMode;
 - (int)LoadTdvFile:(const char *)filename Head:(TDV_HEAD *)HeadInfo;
-- (BOOL)SaveTdvFile:(const char *)filename Head:(TDV_HEAD *)HeadInfo;
+- (BOOL)SaveTdvFile:(const char *)filename Head:(TDV_HEAD*)HeadInfo;
 - (int)SaveHead:(const char *)filename Head:(TDV_HEAD*)HeadInfo;
+// 行属性を設定する関数
 - (void)SetLineHead;
+// 行内の最大文字取得関数
 - (int)EditDataLen;
 - (int)sSearch:(char *)Str1 Str2:(char *)Str2 Start:(int)Start;
 - (int)IsKugiri:(char *)Str;
 - (void)SetRuby:(char *)Str rStr:(char *)rStr;
 - (void)SetBuf:(char *)Str;
+- (void)SetCho:(unsigned char *)Str;
 @end
