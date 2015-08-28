@@ -24,7 +24,7 @@
 				<string>application/x-exe</string>
 			</array>
 			<key>CFBundleTypeName</key>
-			<string>TdTalk2</string>
+			<string>DAISY Talk</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
 				<string>ZIP</string>
@@ -45,7 +45,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
-	<string>jp.fsap.$(PRODUCT_NAME:rfc1034identifier)</string>
+	<string>jp.fsap.tdtalk2dev</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

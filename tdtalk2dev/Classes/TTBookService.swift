@@ -89,7 +89,7 @@ class TTBookService {
         // 取り込み先ディレクトリ ex) sandbox/Library/Books/
         let bookDir = FileManager.getImportDir()
         
-        if (filename.pathExtension == ImportableExtension.EXE.rawValue) {
+        if (filename.pathExtension == Constants.kImportableExtensions[0]) {
             // exe展開
             if !(self.fileManager.unzip(importFilePath, expandDir: expandDir)) {
                 LogE(NSString(format: "Unable to expand:%@", filename))
@@ -97,7 +97,7 @@ class TTBookService {
                 return
             }
             
-        } else if (filename.pathExtension == ImportableExtension.ZIP.rawValue) {
+        } else if (filename.pathExtension == Constants.kImportableExtensions[1]) {
             // zip解凍
             if !(self.fileManager.unzip(importFilePath, expandDir: expandDir)) {
                 self.fileManager.deInitImport([importFilePath])
@@ -190,6 +190,7 @@ class TTBookService {
     // 読み込みキャンセル
     //
     func cancelImport() {
+        self.fileManager.cancelLoad()
         keepLoading = false
     }
     

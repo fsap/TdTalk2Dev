@@ -50,7 +50,6 @@
 		F0E35E1F1B6A4A4B00CC6A6B /* TTAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E191B6A4A4B00CC6A6B /* TTAlertController.swift */; };
 		F0E35E201B6A4A4B00CC6A6B /* TTBookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E1A1B6A4A4B00CC6A6B /* TTBookService.swift */; };
 		F0E35E211B6A4A4B00CC6A6B /* TTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E1B1B6A4A4B00CC6A6B /* TTError.swift */; };
-		F0E35E221B6A4A4B00CC6A6B /* TTFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E1C1B6A4A4B00CC6A6B /* TTFileManager.swift */; };
 		F0E35E241B6A4A5E00CC6A6B /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E35E231B6A4A5E00CC6A6B /* libz.dylib */; };
 /* End PBXBuildFile section */
 
@@ -110,7 +109,7 @@
 		F0836F191B875B93006A7350 /* FileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FileManager.swift; path = tdtalk2dev/Classes/FileManager.swift; sourceTree = SOURCE_ROOT; };
 		F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscInfoManager.swift; path = tdtalk2dev/Classes/DiscInfoManager.swift; sourceTree = SOURCE_ROOT; };
 		F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DiscInfo.swift; path = tdtalk2dev/Classes/DiscInfo.swift; sourceTree = SOURCE_ROOT; };
-		F0E35DDA1B6A490300CC6A6B /* tdtalk2dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tdtalk2dev.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0E35DDA1B6A490300CC6A6B /* DAISY Talk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DAISY Talk.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0E35DDE1B6A490300CC6A6B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0E35DDF1B6A490300CC6A6B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0E35DE11B6A490300CC6A6B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -125,7 +124,6 @@
 		F0E35E191B6A4A4B00CC6A6B /* TTAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TTAlertController.swift; sourceTree = "<group>"; };
 		F0E35E1A1B6A4A4B00CC6A6B /* TTBookService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TTBookService.swift; sourceTree = "<group>"; };
 		F0E35E1B1B6A4A4B00CC6A6B /* TTError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TTError.swift; sourceTree = "<group>"; };
-		F0E35E1C1B6A4A4B00CC6A6B /* TTFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TTFileManager.swift; sourceTree = "<group>"; };
 		F0E35E231B6A4A5E00CC6A6B /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -234,7 +232,7 @@
 		F0E35DDB1B6A490300CC6A6B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F0E35DDA1B6A490300CC6A6B /* tdtalk2dev.app */,
+				F0E35DDA1B6A490300CC6A6B /* DAISY Talk.app */,
 				F0E35DEF1B6A490300CC6A6B /* TdTalk2DevTests.xctest */,
 			);
 			name = Products;
@@ -308,7 +306,6 @@
 				F0E35E191B6A4A4B00CC6A6B /* TTAlertController.swift */,
 				F0E35E1A1B6A4A4B00CC6A6B /* TTBookService.swift */,
 				F0E35E1B1B6A4A4B00CC6A6B /* TTError.swift */,
-				F0E35E1C1B6A4A4B00CC6A6B /* TTFileManager.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -330,7 +327,7 @@
 			);
 			name = tdtalk2dev;
 			productName = TdTalk2Dev;
-			productReference = F0E35DDA1B6A490300CC6A6B /* tdtalk2dev.app */;
+			productReference = F0E35DDA1B6A490300CC6A6B /* DAISY Talk.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F0E35DEE1B6A490300CC6A6B /* TdTalk2DevTests */ = {
@@ -426,7 +423,6 @@
 				82F0969F1B725E96002E01BC /* Util.swift in Sources */,
 				F0836F1A1B875B93006A7350 /* FileManager.swift in Sources */,
 				F0E35DE21B6A490300CC6A6B /* ViewController.swift in Sources */,
-				F0E35E221B6A4A4B00CC6A6B /* TTFileManager.swift in Sources */,
 				F0836F181B875448006A7350 /* Constants.swift in Sources */,
 				F0E35DE01B6A490300CC6A6B /* AppDelegate.swift in Sources */,
 				F0836F161B875377006A7350 /* Daisy.swift in Sources */,
@@ -605,7 +601,8 @@
 				LIBRARY_SEARCH_PATHS = "$(LIBS_ROOT)";
 				LIBS_ROOT = "$(SRCROOT)/$(PRODUCT_NAME)/Libs";
 				OTHER_SWIFT_FLAGS = "-D DEBUG";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "DAISY Talk";
 				PROVISIONING_PROFILE = "0caa61e1-5542-4ab1-a547-276dfbdc8da5";
 				SWIFT_OBJC_BRIDGING_HEADER = BridgeHeader.h;
 				USER_HEADER_SEARCH_PATHS = "$(LIBS_ROOT)";
@@ -627,7 +624,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(LIBS_ROOT)";
 				LIBS_ROOT = "$(SRCROOT)/$(PRODUCT_NAME)/Libs";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "DAISY Talk";
 				PROVISIONING_PROFILE = "0caa61e1-5542-4ab1-a547-276dfbdc8da5";
 				SWIFT_OBJC_BRIDGING_HEADER = BridgeHeader.h;
 				USER_HEADER_SEARCH_PATHS = "$(LIBS_ROOT)";

@@ -12,6 +12,8 @@ class FileManager: NSObject {
     
     let fileManager : NSFileManager = NSFileManager.defaultManager()
     
+    private var keepLoading: Bool
+
     class var sharedInstance : FileManager {
         struct Static {
             static let instance : FileManager = FileManager()
@@ -20,7 +22,7 @@ class FileManager: NSObject {
     }
 
     override init() {
-        
+        self.keepLoading = true
     }
     
     ///
@@ -245,6 +247,11 @@ class FileManager: NSObject {
         }
         
         for (index,xml) in enumerate(xmlFilePaths) {
+            if !keepLoading {
+                keepLoading = true
+                return ""
+            }
+            
             var xmlFile:String = xml
             Log(NSString(format: "xml:%@", xmlFile))
             
@@ -258,10 +265,16 @@ class FileManager: NSObject {
         Log(NSString(format: "save_to:%@", saveFileName))
         if !(file.SaveTdvFile(saveFileName.cStringUsingEncoding(NSUTF8StringEncoding)!, head:&headInfo)) {
             LogE(NSString(format: "Failed to save tdv file. save_file[%@]", saveFileName))
+            keepLoading = true
             return ""
         }
-        
+        keepLoading = true
+
         return saveFileName
+    }
+    
+    func cancelLoad() {
+        keepLoading = false
     }
     
     //
