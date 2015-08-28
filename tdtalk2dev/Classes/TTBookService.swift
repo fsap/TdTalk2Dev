@@ -25,6 +25,8 @@ class TTBookService {
     
     var delegate: BookServiceDelegate?
     
+    private var keepLoading: Bool
+    
     class var sharedInstance : TTBookService {
         struct Static {
             static let instance : TTBookService = TTBookService()
@@ -33,6 +35,7 @@ class TTBookService {
     }
     
     init () {
+        self.keepLoading = true
     }
     
     deinit {
@@ -74,6 +77,7 @@ class TTBookService {
     func importDaisy(target :String, didSuccess:(()->Void), didFailure:((errorCode: TTErrorCode)->Void))->Void {
         
         self.delegate?.importStarted()
+        self.keepLoading = true
         
         var filename: String = target.stringByRemovingPercentEncoding!
         // 外部から渡ってきたファイルのパス ex) sadbox/Documents/Inbox/What_Is_HTML5_.zip
@@ -103,6 +107,11 @@ class TTBookService {
         }
         Log(NSString(format: "tmp_dir:%@", self.fileManager.fileManager.contentsOfDirectoryAtPath(tmpDir, error: nil)!))
         
+        if !keepLoading {
+            deInitImport([importFilePath], errorCode: TTErrorCode.Normal, didSuccess: didSuccess, didFailure: didFailure)
+            return
+        }
+        
         // 初期化
         self.fileManager.initImport()
 
@@ -110,6 +119,11 @@ class TTBookService {
         daisyManager.detectDaisyStandard(expandDir, didSuccess: { (version) -> Void in
             Log(NSString(format: "success. ver:%f", version))
             
+            if !self.keepLoading {
+                self.deInitImport([importFilePath, expandDir], errorCode: TTErrorCode.Normal, didSuccess: didSuccess, didFailure: didFailure)
+                return
+            }
+
             let queue: dispatch_queue_t = dispatch_queue_create("loadMetaData", nil)
             dispatch_async(queue, { () -> Void in
 
@@ -118,7 +132,16 @@ class TTBookService {
                     Log(NSString(format: "success to get metadata. paths:%@", daisy.navigation.contentsPaths))
                     Log(NSString(format: "daisy: title:%@ language:%@", daisy.metadata.title, daisy.metadata.language))
                     
+                    if !self.keepLoading {
+                        self.deInitImport([importFilePath, expandDir], errorCode: TTErrorCode.Normal, didSuccess: didSuccess, didFailure: didFailure)
+                        return
+                    }
+
                     let saveFilePath = self.fileManager.loadXmlFiles(daisy.navigation.contentsPaths, saveDir:expandDir, metadata: daisy.metadata)
+                    if !self.keepLoading {
+                        self.deInitImport([importFilePath, expandDir], errorCode: TTErrorCode.Normal, didSuccess: didSuccess, didFailure: didFailure)
+                        return
+                    }
                     if saveFilePath == "" {
                         self.deInitImport([importFilePath, expandDir], errorCode: TTErrorCode.FailedToLoadFile, didSuccess: didSuccess, didFailure: didFailure)
                         return
@@ -161,6 +184,13 @@ class TTBookService {
             didFailure(errorCode: errorCode)
         }
         
+    }
+    
+    //
+    // 読み込みキャンセル
+    //
+    func cancelImport() {
+        keepLoading = false
     }
     
     func getImportedFiles()->[String] {
@@ -214,6 +244,7 @@ class TTBookService {
     // 終了時の共通処理
     //
     func deInitImport(deleteFilePaths: [String], errorCode: TTErrorCode, didSuccess:(()->Void), didFailure:((errorCode: TTErrorCode)->Void)) {
+        self.keepLoading = true
         self.fileManager.deInitImport(deleteFilePaths)
         if errorCode == TTErrorCode.Normal {
             self.delegate?.importCompleted()

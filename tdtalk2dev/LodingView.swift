@@ -10,7 +10,13 @@ import Foundation
 import UIKit
 import AudioToolbox
 
+protocol LoadingViewDelegate {
+    func cancelLoad()
+}
+
 class LoadingView: UIView, BookListViewDelegate {
+    
+    var delegate: LoadingViewDelegate?
     
     private var activityIndicator: UIActivityIndicatorView
     private var sound_source: dispatch_source_t?
@@ -41,8 +47,8 @@ class LoadingView: UIView, BookListViewDelegate {
         self.alpha = 0.5
         
         // メッセージラベル
-        var msgView: UIView = UIView(frame: CGRectMake(0, 0, 200, 200))
-        var msgLabel: UILabel = UILabel(frame: CGRectMake(0, 0, 200, 20))
+        var msgView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+        var msgLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 20))
         msgView.center = parentView.center
         msgView.backgroundColor = UIColor.clearColor()
         msgLabel.textColor = UIColor.whiteColor()
@@ -56,9 +62,23 @@ class LoadingView: UIView, BookListViewDelegate {
         activityIndicator.center = CGPoint(x: msgView.frame.size.width / 2, y: msgLabel.frame.origin.y + msgLabel.frame.size.height + 20)
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
         
+        // 中止ボタン
+        var cancelBtn: UIButton = UIButton(frame: CGRect(x: 0, y: 0, width: 150, height: 40))
+        cancelBtn.backgroundColor = UIColor.whiteColor()
+        cancelBtn.addTarget(self, action: "cancelBtnTapped", forControlEvents: UIControlEvents.TouchUpInside)
+        cancelBtn.setTitleColor(UIColor.blackColor(), forState: .Normal)
+        cancelBtn.setTitle(NSLocalizedString("button_title_cancel_loading", comment: ""), forState: .Normal)
+        cancelBtn.setTitleColor(UIColor.grayColor(), forState: .Highlighted)
+        cancelBtn.setTitle(NSLocalizedString("button_title_canceling", comment: ""), forState: .Highlighted)
+        cancelBtn.layer.masksToBounds = true
+        cancelBtn.layer.cornerRadius = 5
+        cancelBtn.center.x = parentView.center.x
+        cancelBtn.frame.origin.y = (parentView.frame.size.height / 4) * 3
+        
         msgView.addSubview(msgLabel)
         msgView.addSubview(activityIndicator)
         self.addSubview(msgView)
+        self.addSubview(cancelBtn)
         
         parentView.addSubview(self)
     }
@@ -67,6 +87,17 @@ class LoadingView: UIView, BookListViewDelegate {
         for view in self.subviews {
             view.removeFromSuperview()
         }
+    }
+    
+    func cancelBtnTapped() {
+        LogM("Cancel")
+        for view in self.subviews {
+            if view.isKindOfClass(UIButton) {
+                (view as! UIButton).setTitle(NSLocalizedString("button_title_canceling", comment: ""), forState: .Normal)
+                (view as! UIButton).enabled = false
+            }
+        }
+        self.delegate?.cancelLoad()
     }
     
     func start() {

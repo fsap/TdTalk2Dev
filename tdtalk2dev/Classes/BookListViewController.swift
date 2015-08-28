@@ -12,7 +12,7 @@ protocol BookListViewDelegate {
     func needRedraw(view: UIView)
 }
 
-class BookListViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, BookServiceDelegate {
+class BookListViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, BookServiceDelegate, LoadingViewDelegate {
     
     struct Const {
         static let kBookListViewLineHeight :CGFloat = 64.0
@@ -91,6 +91,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         LogM("start loading")
         
         self.loadingView = LoadingView(parentView: self.view)
+        self.loadingView?.delegate = self
         self.delegate = self.loadingView
         self.loadingView?.start()
     }
@@ -204,7 +205,6 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         LogM("import started.")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//            self.view.backgroundColor = UIColor.grayColor()
             self.startLoading()
         })
     }
@@ -223,7 +223,14 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         LogM("import failed.")
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.stopLoading()
-//            self.view.backgroundColor = UIColor.whiteColor()
         })
+    }
+    
+    //
+    // MARK: LoadingViewDelegate
+    //
+    func cancelLoad() {
+        var bookService: TTBookService = TTBookService.sharedInstance
+        bookService.cancelImport()
     }
 }
