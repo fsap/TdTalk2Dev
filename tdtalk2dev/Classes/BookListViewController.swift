@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol BookListViewDelegate {
+    func needRedraw(view: UIView)
+}
+
 class BookListViewController : UIViewController, UITableViewDelegate, UITableViewDataSource, BookServiceDelegate {
     
     struct Const {
@@ -20,6 +24,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     var manager: DataManager = DataManager.sharedInstance
     var alertController: TTAlertController = TTAlertController(nibName: nil, bundle: nil)
     var loadingView: LoadingView?
+    var delegate: BookListViewDelegate?
     
     
     override func viewDidLoad() {
@@ -38,6 +43,11 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
 //            self.createBooks()
 //            self.bookList = TTBookService.sharedInstance.getBookList()
 //        }
+    }
+    
+    override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
+        LogM("Lotation")
+        self.delegate?.needRedraw(self.view)
     }
     
     override func didReceiveMemoryWarning() {
@@ -81,6 +91,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         LogM("start loading")
         
         self.loadingView = LoadingView(parentView: self.view)
+        self.delegate = self.loadingView
         self.loadingView?.start()
     }
     
@@ -193,7 +204,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         LogM("import started.")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.view.backgroundColor = UIColor.grayColor()
+//            self.view.backgroundColor = UIColor.grayColor()
             self.startLoading()
         })
     }
@@ -212,7 +223,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         LogM("import failed.")
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.stopLoading()
-            self.view.backgroundColor = UIColor.whiteColor()
+//            self.view.backgroundColor = UIColor.whiteColor()
         })
     }
 }

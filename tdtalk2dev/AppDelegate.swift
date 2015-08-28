@@ -95,13 +95,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // インポート
         bookService.importDaisy(url.lastPathComponent, didSuccess: { () -> Void in
             // 完了ダイアログ
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.alertController.show(
-                    self.window?.rootViewController!,
-                    title:NSLocalizedString("dialog_title_notice", comment: ""),
-                    message:NSLocalizedString("msg_import_success", comment: ""),
-                    actionOk: {() -> Void in})
-            })
+//            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//                self.alertController.show(
+//                    self.window?.rootViewController!,
+//                    title:NSLocalizedString("dialog_title_notice", comment: ""),
+//                    message:NSLocalizedString("msg_import_success", comment: ""),
+//                    actionOk: {() -> Void in})
+//            })
         }) { (errorCode) -> Void in
             // エラーダイアログ
             dispatch_async(dispatch_get_main_queue(), { () -> Void in

@@ -25,6 +25,7 @@
 "error_msg_109" = "メタ情報の解析に失敗しました";
 
 "msg_import_success" = "ファイルの取り込みが完了しました";
+"msg_loading" = "図書データの読み込み中";
 
 "row_action_delete" = "Delete";
 
