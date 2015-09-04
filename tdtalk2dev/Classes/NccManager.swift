@@ -10,6 +10,7 @@ import Foundation
 
 enum SmilTag: String {
     case H1 = "h1"
+    case H2 = "h2"
     case A = "a"
 }
 
@@ -120,7 +121,7 @@ class NccManager: NSObject, NSXMLParserDelegate {
             }
         }
         
-        if elementName == SmilTag.H1.rawValue {
+        if elementName == SmilTag.H1.rawValue || elementName == SmilTag.H2.rawValue {
             self.isInSmil = true
         } else if self.isInSmil {
             if elementName == SmilTag.A.rawValue {
@@ -150,7 +151,7 @@ class NccManager: NSObject, NSXMLParserDelegate {
             }
         }
         if self.isInSmil {
-            if elementName == SmilTag.H1.rawValue {
+            if elementName == SmilTag.H1.rawValue || elementName == SmilTag.H2.rawValue {
                 self.isInSmil = false
             }
         }

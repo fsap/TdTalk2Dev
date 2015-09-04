@@ -31,7 +31,16 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         LogM("viewDidLoad")
         // Do any additional setup after loading the view, typically from a nib.
+        // title
         self.navigationItem.title = NSLocalizedString("page_title_book_list", comment: "")
+        // help
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: NSLocalizedString("button_title_help", comment: ""),
+            style: .Plain,
+            target: self,
+            action: "leftBarButtonTapped:"
+        )
+        // edit
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.bookListTableView.delegate = self
         
@@ -47,7 +56,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     
     override func didRotateFromInterfaceOrientation(fromInterfaceOrientation: UIInterfaceOrientation) {
         LogM("Lotation")
-        self.delegate?.needRedraw(self.view)
+        self.delegate?.needRedraw(self.parentViewController!.view)
     }
     
     override func didReceiveMemoryWarning() {
@@ -65,15 +74,9 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     // MARK: Private
     //
     
-    // test
-    private func createBooks()->Void {
-        
-        for (var i=0; i<5; i++) {
-            var book: BookEntity = self.manager.getEntity(DataManager.Const.kBookEntityName) as! BookEntity
-            book.title = NSString(format: "title_%d", i) as String
-            book.sort_num = i
-            manager.save()
-        }
+    // help
+    internal func leftBarButtonTapped(button: UIButton) {
+        UIApplication.sharedApplication().openURL(NSURL(string: NSLocalizedString("link_help", comment: ""))!)
     }
     
     // 並び順をリフレッシュする
@@ -90,7 +93,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     private func startLoading()->Void {
         LogM("start loading")
         
-        self.loadingView = LoadingView(parentView: self.view)
+        self.loadingView = LoadingView(parentView: self.parentViewController!.view)
         self.loadingView?.delegate = self
         self.delegate = self.loadingView
         self.loadingView?.start()
@@ -101,7 +104,17 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         self.loadingView?.stop()
     }
     
-    
+    // test
+    private func createBooks()->Void {
+        
+        for (var i=0; i<5; i++) {
+            var book: BookEntity = self.manager.getEntity(DataManager.Const.kBookEntityName) as! BookEntity
+            book.title = NSString(format: "title_%d", i) as String
+            book.sort_num = i
+            manager.save()
+        }
+    }
+        
     
     //
     // MARK: UITableViewDelegate

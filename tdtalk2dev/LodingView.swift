@@ -44,7 +44,16 @@ class LoadingView: UIView, BookListViewDelegate {
         //
         self.frame = parentView.frame
         self.backgroundColor = UIColor.grayColor()
-        self.alpha = 0.5
+//        self.isAccessibilityElement = true
+//        self.accessibilityLabel = NSLocalizedString("msg_loading", comment: "")
+//        self.accessibilityFrame = self.frame
+        
+        // mask
+        var maskView: UIView = UIView(frame: parentView.frame)
+        maskView.backgroundColor = UIColor.grayColor()
+        maskView.isAccessibilityElement = true
+        maskView.accessibilityLabel = NSLocalizedString("msg_loading", comment: "")
+        maskView.accessibilityFrame = self.frame
         
         // メッセージラベル
         var msgView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
@@ -74,9 +83,14 @@ class LoadingView: UIView, BookListViewDelegate {
         cancelBtn.layer.cornerRadius = 5
         cancelBtn.center.x = parentView.center.x
         cancelBtn.frame.origin.y = (parentView.frame.size.height / 4) * 3
+        cancelBtn.isAccessibilityElement = true
+        cancelBtn.accessibilityLabel = cancelBtn.titleLabel?.text
+        cancelBtn.accessibilityFrame = cancelBtn.frame
         
         msgView.addSubview(msgLabel)
         msgView.addSubview(activityIndicator)
+        
+        self.addSubview(maskView)
         self.addSubview(msgView)
         self.addSubview(cancelBtn)
         
@@ -153,4 +167,9 @@ class LoadingView: UIView, BookListViewDelegate {
             createView(view)
         }
     }
+    
+    override func accessibilityActivate() -> Bool {
+        return true
+    }
+    
 }
