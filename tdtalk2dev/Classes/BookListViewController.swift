@@ -33,6 +33,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         // Do any additional setup after loading the view, typically from a nib.
         // title
         self.navigationItem.title = NSLocalizedString("page_title_book_list", comment: "")
+        self.navigationItem.accessibilityLabel = NSLocalizedString("page_title_book_list", comment: "")
         // help
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("button_title_help", comment: ""),
@@ -40,6 +41,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
             target: self,
             action: "leftBarButtonTapped:"
         )
+        self.navigationItem.leftBarButtonItem?.accessibilityLabel = NSLocalizedString("button_title_help", comment: "")
         // edit
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.bookListTableView.delegate = self
@@ -75,7 +77,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     //
     
     // help
-    internal func leftBarButtonTapped(button: UIButton) {
+    func leftBarButtonTapped(button: UIButton) {
         UIApplication.sharedApplication().openURL(NSURL(string: NSLocalizedString("link_help", comment: ""))!)
     }
     
@@ -150,6 +152,11 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         let book: BookEntity = self.bookList[indexPath.row]
         Log(NSString(format: "--- selected book. title:%@ file:%@", book.title, book.filename))
+        
+        // Debug
+        let fileManager: NSFileManager = NSFileManager.defaultManager()
+        let attr = fileManager.attributesOfItemAtPath(NSString(format: "%@/%@.tdv", FileManager.getImportDir().stringByAppendingPathComponent(book.filename), book.filename) as String, error: nil)
+        Log(NSString(format: "--- selected book. file:%@ attr:%@", book.filename, attr!))
     }
     
     // 編集可否の設定

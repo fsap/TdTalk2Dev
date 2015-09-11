@@ -9,7 +9,7 @@
 "dialog_title_error" = "Error";
 "dialog_title_notice" = "Confirm";
 
-"dialog_msg_delete" = "削除してもよろしいですか？";
+"dialog_msg_delete" = "Delete book?";
 
 "dialog_ok" = "OK";
 "dialog_cancel" = "Cancel";
@@ -20,18 +20,18 @@
 
 "link_help" = "http://www.nbs.co.jp/ios/english/daisytalk/use.htm";
 
-"error_msg_101" = "ファイルの取得に失敗しました";
-"error_msg_102" = "ファイルがありません";
-"error_msg_103" = "サポートしていない形式のファイルです";
-"error_msg_104" = "ファイルの読み込みに失敗しました";
-"error_msg_105" = "既に取り込み済みのファイルです";
-"error_msg_106" = "ファイルの保存に失敗しました";
-"error_msg_107" = "ファイルの削除に失敗しました";
-"error_msg_108" = "メタ情報ファイルが見つかりません";
-"error_msg_109" = "メタ情報の解析に失敗しました";
+"error_msg_101" = "Failed to get file.";
+"error_msg_102" = "File not found.";
+"error_msg_103" = "Unsupported file.";
+"error_msg_104" = "Failed to load file";
+"error_msg_105" = "Already imported.";
+"error_msg_106" = "Failed to save file.";
+"error_msg_107" = "Failed to delete file.";
+"error_msg_108" = "Meta data not found.";
+"error_msg_109" = "Filed to analyze meta data.";
 
-"msg_import_success" = "ファイルの取り込みが完了しました";
-"msg_loading" = "図書データの読み込み中";
+"msg_import_success" = "Import completed.";
+"msg_loading" = "Loading the book data...";
 
 "row_action_delete" = "Delete";
 
