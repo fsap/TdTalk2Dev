@@ -315,6 +315,13 @@ class FileManager: NSObject {
             Log(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
             return TTErrorCode.FailedToSaveFile
         }
+        // パーミッションを変える
+        var attr: Dictionary<String, Int> = [NSFilePosixPermissions: 777]
+        self.fileManager.setAttributes(attr, ofItemAtPath: saveFilePath, error: &err)
+        if err != nil {
+            Log(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
+            return TTErrorCode.FailedToSaveFile
+        }
         
         return TTErrorCode.Normal
     }
