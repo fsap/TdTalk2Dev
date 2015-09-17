@@ -91,20 +91,20 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         self.bookListTableView.reloadData()
     }
     
-    // ローディング中の処理
-    private func startLoading()->Void {
-        LogM("start loading")
-        
-        self.loadingView = LoadingView(parentView: self.parentViewController!.view)
-        self.loadingView?.delegate = self
-        self.delegate = self.loadingView
-        self.loadingView?.start()
-    }
-    
-    // ローディング中のサウンド停止
-    private func stopLoading()->Void {
-        self.loadingView?.stop()
-    }
+//    // ローディング中の処理
+//    private func startLoading()->Void {
+//        LogM("start loading")
+//        
+//        self.loadingView = LoadingView(parentView: self.parentViewController!.view)
+//        self.loadingView?.delegate = self
+//        self.delegate = self.loadingView
+//        self.loadingView?.start()
+//    }
+//    
+//    // ローディング中のサウンド停止
+//    private func stopLoading()->Void {
+//        self.loadingView?.stop()
+//    }
     
     // test
     private func createBooks()->Void {
@@ -221,30 +221,30 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     // MARK: BookServiceDelegate
     //
     
-    func importStarted() {
-        LogM("import started.")
-        
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.startLoading()
-        })
-    }
+//    func importStarted() {
+//        LogM("import started.")
+//        
+//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//            self.startLoading()
+//        })
+//    }
     
     func importCompleted() {
         LogM("import completed.")
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.stopLoading()
-            self.view.backgroundColor = UIColor.whiteColor()
+//            self.stopLoading()
+//            self.view.backgroundColor = UIColor.whiteColor()
             self.bookList = TTBookService.sharedInstance.getBookList()
             self.bookListTableView.reloadData()
         })
     }
     
-    func importFailed() {
-        LogM("import failed.")
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            self.stopLoading()
-        })
-    }
+//    func importFailed() {
+//        LogM("import failed.")
+//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//            self.stopLoading()
+//        })
+//    }
     
     //
     // MARK: LoadingViewDelegate

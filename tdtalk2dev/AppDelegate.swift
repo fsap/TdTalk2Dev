@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var alertController: TTAlertController = TTAlertController(nibName: nil, bundle: nil)
+    var loadingView: LoadingView?
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -73,6 +74,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func startImportBook(url: String)->Bool {
         
+        startLoading()
+        
         var bookService = TTBookService.sharedInstance
         var ret = bookService.validate(url.lastPathComponent)
         
@@ -85,28 +88,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 window?.rootViewController!,
                 title:NSLocalizedString("dialog_title_error", comment: ""),
                 message:TTError.getErrorMessage(ret), actionOk: {() -> Void in})
+            stopLoading()
             return false
         }
-        
-        
-        // ToDo : ユーザーへのインポート確認メッセージ
-        
         
         // インポート
         bookService.importDaisy(url.lastPathComponent, didSuccess: { () -> Void in
             // 完了
+            LogM("Import Success.")
+            self.stopLoading()
             
         }) { (errorCode) -> Void in
             // エラーダイアログ
+            LogE(NSString(format: "err. code:%d", errorCode.rawValue))
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.alertController.show(
                     self.window?.rootViewController!,
                     title:NSLocalizedString("dialog_title_error", comment: ""),
                     message:TTError.getErrorMessage(errorCode),
-                    actionOk: {() -> Void in})
+                    actionOk: {() -> Void in
+                        self.stopLoading()
+                })
             })
         }
         return true
+    }
+    
+    // ローディング中の処理
+    private func startLoading()->Void {
+        LogM("start loading")
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.loadingView = LoadingView(parentView: self.window!.rootViewController!.view)
+//          self.loadingView?.delegate = self
+//          self.delegate = self.loadingView
+            self.loadingView?.hidden = false
+            self.loadingView?.start()
+        })
+    }
+    
+    // ローディング中のサウンド停止
+    private func stopLoading()->Void {
+        LogM("stop loading")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.loadingView?.stop()
+            self.loadingView?.hidden = true
+            self.loadingView = nil
+        })
     }
 }
 

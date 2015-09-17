@@ -9,9 +9,9 @@
 import Foundation
 
 protocol BookServiceDelegate {
-    func importStarted()
+//    func importStarted()
     func importCompleted()
-    func importFailed()
+//    func importFailed()
 }
 
 
@@ -76,7 +76,7 @@ class TTBookService {
     //
     func importDaisy(target :String, didSuccess:(()->Void), didFailure:((errorCode: TTErrorCode)->Void))->Void {
         
-        self.delegate?.importStarted()
+//        self.delegate?.importStarted()
         self.keepLoading = true
         
         var filename: String = target.stringByRemovingPercentEncoding!
@@ -251,7 +251,7 @@ class TTBookService {
             self.delegate?.importCompleted()
             didSuccess()
         } else {
-            self.delegate?.importFailed()
+//            self.delegate?.importFailed()
             didFailure(errorCode: errorCode)
         }
     }
