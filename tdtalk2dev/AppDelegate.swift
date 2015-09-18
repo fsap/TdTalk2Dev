@@ -96,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         bookService.importDaisy(url.lastPathComponent, didSuccess: { () -> Void in
             // 完了
             LogM("Import Success.")
-            self.stopLoading()
+//            self.stopLoading()
             
         }) { (errorCode) -> Void in
             // エラーダイアログ
@@ -107,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     title:NSLocalizedString("dialog_title_error", comment: ""),
                     message:TTError.getErrorMessage(errorCode),
                     actionOk: {() -> Void in
-                        self.stopLoading()
+//                        self.stopLoading()
                 })
             })
         }
@@ -115,7 +115,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // ローディング中の処理
-    private func startLoading()->Void {
+    public func startLoading()->Void {
         LogM("start loading")
         
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -128,7 +128,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     // ローディング中のサウンド停止
-    private func stopLoading()->Void {
+    public func stopLoading()->Void {
         LogM("stop loading")
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.loadingView?.stop()

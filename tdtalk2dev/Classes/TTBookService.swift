@@ -11,7 +11,7 @@ import Foundation
 protocol BookServiceDelegate {
 //    func importStarted()
     func importCompleted()
-//    func importFailed()
+    func importFailed()
 }
 
 
@@ -251,7 +251,7 @@ class TTBookService {
             self.delegate?.importCompleted()
             didSuccess()
         } else {
-//            self.delegate?.importFailed()
+            self.delegate?.importFailed()
             didFailure(errorCode: errorCode)
         }
     }

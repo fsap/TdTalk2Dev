@@ -67,6 +67,7 @@ class DaisyManager: NSObject {
                 
                 // メタ情報を探しにいく
                 for discinfo in discInfos {
+                    /* 2.02は対象外(エラーとする)
                     let nccPath: String = discinfo.href
                     // nccじゃない
                     if nccPath.lastPathComponent != DaisyStandard2_02.MetadataFileName {
@@ -74,9 +75,17 @@ class DaisyManager: NSObject {
                         didFailure(errorCode: TTErrorCode.FailedToLoadFile)
                         return
                     }
+                    */
+                    
+                    let opfPath: String = discinfo.href
+                    if opfPath.pathExtension != DaisyStandard3.MetadataFileExtension {
+                        LogE(NSString(format: "opf path is invalid. opf:%@", opfPath))
+                        didFailure(errorCode: TTErrorCode.FailedToLoadFile)
+                        return
+                    }
                 }
                 // 2.02チェックOK
-                didSuccess(version: DaisyStandards.Version2_02.rawValue)
+                didSuccess(version: DaisyStandards.Version3.rawValue)
             }, didParseFailure: { (errorCode) -> Void in
                 LogE(NSString(format: "[%d] Failed to parse discinfo.html. dir:%@", errorCode.rawValue, discInfoPath!))
                 didFailure(errorCode: TTErrorCode.FiledToParseMetadataFile)
@@ -84,7 +93,8 @@ class DaisyManager: NSObject {
             })
             return
         }
-        
+
+/* 2.02は対象外(エラーとする)
         // 規格2.02のファイル構成で読みに行く
         var nccFilePath: String? = nil
         if fileManager.searchFile(DaisyStandard2_02.MetadataFileName, targetDir: targetFileDir, recursive: true, result: &nccFilePath) {
@@ -101,6 +111,7 @@ class DaisyManager: NSObject {
             })
             return
         }
+*/
         
         // 規格3のファイル構成で読みに行く
         var opfFilePath: String? = nil

@@ -234,17 +234,21 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
 //            self.stopLoading()
 //            self.view.backgroundColor = UIColor.whiteColor()
+            var appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            appDelegate.stopLoading()
             self.bookList = TTBookService.sharedInstance.getBookList()
             self.bookListTableView.reloadData()
         })
     }
     
-//    func importFailed() {
-//        LogM("import failed.")
-//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+    func importFailed() {
+        LogM("import failed.")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
 //            self.stopLoading()
-//        })
-//    }
+            var appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            appDelegate.stopLoading()
+        })
+    }
     
     //
     // MARK: LoadingViewDelegate
