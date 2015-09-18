@@ -115,6 +115,10 @@ class LoadingView: UIView, BookListViewDelegate {
     }
     
     func start() {
+        if activityIndicator.isAnimating() {
+            return
+        }
+            
         activityIndicator.startAnimating()
         
         /*

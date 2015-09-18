@@ -82,7 +82,7 @@ class OpfManager: NSObject, NSXMLParserDelegate {
         qualifiedName qName: String?,
         attributes attributeDict: [NSObject : AnyObject])
     {
-        Log(NSString(format: " - found element:[%@] attr[%@]", elementName, attributeDict))
+//        Log(NSString(format: " - found element:[%@] attr[%@]", elementName, attributeDict))
         
         if elementName == DCMetadataTag.DC_Metadata.rawValue {
             self.isInDcMetadata = true
@@ -109,7 +109,7 @@ class OpfManager: NSObject, NSXMLParserDelegate {
     
     // valueを読み込み
     func parser(parser: NSXMLParser, foundCharacters string: String?) {
-        Log(NSString(format: " - found value:[%@] current_elem:%@", string!, self.currentElement))
+//        Log(NSString(format: " - found value:[%@] current_elem:%@", string!, self.currentElement))
         
         if self.isInDcMetadata {
             switch self.currentElement {
@@ -146,7 +146,7 @@ class OpfManager: NSObject, NSXMLParserDelegate {
     
     // 要素の終了タグを読み込み
     func parser(parser: NSXMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        Log(NSString(format: " - found element:[%@]", elementName))
+//        Log(NSString(format: " - found element:[%@]", elementName))
         
         if self.isInDcMetadata {
             if elementName == DCMetadataTag.DC_Metadata.rawValue {

@@ -46,6 +46,12 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         self.navigationItem.rightBarButtonItem = self.editButtonItem()
         self.bookListTableView.delegate = self
         
+        // ロード中だったらローディング画面へ
+        let appDelegate: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        if appDelegate.loadingFlg {
+            self.startLoading()
+        }
+        
         var bookService = TTBookService.sharedInstance
         bookService.delegate = self
         
@@ -95,15 +101,20 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     private func startLoading()->Void {
         LogM("start loading")
         
-        self.loadingView = LoadingView(parentView: self.parentViewController!.view)
-        self.loadingView?.delegate = self
-        self.delegate = self.loadingView
-        self.loadingView?.start()
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.loadingView = LoadingView(parentView: self.parentViewController!.view)
+            self.loadingView?.delegate = self
+            self.delegate = self.loadingView
+            self.loadingView?.start()
+        })
     }
     
     // ローディング中のサウンド停止
     private func stopLoading()->Void {
-        self.loadingView?.stop()
+        LogM("stop loading")
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.loadingView?.stop()
+        })
     }
     
     // test
@@ -224,9 +235,9 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     func importStarted() {
         LogM("import started.")
         
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.startLoading()
-        })
+//        })
     }
     
     func importCompleted() {
@@ -241,9 +252,9 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     
     func importFailed() {
         LogM("import failed.")
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+//        dispatch_async(dispatch_get_main_queue(), { () -> Void in
             self.stopLoading()
-        })
+//        })
     }
     
     //

@@ -76,7 +76,7 @@ class TTBookService {
     //
     func importDaisy(target :String, didSuccess:(()->Void), didFailure:((errorCode: TTErrorCode)->Void))->Void {
         
-        self.delegate?.importStarted()
+//        self.delegate?.importStarted()
         self.keepLoading = true
         
         var filename: String = target.stringByRemovingPercentEncoding!
@@ -100,7 +100,6 @@ class TTBookService {
         } else if (filename.pathExtension == Constants.kImportableExtensions[1]) {
             // zip解凍
             if !(self.fileManager.unzip(importFilePath, expandDir: expandDir)) {
-                self.fileManager.deInitImport([importFilePath])
                 deInitImport([importFilePath], errorCode: TTErrorCode.UnsupportedFileType, didSuccess: didSuccess, didFailure: didFailure)
                 return
             }
@@ -172,16 +171,14 @@ class TTBookService {
                     
                 }, didFailure: { (errorCode) -> Void in
                     LogE(NSString(format: "[%d]Failed to load metadata. dir:%@", errorCode.rawValue, expandDir))
-                    self.fileManager.deInitImport([importFilePath, expandDir])
-                    didFailure(errorCode: errorCode)
+                    self.deInitImport([importFilePath, expandDir], errorCode: errorCode, didSuccess: didSuccess, didFailure: didFailure)
                 })
 
             })
             
         }) { (errorCode) -> Void in
             LogE(NSString(format: "[%d]Invalid directory format. dir:%@", errorCode.rawValue, expandDir))
-            self.fileManager.deInitImport([importFilePath, expandDir])
-            didFailure(errorCode: errorCode)
+            self.deInitImport([importFilePath, expandDir], errorCode: errorCode, didSuccess: didSuccess, didFailure: didFailure)
         }
         
     }

@@ -12,6 +12,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var loadingFlg: Bool = false
     var alertController: TTAlertController = TTAlertController(nibName: nil, bundle: nil)
 
 
@@ -72,8 +73,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     private func startImportBook(url: String)->Bool {
+        if self.loadingFlg {
+            return false
+        }
         
         var bookService = TTBookService.sharedInstance
+        bookService.delegate?.importStarted()
         var ret = bookService.validate(url.lastPathComponent)
         
         // エラーメッセージ
@@ -81,6 +86,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         case TTErrorCode.Normal:
             break
         default:
+            self.loadingFlg = false
             alertController.show(
                 window?.rootViewController!,
                 title:NSLocalizedString("dialog_title_error", comment: ""),
@@ -89,23 +95,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         
-        // ToDo : ユーザーへのインポート確認メッセージ
+        self.loadingFlg = true
+        let queue = dispatch_queue_create("import_book", nil)
+        dispatch_async(queue, { () -> Void in
+            // インポート
+            bookService.importDaisy(url.lastPathComponent, didSuccess: { () -> Void in
+                // 完了
+                self.loadingFlg = false
+                
+                }) { (errorCode) -> Void in
+                    // エラーダイアログ
+                    self.loadingFlg = false
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.alertController.show(
+                            self.window?.rootViewController!,
+                            title:NSLocalizedString("dialog_title_error", comment: ""),
+                            message:TTError.getErrorMessage(errorCode),
+                            actionOk: {() -> Void in})
+                    })
+            }
+        })
         
-        
-        // インポート
-        bookService.importDaisy(url.lastPathComponent, didSuccess: { () -> Void in
-            // 完了
-            
-        }) { (errorCode) -> Void in
-            // エラーダイアログ
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.alertController.show(
-                    self.window?.rootViewController!,
-                    title:NSLocalizedString("dialog_title_error", comment: ""),
-                    message:TTError.getErrorMessage(errorCode),
-                    actionOk: {() -> Void in})
-            })
-        }
         return true
     }
 }
