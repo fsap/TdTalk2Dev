@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>    
+﻿#import <Foundation/Foundation.h>    
 #import <stdio.h>	// for printf,fgets,puts
 #import <ctype.h>	// for isspace, tolower
 #import <string.h>	// for strcmp, strncpy, strlen
@@ -8,7 +8,7 @@
 #define BRLDOC_REV_MAP_SIZE	4
 #define BRLDOC_SUBTTL_SIZE	30
 #define SEP_NAME_SIZE	192
-#define BES_FILE_ATTR	4	// ＩＢＭ−ＢＥＳ形式(*.bes)
+#define BES_FILE_ATTR	4	// ＩＢＭ－ＢＥＳ形式(*.bes)
 #define BET_FILE_ATTR	5	// ＢＥ形式(*.bet)
 #define BRLDOC_DAT_SIZE	256
 #define BRLDOC_DAT_LENGTH 254
@@ -94,6 +94,7 @@ typedef union {
 }
 - (void)DataSet:(id)Bufid;
 - (int)LoadXmlFile:(const char *)filename ReadMode:(int)RMode;
+- (int)LoadHtmlFile:(const char *)filename ReadMode:(int)RMode;
 - (int)LoadTdvFile:(const char *)filename Head:(TDV_HEAD *)HeadInfo;
 - (BOOL)SaveTdvFile:(const char *)filename Head:(TDV_HEAD*)HeadInfo;
 - (int)SaveHead:(const char *)filename Head:(TDV_HEAD*)HeadInfo;

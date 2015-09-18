@@ -1,4 +1,4 @@
-#import <Foundation/Foundation.h>    
+﻿#import <Foundation/Foundation.h>    
 #import "file.h"
 #import "brlbuf.h"
 #include <string.h>
@@ -183,7 +183,7 @@ fclose(fp);
 			Ix = 0;
 			continue;
 		}
-		else if (!strncmp(TmpDat + Start, "<span class=\"ruby\">", 19)) {
+		else if ([self sSearch:TmpDat Str2:"<span class=\"ruby\">" Start:0] != -1) {
 			m_EditData.Block.LineAttr.Map.Midashi = Midashi;
 			m_EditData.Block.LineAttr.Map.Level = Level;
 			memset(rStr, 0x00, sizeof(rStr));
@@ -269,6 +269,265 @@ fclose(fp);
 	fclose(InFp);
 	[m_EditBuffer Top];
 	return 0;
+}
+
+- (int)LoadHtmlFile:(const char *)filename ReadMode:(int)RMode {
+	FILE *fp;
+	FILE *InFp;
+	if((InFp = fopen(filename,"r")) == NULL) {
+		return(-1);
+	}
+fp = fopen("log.txt", "a");
+fprintf(fp, "%s\n",filename);
+fclose(fp);
+	if (RMode) {
+		[m_EditBuffer End];
+	}
+	char TmpDat[1024];
+	char rStr[1024];
+	int Start, End, End2;
+	int Midashi = 0;
+	int MidashiBak = 0;
+	int Level = 0;
+	int IsRuby = 0;
+	int reply = 0;
+	int Ix = 0;
+	int Body = 0;
+	memset(m_EditData.Data,0x00,BRLDOC_DAT_SIZE);
+	memset(TmpDat, 0x00, sizeof(TmpDat));
+	while (1) {
+		if (MidashiBak) {
+			strcpy(TmpDat, "<h");
+			TmpDat[2] = MidashiBak + 0x30;
+			MidashiBak = 0;
+			Ix = 3;
+		}
+		if((TmpDat[Ix] = fgetc(InFp)) == EOF) {
+			break;
+		}
+		if (IsRuby == 2) {
+			IsRuby = 0;
+		}
+		if (!strncmp(TmpDat + strlen(TmpDat) - 6, "<ruby>", 6)) {
+			IsRuby = 1;
+		}
+		if (!strncmp(TmpDat + strlen(TmpDat) - 7, "</ruby>", 7)) {
+			IsRuby = 2;
+		}
+		if (TmpDat[Ix] != 0x0a &&
+		    [self sSearch:TmpDat Str2:"<br />" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"<br>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"</p>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"</h1>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"</h2>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"</h3>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"</h4>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"</h5>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"</h6>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"</title>" Start:0] == -1 &&
+		    [self sSearch:TmpDat Str2:"<h1" Start:1] <= 0 &&
+		    [self sSearch:TmpDat Str2:"<h2" Start:1] <= 0 &&
+		    [self sSearch:TmpDat Str2:"<h2" Start:1] <= 0 &&
+		    [self sSearch:TmpDat Str2:"<h3" Start:1] <= 0 &&
+		    [self sSearch:TmpDat Str2:"<h4" Start:1] <= 0 &&
+		    [self sSearch:TmpDat Str2:"<h5" Start:1] <= 0 &&
+		    [self sSearch:TmpDat Str2:"<h6" Start:1] <= 0 &&
+		    !(strlen(TmpDat) > 600 && !IsRuby && !strncmp(TmpDat + strlen(TmpDat) - 3, "。", 3)) &&
+		    !(strlen(TmpDat) > 600 && !IsRuby && !strncmp(TmpDat + strlen(TmpDat) - 2, ". ", 2)) &&
+		    !(strlen(TmpDat) > 600 && !IsRuby && !strncmp(TmpDat + strlen(TmpDat) - 2, ", ", 2)) &&
+		    !(strlen(TmpDat) > 600 && !IsRuby && !strncmp(TmpDat + strlen(TmpDat) - 1, ">", 1)) &&
+		    !(strlen(TmpDat) > 600 && !IsRuby && !strncmp(TmpDat + strlen(TmpDat) - 3, "、", 3))) {
+			Ix++;
+			continue;
+		}
+		if (TmpDat[strlen(TmpDat)-1] == 0x0a) {
+			TmpDat[strlen(TmpDat) - 1] = 0;
+			if (!strlen(TmpDat)) {
+				Ix = 0;
+				memset(TmpDat, 0x00, sizeof(TmpDat));
+				continue;
+			}
+		}
+		if (!strncmp(TmpDat + strlen(TmpDat) - 3, "<h1", 3) ||
+		    !strncmp(TmpDat + strlen(TmpDat) - 3, "<h2", 3) ||
+		    !strncmp(TmpDat + strlen(TmpDat) - 3, "<h3", 3) ||
+		    !strncmp(TmpDat + strlen(TmpDat) - 3, "<h4", 3) ||
+		    !strncmp(TmpDat + strlen(TmpDat) - 3, "<h5", 3) ||
+		    !strncmp(TmpDat + strlen(TmpDat) - 3, "<h6", 3)) {
+			MidashiBak = TmpDat[strlen(TmpDat) - 1] - 0x30;
+			TmpDat[strlen(TmpDat) - 3] = 0;
+		}
+		Start = 0;
+		while (1) {
+			if (TmpDat[Start] != 0x20) {
+				break;
+			}
+			Start++;
+		}
+		if (!TmpDat[Start]) {
+			Ix = 0;
+			memset(TmpDat, 0x00, sizeof(TmpDat));
+			continue;
+		}
+
+fp = fopen("log.txt", "a");
+fprintf(fp, "%d  %s\n",strlen(TmpDat), TmpDat);
+fclose(fp);
+
+		if ([self sSearch:TmpDat Str2:"<body" Start:0] != -1) {
+			Body = 1;
+		}
+		if ([self sSearch:TmpDat Str2:"<h1" Start:0] != -1) {
+			Midashi = 1;
+			Level = 1;
+		}
+		if ([self sSearch:TmpDat Str2:"<h2" Start:0] != -1) {
+			Midashi = 2;
+			Level = 2;
+		}
+		if ([self sSearch:TmpDat Str2:"<h3" Start:0] != -1) {
+			Midashi = 3;
+			Level = 4;
+		}
+		if ([self sSearch:TmpDat Str2:"<h4" Start:0] != -1) {
+			Midashi = 4;
+			Level = 8;
+		}
+		if ([self sSearch:TmpDat Str2:"<h5" Start:0] != -1) {
+			Midashi = 5;
+			Level = 8;
+		}
+		if ([self sSearch:TmpDat Str2:"<h6" Start:0] != -1) {
+			Midashi = 6;
+			Level = 8;
+		}
+		Start = [self sSearch:TmpDat Str2:"title>" Start:0];
+		if (!RMode && Start != -1) {
+			Start += 6;
+			End = [self sSearch:TmpDat Str2:"<" Start:Start+1];
+			if (Start < End) {
+				memset(rStr, 0x00, sizeof(rStr));
+				strncpy(rStr, TmpDat + Start, End - Start);
+				m_EditData.Block.LineAttr.Map.Midashi = 1;
+				m_EditData.Block.LineAttr.Map.Level = 1;
+				[self SetBuf:rStr];
+				Midashi = 0;
+				Level = 0;
+			}
+			memset(TmpDat, 0x00, sizeof(TmpDat));
+			Ix = 0;
+			continue;
+		}
+		if (!Body) {
+			memset(TmpDat, 0x00, sizeof(TmpDat));
+			Ix = 0;
+			continue;
+		}
+		memset(rStr, 0x00, sizeof(rStr));
+		Start = 0;
+		while (1) {
+			if (TmpDat[Start] != 0x20) {
+				break;
+			}
+			Start++;
+		}
+		start6:
+
+fp = fopen("log.txt", "a");
+fprintf(fp, "start6  %s\n", TmpDat + Start);
+fclose(fp);
+
+		if (!TmpDat[Start]) {
+			if (strlen(rStr)) {
+				m_EditData.Block.LineAttr.Map.Midashi = Midashi;
+				m_EditData.Block.LineAttr.Map.Level = Level;
+				[self SetBuf:rStr];
+				Midashi = 0;
+				Level = 0;
+			}
+			memset(TmpDat, 0x00, sizeof(TmpDat));
+			Ix = 0;
+			continue;
+		}
+		else if (!strncmp(TmpDat + Start, "<ruby>", 6)) {
+			Start = [self sSearch:TmpDat Str2:"<rt>" Start:Start];
+			if (Start == -1) {
+				if (strlen(rStr)) {
+					m_EditData.Block.LineAttr.Map.Midashi = 1;
+					m_EditData.Block.LineAttr.Map.Level = Level;
+					[self SetBuf:rStr];
+					Midashi = 0;
+					Level = 0;
+				}
+				memset(TmpDat, 0x00, sizeof(TmpDat));
+				Ix = 0;
+				continue;
+			}
+			else {
+				Start += 4;
+				End = [self sSearch:TmpDat Str2:"<" Start:Start];
+				if (End && Start < End) {
+					strncat(rStr, TmpDat + Start, End - Start);
+					Start = [self sSearch:TmpDat Str2:"</ruby>" Start:End];
+					if (Start) {
+						Start += 7;
+						goto start6;
+					}
+				}
+				else {
+					m_EditData.Block.LineAttr.Map.Midashi = Midashi;
+					m_EditData.Block.LineAttr.Map.Level = Level;
+					[self SetBuf:rStr];
+					Midashi = 0;
+					Level = 0;
+					memset(TmpDat, 0x00, sizeof(TmpDat));
+					Ix = 0;
+					continue;
+				}
+			}
+		}
+		else if (TmpDat[Start] == '<') {
+			Start = [self sSearch:TmpDat Str2:">" Start:Start];
+			if (Start == -1) {
+				if (strlen(rStr)) {
+					m_EditData.Block.LineAttr.Map.Midashi = 1;
+					m_EditData.Block.LineAttr.Map.Level = Level;
+					[self SetBuf:rStr];
+					Midashi = 0;
+					Level = 0;
+				}
+				memset(TmpDat, 0x00, sizeof(TmpDat));
+				Ix = 0;
+				continue;
+			}
+			else {
+				Start++;
+				goto start6;
+			}
+		}
+		else {
+			End = [self sSearch:TmpDat Str2:"<" Start:Start];
+			if (End && Start < End) {
+				strncat(rStr, TmpDat + Start, End - Start);
+				Start = End;
+				goto start6;
+			}	
+			else {
+				strcat(rStr, TmpDat + Start);
+				m_EditData.Block.LineAttr.Map.Midashi = Midashi;
+				m_EditData.Block.LineAttr.Map.Level = Level;
+				[self SetBuf:rStr];
+				Midashi = 0;
+				Level = 0;
+				memset(TmpDat, 0x00, sizeof(TmpDat));
+				Ix = 0;
+				continue;
+			}	
+		}	
+	}
+	fclose(InFp);
+	[m_EditBuffer Top];
+	return(0);
 }
 
 - (int)LoadTdvFile:(const char *)filename Head:(TDV_HEAD *)HeadInfo {
@@ -426,6 +685,9 @@ FILE *fp;
 			strncpy(rStr, Str + Start, End - Start);
 		}
 	}
+	else {
+		Start = 0;
+	}
 	start:
 	End = [self sSearch:Str Str2:"<span class=\"rt\">" Start:Start];
 	if (End != -1) {
@@ -439,6 +701,9 @@ FILE *fp;
 	End = [self sSearch:Str Str2:"</span></span>" Start:Start];
 	if (End != -1) {
 		Start = End + 14;
+		if (*(Str + Start) == '<') {
+			goto start;
+		}
 		End = [self sSearch:Str Str2:"<" Start:Start+1];
 		if (Start && Start < End) {
 			strncat(rStr, Str + Start, End - Start);
