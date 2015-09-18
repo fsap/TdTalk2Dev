@@ -9,6 +9,49 @@
 /* Begin PBXBuildFile section */
 		823439431B73E0C70066E942 /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823439421B73E0C70066E942 /* BookEntity.swift */; };
 		825185941B6A884700196715 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 825185961B6A884700196715 /* Localizable.strings */; };
+		827EEBA01BACC76C007BC56E /* DCMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9FA8F1B82366C00796A9F /* DCMetadata.swift */; };
+		827EEBA11BACC76C007BC56E /* TTAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E191B6A4A4B00CC6A6B /* TTAlertController.swift */; };
+		827EEBA21BACC76C007BC56E /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B9885C1B839E7F00EA3408 /* unzip.c */; };
+		827EEBA31BACC76C007BC56E /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B9885E1B839E7F00EA3408 /* zip.c */; };
+		827EEBA41BACC76C007BC56E /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 82B988621B839E7F00EA3408 /* SSZipArchive.m */; };
+		827EEBA51BACC76C007BC56E /* TTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E1B1B6A4A4B00CC6A6B /* TTError.swift */; };
+		827EEBA61BACC76C007BC56E /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F0969E1B725E96002E01BC /* Util.swift */; };
+		827EEBA71BACC76C007BC56E /* FileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F191B875B93006A7350 /* FileManager.swift */; };
+		827EEBA81BACC76C007BC56E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35DE11B6A490300CC6A6B /* ViewController.swift */; };
+		827EEBA91BACC76C007BC56E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F171B875448006A7350 /* Constants.swift */; };
+		827EEBAA1BACC76C007BC56E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35DDF1B6A490300CC6A6B /* AppDelegate.swift */; };
+		827EEBAB1BACC76C007BC56E /* Daisy.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F151B875377006A7350 /* Daisy.swift */; };
+		827EEBAC1BACC76C007BC56E /* OPF.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F071B82E7C8006A7350 /* OPF.swift */; };
+		827EEBAD1BACC76C007BC56E /* DiscInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C37B1F1B82CB2A0045E1D8 /* DiscInfoManager.swift */; };
+		827EEBAE1BACC76C007BC56E /* OpfManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F051B82E79D006A7350 /* OpfManager.swift */; };
+		827EEBAF1BACC76C007BC56E /* BookListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E171B6A4A4B00CC6A6B /* BookListViewController.swift */; };
+		827EEBB01BACC76C007BC56E /* file.m in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C2481B6BD213007D782A /* file.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		827EEBB11BACC76C007BC56E /* ioapi.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B988581B839E7F00EA3408 /* ioapi.c */; };
+		827EEBB21BACC76C007BC56E /* DiscInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C37B211B82D3A20045E1D8 /* DiscInfo.swift */; };
+		827EEBB31BACC76C007BC56E /* mztools.c in Sources */ = {isa = PBXBuildFile; fileRef = 82B9885A1B839E7F00EA3408 /* mztools.c */; };
+		827EEBB41BACC76C007BC56E /* ManifestItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82E9FA931B8243D100796A9F /* ManifestItem.swift */; };
+		827EEBB51BACC76C007BC56E /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D8D0961B87D07900360A39 /* Metadata.swift */; };
+		827EEBB61BACC76C007BC56E /* TTBookService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E35E1A1B6A4A4B00CC6A6B /* TTBookService.swift */; };
+		827EEBB71BACC76C007BC56E /* Changelog.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 82B988541B839E7F00EA3408 /* Changelog.markdown */; };
+		827EEBB81BACC76C007BC56E /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A803001B73CC330027094D /* DataManager.swift */; };
+		827EEBB91BACC76C007BC56E /* DaisyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F111B873072006A7350 /* DaisyManager.swift */; };
+		827EEBBA1BACC76C007BC56E /* BookEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823439421B73E0C70066E942 /* BookEntity.swift */; };
+		827EEBBB1BACC76C007BC56E /* tdtalk2dev.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 82A802FB1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld */; };
+		827EEBBC1BACC76C007BC56E /* LIST.M in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C24A1B6BD213007D782A /* LIST.M */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		827EEBBD1BACC76C007BC56E /* Readme.markdown in Sources */ = {isa = PBXBuildFile; fileRef = 82B988601B839E7F00EA3408 /* Readme.markdown */; };
+		827EEBBE1BACC76C007BC56E /* NccManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D8D0941B87CD7200360A39 /* NccManager.swift */; };
+		827EEBBF1BACC76C007BC56E /* BRLBUF.M in Sources */ = {isa = PBXBuildFile; fileRef = 82F0C2461B6BD213007D782A /* BRLBUF.M */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		827EEBC01BACC76C007BC56E /* LodingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D8D0991B88B5A900360A39 /* LodingView.swift */; };
+		827EEBC11BACC76C007BC56E /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0836F131B8752AE006A7350 /* Navigation.swift */; };
+		827EEBC31BACC76C007BC56E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0836F0A1B837626006A7350 /* AudioToolbox.framework */; };
+		827EEBC41BACC76C007BC56E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 82E9FA911B8238CF00796A9F /* libxml2.dylib */; };
+		827EEBC51BACC76C007BC56E /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0E35E231B6A4A5E00CC6A6B /* libz.dylib */; };
+		827EEBC71BACC76C007BC56E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 825185961B6A884700196715 /* Localizable.strings */; };
+		827EEBC81BACC76C007BC56E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0E35DE31B6A490300CC6A6B /* Main.storyboard */; };
+		827EEBC91BACC76C007BC56E /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 82B988551B839E7F00EA3408 /* LICENSE */; };
+		827EEBCA1BACC76C007BC56E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F0E35DE81B6A490300CC6A6B /* LaunchScreen.xib */; };
+		827EEBCB1BACC76C007BC56E /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 82B988531B839E7F00EA3408 /* .gitignore */; };
+		827EEBCC1BACC76C007BC56E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0E35DE61B6A490300CC6A6B /* Images.xcassets */; };
 		82A802FD1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 82A802FB1B73CA9A0027094D /* tdtalk2dev.xcdatamodeld */; };
 		82A803021B73CC330027094D /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82A803001B73CC330027094D /* DataManager.swift */; };
 		82B988631B839E7F00EA3408 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 82B988531B839E7F00EA3408 /* .gitignore */; };
@@ -69,6 +112,8 @@
 		825185971B6A885900196715 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
 		825185981B6A885900196715 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		825185991B6A885900196715 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
+		827EEBD01BACC76C007BC56E /* DAISY Talk(Trial).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DAISY Talk(Trial).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		827EEBD11BACC76D007BC56E /* tdtalk2devtrial-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "tdtalk2devtrial-Info.plist"; path = "/Users/fujiwara/workspaces/TdTalk2Dev/tdtalk2devtrial-Info.plist"; sourceTree = "<absolute>"; };
 		82A802FC1B73CA9A0027094D /* tdtalk2dev.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = tdtalk2dev.xcdatamodel; sourceTree = "<group>"; };
 		82A803001B73CC330027094D /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataManager.swift; path = tdtalk2dev/Classes/DataManager.swift; sourceTree = SOURCE_ROOT; };
 		82B988531B839E7F00EA3408 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
@@ -128,6 +173,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		827EEBC21BACC76C007BC56E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827EEBC31BACC76C007BC56E /* AudioToolbox.framework in Frameworks */,
+				827EEBC41BACC76C007BC56E /* libxml2.dylib in Frameworks */,
+				827EEBC51BACC76C007BC56E /* libz.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F0E35DD71B6A490300CC6A6B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -234,6 +289,7 @@
 			children = (
 				F0E35DDA1B6A490300CC6A6B /* DAISY Talk.app */,
 				F0E35DEF1B6A490300CC6A6B /* TdTalk2DevTests.xctest */,
+				827EEBD01BACC76C007BC56E /* DAISY Talk(Trial).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -259,6 +315,7 @@
 			isa = PBXGroup;
 			children = (
 				F0E35DDE1B6A490300CC6A6B /* Info.plist */,
+				827EEBD11BACC76D007BC56E /* tdtalk2devtrial-Info.plist */,
 				825185961B6A884700196715 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
@@ -313,6 +370,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		827EEB9E1BACC76C007BC56E /* tdtalk2devtrial */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 827EEBCD1BACC76C007BC56E /* Build configuration list for PBXNativeTarget "tdtalk2devtrial" */;
+			buildPhases = (
+				827EEB9F1BACC76C007BC56E /* Sources */,
+				827EEBC21BACC76C007BC56E /* Frameworks */,
+				827EEBC61BACC76C007BC56E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = tdtalk2devtrial;
+			productName = TdTalk2Dev;
+			productReference = 827EEBD01BACC76C007BC56E /* DAISY Talk(Trial).app */;
+			productType = "com.apple.product-type.application";
+		};
 		F0E35DD91B6A490300CC6A6B /* tdtalk2dev */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = F0E35DF91B6A490300CC6A6B /* Build configuration list for PBXNativeTarget "tdtalk2dev" */;
@@ -381,12 +455,26 @@
 			projectRoot = "";
 			targets = (
 				F0E35DD91B6A490300CC6A6B /* tdtalk2dev */,
+				827EEB9E1BACC76C007BC56E /* tdtalk2devtrial */,
 				F0E35DEE1B6A490300CC6A6B /* TdTalk2DevTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		827EEBC61BACC76C007BC56E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827EEBC71BACC76C007BC56E /* Localizable.strings in Resources */,
+				827EEBC81BACC76C007BC56E /* Main.storyboard in Resources */,
+				827EEBC91BACC76C007BC56E /* LICENSE in Resources */,
+				827EEBCA1BACC76C007BC56E /* LaunchScreen.xib in Resources */,
+				827EEBCB1BACC76C007BC56E /* .gitignore in Resources */,
+				827EEBCC1BACC76C007BC56E /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F0E35DD81B6A490300CC6A6B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -410,6 +498,47 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		827EEB9F1BACC76C007BC56E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				827EEBA01BACC76C007BC56E /* DCMetadata.swift in Sources */,
+				827EEBA11BACC76C007BC56E /* TTAlertController.swift in Sources */,
+				827EEBA21BACC76C007BC56E /* unzip.c in Sources */,
+				827EEBA31BACC76C007BC56E /* zip.c in Sources */,
+				827EEBA41BACC76C007BC56E /* SSZipArchive.m in Sources */,
+				827EEBA51BACC76C007BC56E /* TTError.swift in Sources */,
+				827EEBA61BACC76C007BC56E /* Util.swift in Sources */,
+				827EEBA71BACC76C007BC56E /* FileManager.swift in Sources */,
+				827EEBA81BACC76C007BC56E /* ViewController.swift in Sources */,
+				827EEBA91BACC76C007BC56E /* Constants.swift in Sources */,
+				827EEBAA1BACC76C007BC56E /* AppDelegate.swift in Sources */,
+				827EEBAB1BACC76C007BC56E /* Daisy.swift in Sources */,
+				827EEBAC1BACC76C007BC56E /* OPF.swift in Sources */,
+				827EEBAD1BACC76C007BC56E /* DiscInfoManager.swift in Sources */,
+				827EEBAE1BACC76C007BC56E /* OpfManager.swift in Sources */,
+				827EEBAF1BACC76C007BC56E /* BookListViewController.swift in Sources */,
+				827EEBB01BACC76C007BC56E /* file.m in Sources */,
+				827EEBB11BACC76C007BC56E /* ioapi.c in Sources */,
+				827EEBB21BACC76C007BC56E /* DiscInfo.swift in Sources */,
+				827EEBB31BACC76C007BC56E /* mztools.c in Sources */,
+				827EEBB41BACC76C007BC56E /* ManifestItem.swift in Sources */,
+				827EEBB51BACC76C007BC56E /* Metadata.swift in Sources */,
+				827EEBB61BACC76C007BC56E /* TTBookService.swift in Sources */,
+				827EEBB71BACC76C007BC56E /* Changelog.markdown in Sources */,
+				827EEBB81BACC76C007BC56E /* DataManager.swift in Sources */,
+				827EEBB91BACC76C007BC56E /* DaisyManager.swift in Sources */,
+				827EEBBA1BACC76C007BC56E /* BookEntity.swift in Sources */,
+				827EEBBB1BACC76C007BC56E /* tdtalk2dev.xcdatamodeld in Sources */,
+				827EEBBC1BACC76C007BC56E /* LIST.M in Sources */,
+				827EEBBD1BACC76C007BC56E /* Readme.markdown in Sources */,
+				827EEBBE1BACC76C007BC56E /* NccManager.swift in Sources */,
+				827EEBBF1BACC76C007BC56E /* BRLBUF.M in Sources */,
+				827EEBC01BACC76C007BC56E /* LodingView.swift in Sources */,
+				827EEBC11BACC76C007BC56E /* Navigation.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F0E35DD61B6A490300CC6A6B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -501,6 +630,54 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		827EEBCE1BACC76C007BC56E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shuichi Fujiwara (77Q569439Y)";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(LIBS_ROOT)",
+				);
+				INFOPLIST_FILE = "tdtalk2devtrial-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(LIBS_ROOT)";
+				LIBS_ROOT = "$(SRCROOT)/$(PRODUCT_NAME)/Libs";
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "DAISY Talk(Trial)";
+				PROVISIONING_PROFILE = "e7f429f6-0724-433f-bda4-05e9e553d2dc";
+				SWIFT_OBJC_BRIDGING_HEADER = BridgeHeader.h;
+				USER_HEADER_SEARCH_PATHS = "$(LIBS_ROOT)";
+			};
+			name = Debug;
+		};
+		827EEBCF1BACC76C007BC56E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(LIBS_ROOT)",
+				);
+				INFOPLIST_FILE = "tdtalk2devtrial-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(LIBS_ROOT)";
+				LIBS_ROOT = "$(SRCROOT)/$(PRODUCT_NAME)/Libs";
+				PRODUCT_MODULE_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "DAISY Talk(Trial)";
+				PROVISIONING_PROFILE = "e7f429f6-0724-433f-bda4-05e9e553d2dc";
+				SWIFT_OBJC_BRIDGING_HEADER = BridgeHeader.h;
+				USER_HEADER_SEARCH_PATHS = "$(LIBS_ROOT)";
+			};
+			name = Release;
+		};
 		F0E35DF71B6A490300CC6A6B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -669,6 +846,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		827EEBCD1BACC76C007BC56E /* Build configuration list for PBXNativeTarget "tdtalk2devtrial" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				827EEBCE1BACC76C007BC56E /* Debug */,
+				827EEBCF1BACC76C007BC56E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		F0E35DD51B6A490300CC6A6B /* Build configuration list for PBXProject "tdtalk2dev" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
