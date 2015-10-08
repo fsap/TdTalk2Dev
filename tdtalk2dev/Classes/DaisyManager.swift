@@ -77,7 +77,7 @@ class DaisyManager: NSObject {
                     }
                     */
                     
-                    let opfPath: String = discinfo.href
+                    let opfPath: NSURL = NSURL(fileURLWithPath: discinfo.href)
                     if opfPath.pathExtension != DaisyStandard3.MetadataFileExtension {
                         LogE(NSString(format: "opf path is invalid. opf:%@", opfPath))
                         didFailure(errorCode: TTErrorCode.FailedToLoadFile)

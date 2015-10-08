@@ -32,22 +32,34 @@ class FileManager: NSObject {
     ///
     /// 他アプリからエクスポートされたファイルの格納場所を取得
     ///
-    static func getInboxDir()-> String {
+    static func getInboxDirString()-> String {
         return getHomeURL().URLByAppendingPathComponent(Constants.kInboxDocumentPath).absoluteString
+    }
+    
+    static func getInboxDir()->NSURL {
+        return getHomeURL().URLByAppendingPathComponent(Constants.kInboxDocumentPath)
     }
     
     ///
     /// 本棚のパスを取得
     ///
-    static func getImportDir()->String {
+    static func getImportDirString()->String {
         return getHomeURL().URLByAppendingPathComponent(Constants.kSaveDocumentPath).absoluteString
     }
-    
+
+    static func getImportDir()->NSURL {
+        return getHomeURL().URLByAppendingPathComponent(Constants.kSaveDocumentPath)
+    }
+
     ///
     /// 作業用のパスを取得
     ///
-    static func getTmpDir()->String {
+    static func getTmpDirString()->String {
         return getHomeURL().URLByAppendingPathComponent(Constants.kTmpDocumentPath).absoluteString
+    }
+    
+    static func getTmpDir()->NSURL {
+        return getHomeURL().URLByAppendingPathComponent(Constants.kTmpDocumentPath)
     }
     
     ///
@@ -102,16 +114,15 @@ class FileManager: NSObject {
         }
         
         // 配下のファイルを取得
-        var err: NSError? = nil
-        // ToDo: 例外処理
-        let contents = try! self.fileManager.contentsOfDirectoryAtPath(target)
-//        let contents = self.fileManager.contentsOfDirectoryAtPath(target, error: &err)!
-        if err != nil {
-            LogE(NSString(format: "Search target directory has no contents. dif:%@ err_code:%d msg:%@", target, err!.code, err!.description))
+        var contents: [String] = []
+        do {
+            contents = try self.fileManager.contentsOfDirectoryAtPath(target)
+        } catch let error as NSError {
+            LogE(NSString(format: "Search target directory has no contents. dir:%@ [%d][msg]", target, error.code, error.description))
             return false
         }
         for c in contents {
-            let c: String  = c as! String
+//            let c: String  = c as! String
             let content: String = c.stringByRemovingPercentEncoding!
             Log(NSString(format: "content:%@", content))
             // 中身のファイルチェック
@@ -159,16 +170,16 @@ class FileManager: NSObject {
         }
         
         // 配下のファイルを取得
-        var err: NSError? = nil
-        // ToDo: 例外処理
-        let contents = try! self.fileManager.contentsOfDirectoryAtPath(target)
-//        let contents = self.fileManager.contentsOfDirectoryAtPath(target, error: &err)!
-        if err != nil {
-            LogE(NSString(format: "Search target directory has no contents. dif:%@ err_code:%d msg:%@", target, err!.code, err!.description))
+        var contents: [String] = []
+        do {
+            contents = try self.fileManager.contentsOfDirectoryAtPath(target)
+        } catch let error as NSError {
+            LogE(NSString(format: "Search target directory has no contents. dir:%@ [%d][msg]", target, error.code, error.description))
             return false
         }
+
         for c in contents {
-            let c: String  = c as! String
+//            let c: String  = c as! String
             let content: String = c.stringByRemovingPercentEncoding!
             Log(NSString(format: "content:%@", content))
             // 中身のファイルチェック
@@ -204,12 +215,11 @@ class FileManager: NSObject {
     // インポートを開始するにあたっての初期処理
     //
     func initImport()->Void {
-        if !(exists(FileManager.getImportDir())) {
-            var err:NSError? = nil
-            // ToDo: 例外処理
-            try! self.fileManager.createDirectoryAtPath(FileManager.getImportDir(), withIntermediateDirectories: false, attributes: nil)
-            if err != nil {
-                LogE(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
+        if !(exists(FileManager.getImportDirString())) {
+            do {
+                try self.fileManager.createDirectoryAtPath(FileManager.getImportDirString(), withIntermediateDirectories: false, attributes: nil)
+            } catch let error as NSError {
+                LogE(NSString(format: "Failed to create dir. dir:[%@] [%d][%@]", FileManager.getImportDirString(), error.code, error.description))
             }
         }
     }
@@ -302,7 +312,7 @@ class FileManager: NSObject {
         // タイトル名
         let titleBaseName = NSURL(fileURLWithPath: saveFileName!).URLByDeletingPathExtension!.absoluteString
         // 保存先ディレクトリ
-        let saveDir: NSURL = NSURL(fileURLWithPath: FileManager.getImportDir()).URLByAppendingPathComponent(titleBaseName)
+        let saveDir: NSURL = FileManager.getImportDir().URLByAppendingPathComponent(titleBaseName)
         // 保存先フルパス
         let saveFilePath = saveDir.URLByAppendingPathComponent(saveFileName!).absoluteString
         Log(NSString(format: "save_to:%@", saveFilePath))
@@ -313,27 +323,26 @@ class FileManager: NSObject {
         }
         
         // 保存用ディレクトリの作成
-        var err:NSError?
-        // ToDo: 例外処理
-        try! self.fileManager.createDirectoryAtPath(saveDir.absoluteString, withIntermediateDirectories: false, attributes: nil)
-        if err != nil {
-            Log(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
+        do {
+            try self.fileManager.createDirectoryAtPath(saveDir.absoluteString, withIntermediateDirectories: false, attributes: nil)
+        } catch let error as NSError {
+            Log(NSString(format: "Failed to create dir for save. dir:[%@] [%d][%@]", saveDir, error.code, error.description))
             return TTErrorCode.FailedToSaveFile
         }
         
         // 保存
-        // ToDo: 例外処理
-        try! self.fileManager.copyItemAtPath(importFilePath, toPath: saveFilePath)
-        if err != nil {
-            Log(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
+        do {
+            try self.fileManager.copyItemAtPath(importFilePath, toPath: saveFilePath)
+        } catch let error as NSError {
+            Log(NSString(format: "Failed to save file. save_path:[%@] [%d][%@]", saveFilePath, error.code, error.description))
             return TTErrorCode.FailedToSaveFile
         }
         // パーミッションを変える
-        var attr: Dictionary<String, Int> = [NSFilePosixPermissions: 777]
-        // ToDo: 例外処理
-        try! self.fileManager.setAttributes(attr, ofItemAtPath: saveFilePath)
-        if err != nil {
-            Log(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
+        let attr: Dictionary<String, Int> = [NSFilePosixPermissions: 777]
+        do {
+            try self.fileManager.setAttributes(attr, ofItemAtPath: saveFilePath)
+        } catch let error as NSError {
+            Log(NSString(format: "Failed to change file. attr:[%@] [%d][%@]", attr, error.code, error.description))
             return TTErrorCode.FailedToSaveFile
         }
         
@@ -343,13 +352,13 @@ class FileManager: NSObject {
 
     // 指定ファイルを削除
     func removeFile(path:String)->TTErrorCode {
-        var err:NSError? = nil
-        // ToDo: 例外処理
-        try! self.fileManager.removeItemAtPath(path)
-        if err != nil {
-            Log(NSString(format: "code:[%d] msg:[%@]", err!.code, err!.description))
+        do {
+            try self.fileManager.removeItemAtPath(path)
+        } catch let error as NSError {
+            Log(NSString(format: "Failed to delete file. path:[%@] [%d][%@]", path, error.code, error.description))
             return TTErrorCode.FailedToDeleteFile
         }
+        
         return TTErrorCode.Normal
     }
 

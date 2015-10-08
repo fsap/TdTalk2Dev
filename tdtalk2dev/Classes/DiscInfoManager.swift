@@ -52,7 +52,7 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
         self.didParseFailure = didParseFailure
         
         let url: NSURL? = NSURL.fileURLWithPath(discinfoFilePath)
-        let parser: NSXMLParser? = NSXMLParser(contentsOfURL: url)
+        let parser: NSXMLParser? = NSXMLParser(contentsOfURL: url!)
         
         if parser == nil {
             didParseFailure(errorCode: TTErrorCode.MetadataFileNotFound)
@@ -78,7 +78,7 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
         didStartElement elementName: String,
         namespaceURI: String?,
         qualifiedName qName: String?,
-        attributes attributeDict: [NSObject : AnyObject])
+        attributes attributeDict: [String : String])
     {
         Log(NSString(format: " - found element:[%@] attr[%@]", elementName, attributeDict))
         
@@ -88,17 +88,11 @@ class DiscInfoManager: NSObject, NSXMLParserDelegate {
             self.currentElement = elementName
             if elementName == DiscinfoTag.A.rawValue {
                 // xmlファイル情報のみ取得
-                var discInfo: DiscInfo = DiscInfo()
-                discInfo.href = attributeDict[DiscinfoAttr.Href.rawValue] as! String
+                let discInfo: DiscInfo = DiscInfo()
+                discInfo.href = attributeDict[DiscinfoAttr.Href.rawValue]!
                 self.discInfos.append(discInfo)
             }
         }
-    }
-    
-    // valueを読み込み
-    func parser(parser: NSXMLParser, foundCharacters string: String?) {
-        Log(NSString(format: " - found value:[%@] current_elem:%@", string!, self.currentElement))
-        
     }
     
     // 要素の終了タグを読み込み

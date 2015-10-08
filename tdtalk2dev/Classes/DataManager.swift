@@ -35,17 +35,20 @@ class DataManager {
         Log(NSString(format: "sqlite:%@", url))
         var error: NSError? = nil
         var failureReason = "There was an error creating or loading the application's saved data."
-        if coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil, error: &error) == nil {
-            coordinator = nil
+        
+        do {
+            try coordinator!.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
+        } catch {
             // Report any error we got.
             var dict = [String: AnyObject]()
             dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data"
             dict[NSLocalizedFailureReasonErrorKey] = failureReason
-            dict[NSUnderlyingErrorKey] = error
-            error = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
+            
+            dict[NSUnderlyingErrorKey] = error as NSError
+            let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
             // Replace this with code to handle the error appropriately.
             // abort() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            NSLog("Unresolved error \(error), \(error!.userInfo)")
+            NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
             abort()
         }
         
@@ -72,7 +75,7 @@ class DataManager {
     }
     
     func find(entityName: String, condition: NSPredicate?, sort: [NSSortDescriptor]?)->[AnyObject]? {
-        var request: NSFetchRequest = NSFetchRequest()
+        let request: NSFetchRequest = NSFetchRequest()
         let entity = NSEntityDescription.entityForName(entityName, inManagedObjectContext: self.managedObjectContext!)
         request.entity = entity
         if condition != nil {
@@ -82,24 +85,28 @@ class DataManager {
             request.sortDescriptors = sort
         }
         
-        var error: NSError?
-        let results = self.managedObjectContext?.executeFetchRequest(request, error: &error)
-        if error != nil {
-            Log(NSString(format: "error code:%d msg:%@", error!.code, error!.description))
+        var results: [AnyObject]? = []
+        do {
+            results = try self.managedObjectContext?.executeFetchRequest(request)
+        } catch let error as NSError {
+            LogE(NSString(format: "Failed to fetch data. [%d][%@]", error.code, error.description))
             return []
         }
         return results
     }
     
     func getEntity(entityName: String)->NSManagedObject {
-        return NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: self.managedObjectContext!) as! NSManagedObject
+        return NSEntityDescription.insertNewObjectForEntityForName(entityName, inManagedObjectContext: self.managedObjectContext!) 
     }
     
     func save()->TTErrorCode {
         if let context = self.managedObjectContext {
-            var error: NSError? = nil
-            if context.hasChanges && !context.save(&error) {
-                Log(NSString(format: "error code:%d msg:%@", error!.code, error!.description))
+            do {
+                if context.hasChanges {
+                    try context.save()
+                }
+            } catch let error as NSError {
+                Log(NSString(format: "Failed to save data. [%d][%@]", error.code, error.description))
                 return TTErrorCode.FailedToSaveDB
             }
         }
@@ -108,10 +115,11 @@ class DataManager {
     
     func remove(entity: NSManagedObject)->TTErrorCode {
         if let context = self.managedObjectContext {
-            context.deleteObject(entity)
-            var error: NSError? = nil
-            if !context.save(&error) {
-                Log(NSString(format: "error code:%d msg:%@", error!.code, error!.description))
+            do {
+                context.deleteObject(entity)
+                try context.save()
+            } catch let error as NSError {
+                Log(NSString(format: "Failed to delete data. [%d][%@]", error.code, error.description))
                 return TTErrorCode.FailedToSaveDB
             }
         }

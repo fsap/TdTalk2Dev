@@ -52,7 +52,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
             self.startLoading()
         }
         
-        var bookService = TTBookService.sharedInstance
+        let bookService = TTBookService.sharedInstance
         bookService.delegate = self
         
         self.bookList = bookService.getBookList()
@@ -121,7 +121,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     private func createBooks()->Void {
         
         for (var i=0; i<5; i++) {
-            var book: BookEntity = self.manager.getEntity(DataManager.Const.kBookEntityName) as! BookEntity
+            let book: BookEntity = self.manager.getEntity(DataManager.Const.kBookEntityName) as! BookEntity
             book.title = NSString(format: "title_%d", i) as String
             book.sort_num = i
             manager.save()
