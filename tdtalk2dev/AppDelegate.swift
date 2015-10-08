@@ -21,10 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         if launchOptions != nil {
             var options = launchOptions!
-            var url = options[UIApplicationLaunchOptionsURLKey] as! NSURL;
-            Log(NSString(format: "url:%@", url.absoluteString!))
+            let url = options[UIApplicationLaunchOptionsURLKey] as! NSURL;
+            Log(NSString(format: "url:%@", url.absoluteString))
             
-            if !self.startImportBook(url.absoluteString!) {
+            if !self.startImportBook(url.absoluteString) {
                 return false
             }
         }
@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Log(NSString(format: "lifecycle:handle_open_url:%@", url.lastPathComponent!))
         // Override point for customization after application launch.
         
-        if !self.startImportBook(url.absoluteString!) {
+        if !self.startImportBook(url.absoluteString) {
             return false
         }
 
@@ -72,14 +72,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
-    private func startImportBook(url: String)->Bool {
+    private func startImportBook(urlStr: String)->Bool {
         if self.loadingFlg {
             return false
         }
+        let url: NSURL = NSURL(fileURLWithPath: urlStr)
         
-        var bookService = TTBookService.sharedInstance
+        let bookService = TTBookService.sharedInstance
         bookService.delegate?.importStarted()
-        var ret = bookService.validate(url.lastPathComponent)
+        let ret = bookService.validate(url.lastPathComponent!)
         
         // エラーメッセージ
         switch ret {
@@ -99,7 +100,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let queue = dispatch_queue_create("import_book", nil)
         dispatch_async(queue, { () -> Void in
             // インポート
-            bookService.importDaisy(url.lastPathComponent, didSuccess: { () -> Void in
+            bookService.importDaisy(url.lastPathComponent!, didSuccess: { () -> Void in
                 // 完了
                 self.loadingFlg = false
                 
