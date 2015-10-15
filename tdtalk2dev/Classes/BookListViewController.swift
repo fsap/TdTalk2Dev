@@ -89,7 +89,8 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     
     // 並び順をリフレッシュする
     private func refreshSort()->Void {
-        for (index, book: BookEntity) in enumerate(self.bookList) {
+        for (index, book) in self.bookList.enumerate() {
+//        for (index, book: BookEntity) in self.bookList.enumerate() {
             // 降順で並べるため
             book.sort_num = self.bookList.count - index
             self.manager.save()
@@ -166,8 +167,8 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
         
         // Debug
         let fileManager: NSFileManager = NSFileManager.defaultManager()
-        let attr = fileManager.attributesOfItemAtPath(NSString(format: "%@/%@.tdv", FileManager.getImportDir().stringByAppendingPathComponent(book.filename), book.filename) as String, error: nil)
-        Log(NSString(format: "--- selected book. file:%@ attr:%@", book.filename, attr!))
+        let attr = try! fileManager.attributesOfItemAtPath(NSString(format: "%@/%@.tdv", FileManager.getImportDir().URLByAppendingPathComponent(book.filename), book.filename) as String)
+        Log(NSString(format: "--- selected book. file:%@ attr:%@", book.filename, attr))
     }
     
     // 編集可否の設定

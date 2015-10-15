@@ -26,7 +26,7 @@ class NccManager: NSObject, NSXMLParserDelegate {
     private var daisy: Daisy
     private var isInMetadata: Bool
     private var isInSmil: Bool
-    private var currentDir: String
+    private var currentDir: NSURL?
     
     
     class var sharedInstance : NccManager {
@@ -42,7 +42,7 @@ class NccManager: NSObject, NSXMLParserDelegate {
         self.daisy = Daisy()
         self.isInMetadata = false
         self.isInSmil = false
-        self.currentDir = ""
+        self.currentDir = nil
         
         super.init()
     }
@@ -55,14 +55,14 @@ class NccManager: NSObject, NSXMLParserDelegate {
         self.didParseFailure = didParseFailure
         
         let url: NSURL? = NSURL.fileURLWithPath(nccFilePath)
-        let parser: NSXMLParser? = NSXMLParser(contentsOfURL: url)
+        let parser: NSXMLParser? = NSXMLParser(contentsOfURL: url!)
         
         if parser == nil {
             didParseFailure(errorCode: TTErrorCode.MetadataFileNotFound)
             return
         }
         
-        currentDir = nccFilePath.stringByDeletingLastPathComponent
+        currentDir = NSURL(fileURLWithPath: nccFilePath).URLByDeletingLastPathComponent
         
         parser!.delegate = self
         
@@ -84,15 +84,15 @@ class NccManager: NSObject, NSXMLParserDelegate {
         didStartElement elementName: String,
         namespaceURI: String?,
         qualifiedName qName: String?,
-        attributes attributeDict: [NSObject : AnyObject])
+        attributes attributeDict: [String : String])
     {
         Log(NSString(format: " - found element:[%@] attr[%@]", elementName, attributeDict))
         
         if elementName == MetadataTag.Metadata.rawValue {
             
-            let name: String? = attributeDict[MetadataAttr.Name.rawValue] as? String
+            let name: String? = attributeDict[MetadataAttr.Name.rawValue]
             if name != nil {
-                let content: String = attributeDict[MetadataAttr.Content.rawValue] as! String
+                let content: String = attributeDict[MetadataAttr.Content.rawValue]!
                 switch name! {
                 case MetadataTag.DC_Identifier.rawValue:
                     self.daisy.metadata.identifier = content
@@ -126,18 +126,18 @@ class NccManager: NSObject, NSXMLParserDelegate {
         } else if self.isInSmil {
             if elementName == SmilTag.A.rawValue {
                 // smilファイル情報取得
-                let href: String = attributeDict[SmilAttr.Href.rawValue] as! String
-                var ary: [String] = href.componentsSeparatedByString("#")
-                let path: String = currentDir.stringByAppendingPathComponent(ary[0])
-                Log(NSString(format: "path:%@", path))
-                self.daisy.navigation.contentsPaths.append(path)
+                let href: String? = attributeDict[SmilAttr.Href.rawValue]
+                var ary: [String] = href!.componentsSeparatedByString("#")
+                let path: NSURL? = currentDir?.URLByAppendingPathComponent(ary[0])
+                Log(NSString(format: "path:%@", path!))
+                self.daisy.navigation.contentsPaths.append((path?.absoluteString)!)
             }
         }
     }
     
     // valueを読み込み
-    func parser(parser: NSXMLParser, foundCharacters string: String?) {
-        Log(NSString(format: " - found value:[%@]", string!))
+    func parser(parser: NSXMLParser, foundCharacters string: String) {
+        Log(NSString(format: " - found value:[%@]", string))
         
     }
     
