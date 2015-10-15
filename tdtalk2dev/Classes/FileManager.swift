@@ -248,9 +248,9 @@ class FileManager: NSObject {
         }
         
         // コンテンツ読み出し
-        var brllist:BrlBuffer = BrlBuffer()
+        let brllist:BrlBuffer = BrlBuffer()
         brllist.Setinit()
-        var file = File()
+        let file = File()
         file.DataSet(brllist)
         var headInfo: TDV_HEAD = TDV_HEAD()
         memset(&headInfo, 0x00, sizeof(TDV_HEAD))
@@ -272,7 +272,7 @@ class FileManager: NSObject {
                 return ""
             }
             
-            var xmlFile:String = xml
+            let xmlFile:String = xml
             Log(NSString(format: "xml:%@", xmlFile))
             
             let tagetFile:[CChar] = xml.cStringUsingEncoding(NSUTF8StringEncoding)!

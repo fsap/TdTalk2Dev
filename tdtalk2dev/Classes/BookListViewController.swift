@@ -195,7 +195,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
                 message: NSLocalizedString("dialog_msg_delete", comment: ""),
                 actionOk: { () -> Void in
                     let book: BookEntity = self.bookList[indexPath.row]
-                    var result: TTErrorCode = TTBookService.sharedInstance.deleteBook(book)
+                    let result: TTErrorCode = TTBookService.sharedInstance.deleteBook(book)
                     if result == TTErrorCode.Normal {
                         self.bookList.removeAtIndex(indexPath.row)
                         self.bookListTableView?.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Left)
@@ -221,7 +221,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     // 移動の確定タイミングで呼ばれる
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
 
-        var sourceBook: BookEntity = self.bookList[sourceIndexPath.row]
+        let sourceBook: BookEntity = self.bookList[sourceIndexPath.row]
         self.bookList.removeAtIndex(sourceIndexPath.row)
         self.bookList.insert(sourceBook, atIndex: destinationIndexPath.row)
         self.refreshSort()
@@ -261,7 +261,7 @@ class BookListViewController : UIViewController, UITableViewDelegate, UITableVie
     // MARK: LoadingViewDelegate
     //
     func cancelLoad() {
-        var bookService: TTBookService = TTBookService.sharedInstance
+        let bookService: TTBookService = TTBookService.sharedInstance
         bookService.cancelImport()
     }
 }

@@ -126,9 +126,9 @@ class NccManager: NSObject, NSXMLParserDelegate {
         } else if self.isInSmil {
             if elementName == SmilTag.A.rawValue {
                 // smilファイル情報取得
-                var href: String = attributeDict[SmilAttr.Href.rawValue] as! String
+                let href: String = attributeDict[SmilAttr.Href.rawValue] as! String
                 var ary: [String] = href.componentsSeparatedByString("#")
-                var path: String = currentDir.stringByAppendingPathComponent(ary[0])
+                let path: String = currentDir.stringByAppendingPathComponent(ary[0])
                 Log(NSString(format: "path:%@", path))
                 self.daisy.navigation.contentsPaths.append(path)
             }
