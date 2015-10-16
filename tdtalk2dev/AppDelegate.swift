@@ -21,10 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         if launchOptions != nil {
             var options = launchOptions!
-            let url = options[UIApplicationLaunchOptionsURLKey] as! NSURL;
-            Log(NSString(format: "url:%@", url.absoluteString))
+            let url: NSURL = options[UIApplicationLaunchOptionsURLKey]
+            Log(NSString(format: "url:%@", url))
             
-            if !self.startImportBook(url.absoluteString) {
+            if !self.startImportBook(url) {
                 return false
             }
         }
@@ -34,10 +34,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // バックグラウンドにいる場合はこちらがキックされる
     func application(application: UIApplication, handleOpenURL url: NSURL) -> Bool {
-        Log(NSString(format: "lifecycle:handle_open_url:%@", url.lastPathComponent!))
+        Log(NSString(format: "lifecycle:handle_open_url:%@", url))
         // Override point for customization after application launch.
         
-        if !self.startImportBook(url.absoluteString) {
+        if !self.startImportBook(url) {
             return false
         }
 
@@ -72,11 +72,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
-    private func startImportBook(urlStr: String)->Bool {
+    private func startImportBook(url: NSURL)->Bool {
         if self.loadingFlg {
             return false
         }
-        let url: NSURL = NSURL(fileURLWithPath: urlStr)
+//        let url: NSURL = NSURL(fileURLWithPath: urlStr)
         
         let bookService = TTBookService.sharedInstance
         bookService.delegate?.importStarted()
@@ -91,7 +91,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             alertController.show(
                 window?.rootViewController!,
                 title:NSLocalizedString("dialog_title_error", comment: ""),
-                message:TTError.getErrorMessage(ret), actionOk: {() -> Void in})
+                message:TTError.getErrorMessage(ret), actionOk: {() -> Void in
+                    bookService.delegate?.importFailed()
+            })
             return false
         }
         

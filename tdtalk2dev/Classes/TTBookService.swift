@@ -57,7 +57,7 @@ class TTBookService {
         
         // ファイルの存在チェック
         if !(self.fileManager.exists(filepath.absoluteString)) {
-            Log(NSString(format: "%@ not found.", filepath))
+            Log(NSString(format: "%@ not found.", filepath.absoluteString))
             return TTErrorCode.FileNotExists
         }
         
