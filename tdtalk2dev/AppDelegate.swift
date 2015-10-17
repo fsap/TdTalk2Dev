@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         if launchOptions != nil {
             var options = launchOptions!
-            let url: NSURL = options[UIApplicationLaunchOptionsURLKey]
+            let url: NSURL = options[UIApplicationLaunchOptionsURLKey] as! NSURL
             Log(NSString(format: "url:%@", url))
             
             if !self.startImportBook(url) {
