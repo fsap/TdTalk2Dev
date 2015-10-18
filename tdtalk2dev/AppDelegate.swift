@@ -72,11 +72,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
-    private func startImportBook(url: NSURL)->Bool {
+    ///
+    /// 図書ファイル読み込み開始
+    /// - parameter url: NSURL! 取り込み元URL
+    /// - returns: Bool
+    ///
+    private func startImportBook(url: NSURL!)->Bool {
+        // 既に読み込みが走っている場合はスルー
         if self.loadingFlg {
             return false
         }
-//        let url: NSURL = NSURL(fileURLWithPath: urlStr)
         
         let bookService = TTBookService.sharedInstance
         bookService.delegate?.importStarted()
