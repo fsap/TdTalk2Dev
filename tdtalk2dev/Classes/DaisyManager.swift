@@ -48,19 +48,19 @@ class DaisyManager: NSObject {
     /// :param: Closure 処理に成功した時のクロージャを定義
     /// :param: Closure 処理に失敗した時のクロージャを定義
     ///
-    func detectDaisyStandard(targetFileDir: String, didSuccess:((version: CGFloat)->Void), didFailure:((errorCode: TTErrorCode)->Void)) {
+    func detectDaisyStandard(targetUrl: NSURL, didSuccess:((version: CGFloat)->Void), didFailure:((errorCode: TTErrorCode)->Void)) {
         
         let fileManager: FileManager = FileManager.sharedInstance
         
         // マルチDAISYか確認するためにdiscinfoをサーチ
         var discInfoPath: String? = nil
-        if fileManager.searchFile(Constants.kMultiDaisyInfoFile, targetDir: targetFileDir, recursive: true, result: &discInfoPath) {
+        if fileManager.searchFile(Constants.kMultiDaisyInfoFile, targetUrl: targetUrl, recursive: true, result: &discInfoPath) {
             // discinfoを読み取る
             let discInfoManager: DiscInfoManager = DiscInfoManager.sharedInstance
             discInfoManager.startParseDiscInfoFile(discInfoPath!, didParseSuccess: { (discInfos) -> Void in
                 // discinfo解析失敗
                 if discInfos.count == 0 {
-                    LogE(NSString(format: "discinfo.html is not found. dir:%@", targetFileDir))
+                    LogE(NSString(format: "discinfo.html is not found. dir:%@", targetUrl))
                     didFailure(errorCode: TTErrorCode.FailedToLoadFile)
                     return
                 }
@@ -118,7 +118,7 @@ class DaisyManager: NSObject {
         
         // 規格3のファイル構成で読みに行く
         var opfFilePath: String? = nil
-        if fileManager.searchExtension(DaisyStandard3.MetadataFileExtension, targetDir: targetFileDir, recursive: true, result: &opfFilePath) {
+        if fileManager.searchExtension(DaisyStandard3.MetadataFileExtension, targetUrl: targetUrl, recursive: true, result: &opfFilePath) {
             // opfを読み取る
             let opfManager: OpfManager = OpfManager.sharedInstance
             opfManager.startParseOpfFile(opfFilePath!, didParseSuccess: { (daisy) -> Void in
@@ -142,7 +142,7 @@ class DaisyManager: NSObject {
     // メタ情報の読み込み
     //
     func loadMetadata(
-        targetDir :String,
+        targetUrl :NSURL,
         version: CGFloat,
         didSuccess:((daisy: Daisy)->Void),
         didFailure:((errorCode: TTErrorCode)->Void)
@@ -153,7 +153,7 @@ class DaisyManager: NSObject {
         // 規格によって出しわけ :ToDo:この辺はもう少しうまくやる
         if version == DaisyStandards.Version2_02.rawValue {
             var nccFilePath: String? = nil
-            if fileManager.searchFile(DaisyStandard2_02.MetadataFileName, targetDir: targetDir, recursive: true, result: &nccFilePath) {
+            if fileManager.searchFile(DaisyStandard2_02.MetadataFileName, targetUrl: targetUrl, recursive: true, result: &nccFilePath) {
                 // nccを読み取る
                 let nccManager: NccManager = NccManager.sharedInstance
                 nccManager.startParseNccFile(nccFilePath!, didParseSuccess: { (daisy) -> Void in
@@ -172,9 +172,9 @@ class DaisyManager: NSObject {
         
         if version == DaisyStandards.Version3.rawValue {
             var opfFilePath: String? = nil
-            if fileManager.searchExtension(DaisyStandard3.MetadataFileExtension, targetDir: targetDir, recursive: true, result: &opfFilePath) {
+            if fileManager.searchExtension(DaisyStandard3.MetadataFileExtension, targetUrl: targetUrl, recursive: true, result: &opfFilePath) {
                 // opfを読み取る
-                let opfManager: OpfManager = OpfManager.sharedInstance
+                let opfManager: OpfManager = OpfManager()
                 opfManager.startParseOpfFile(opfFilePath!, didParseSuccess: { (daisy) -> Void in
                     didSuccess(daisy: daisy)
                     

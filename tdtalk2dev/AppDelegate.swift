@@ -85,7 +85,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let bookService = TTBookService.sharedInstance
         bookService.delegate?.importStarted()
-        let ret = bookService.validate(url.lastPathComponent!)
+        let ret = bookService.validate(url)
         
         // エラーメッセージ
         switch ret {
@@ -107,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let queue = dispatch_queue_create("import_book", nil)
         dispatch_async(queue, { () -> Void in
             // インポート
-            bookService.importDaisy(url.lastPathComponent!, didSuccess: { () -> Void in
+            bookService.importDaisy(url, didSuccess: { () -> Void in
                 // 完了
                 self.loadingFlg = false
                 

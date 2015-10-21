@@ -99,7 +99,7 @@ class OpfManager: NSObject, NSXMLParserDelegate {
                 let attr: String = attributeDict[ManifestItemAttr.MediaType.rawValue]!
                 if attr == MediaTypes.XML.rawValue {
                     let href: String = attributeDict[ManifestItemAttr.Href.rawValue]!
-                    let path: String = currentDir!.URLByAppendingPathComponent(href).absoluteString
+                    let path: String = currentDir!.URLByAppendingPathComponent(href).path!
                     self.daisy.navigation.contentsPaths.append(path)
                 }
             }
@@ -108,7 +108,7 @@ class OpfManager: NSObject, NSXMLParserDelegate {
     
     // valueを読み込み
     func parser(parser: NSXMLParser, foundCharacters string: String) {
-//        Log(NSString(format: " - found value:[%@] current_elem:%@", string!, self.currentElement))
+        Log(NSString(format: " - found value:[%@] current_elem:%@", string, self.currentElement))
         
         if self.isInDcMetadata {
             switch self.currentElement {
@@ -116,7 +116,12 @@ class OpfManager: NSObject, NSXMLParserDelegate {
                 self.daisy.metadata.identifier = string
                 break
             case DCMetadataTag.DC_Title.rawValue:
-                self.daisy.metadata.title = string
+                if self.daisy.metadata.title == "" {
+                    self.daisy.metadata.title = string
+                } else {
+                    self.daisy.metadata.title += string
+                }
+                Log(NSString(format: "title:%@", self.daisy.metadata.title))
                 break
             case DCMetadataTag.DC_Publisher.rawValue:
                 self.daisy.metadata.publisher = string

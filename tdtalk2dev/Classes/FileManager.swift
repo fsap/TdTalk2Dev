@@ -32,23 +32,31 @@ class FileManager: NSObject {
     ///
     /// 他アプリからエクスポートされたファイルの格納場所を取得
     ///
-    static func getInboxDirString()-> String {
-        return getHomeURL().URLByAppendingPathComponent(Constants.kInboxDocumentPath).path!
+    static func getInboxPath(filename: String?)-> String {
+        return getInboxDir(filename).path!
     }
     
-    static func getInboxDir()->NSURL {
-        return getHomeURL().URLByAppendingPathComponent(Constants.kInboxDocumentPath)
+    static func getInboxDir(filename: String?)->NSURL {
+        var inboxUrl: NSURL = getHomeURL().URLByAppendingPathComponent(Constants.kInboxDocumentPath)
+        if (filename != nil) {
+            inboxUrl = inboxUrl.URLByAppendingPathComponent(filename!)
+        }
+        return inboxUrl
     }
     
     ///
     /// 本棚のパスを取得
     ///
-    static func getImportDirString()->String {
-        return getHomeURL().URLByAppendingPathComponent(Constants.kSaveDocumentPath).path!
+    static func getImportPath(filename: String?)->String {
+        return getImportDir(filename).path!
     }
 
-    static func getImportDir()->NSURL {
-        return getHomeURL().URLByAppendingPathComponent(Constants.kSaveDocumentPath)
+    static func getImportDir(filename: String?)->NSURL {
+        var importUrl: NSURL = getHomeURL().URLByAppendingPathComponent(Constants.kSaveDocumentPath)
+        if (filename != nil) {
+            importUrl = importUrl.URLByAppendingPathComponent(filename!)
+        }
+        return importUrl
     }
 
     ///
@@ -90,12 +98,12 @@ class FileManager: NSObject {
     /// zip解凍
     /// :param: String 圧縮ファイルのファイル名をフルパスで指定
     /// :param: String 展開先のディレクトリ
-    func unzip(importFilePath : String, expandDir : String)->Bool {
-        if (exists(expandDir)) {
+    func unzip(importFilePath : String, expandPath : String)->Bool {
+        if (exists(expandPath)) {
             // ToDo: 例外処理
-            try! self.fileManager.removeItemAtPath(expandDir)
+            try! self.fileManager.removeItemAtPath(expandPath)
         }
-        return SSZipArchive.unzipFileAtPath(importFilePath, toDestination: expandDir)
+        return SSZipArchive.unzipFileAtPath(importFilePath, toDestination: expandPath)
     }
     
     ///
@@ -103,22 +111,22 @@ class FileManager: NSObject {
     /// :param: ファイル名(ディレクトリも可)
     /// :param: 対象ディレクトリ
     /// :param: 再帰的に検索を行うかどうか
-    func searchFile(filename: String, targetDir: String, recursive: Bool, inout result: String?)->Bool {
+    func searchFile(filename: String, targetUrl: NSURL, recursive: Bool, inout result: String?)->Bool {
         
-        let target: String = targetDir.stringByRemovingPercentEncoding!
+//        let target: String = targetPath.stringByRemovingPercentEncoding!
 
         // 対象ディレクトリが存在しない
-        if !exists(target) {
-            LogE(NSString(format: "Search target directory not found. dir:%@", target))
+        if !exists(targetUrl.path!) {
+            LogE(NSString(format: "Search target directory not found. dir:%@", targetUrl))
             return false
         }
         
         // 配下のファイルを取得
         var contents: [String] = []
         do {
-            contents = try self.fileManager.contentsOfDirectoryAtPath(target)
+            contents = try self.fileManager.contentsOfDirectoryAtPath(targetUrl.path!)
         } catch let error as NSError {
-            LogE(NSString(format: "Search target directory has no contents. dir:%@ [%d][msg]", target, error.code, error.description))
+            LogE(NSString(format: "Search target directory has no contents. dir:%@ [%d][msg]", targetUrl, error.code, error.description))
             return false
         }
         for c in contents {
@@ -127,7 +135,7 @@ class FileManager: NSObject {
             Log(NSString(format: "content:%@", content))
             // 中身のファイルチェック
             var isDir = ObjCBool(false)
-            if (!self.fileManager.fileExistsAtPath(NSURL(fileURLWithPath: target).URLByAppendingPathComponent(content).path!, isDirectory: &isDir)) {
+            if (!self.fileManager.fileExistsAtPath(targetUrl.URLByAppendingPathComponent(content).path!, isDirectory: &isDir)) {
                 continue
             }
             
@@ -138,7 +146,7 @@ class FileManager: NSObject {
             
             // ディレクトリの場合で再帰的に検索する場合はサブディレクトリ検索
             if (isDir && recursive) {
-                if searchFile(filename, targetDir: NSURL(fileURLWithPath: target).URLByAppendingPathComponent(content).path!, recursive: recursive, result: &result) {
+                if searchFile(filename, targetUrl: targetUrl.URLByAppendingPathComponent(content), recursive: recursive, result: &result) {
                     return true
                 }
                 continue
@@ -146,7 +154,7 @@ class FileManager: NSObject {
             
             // ファイル名をチェック
             if content == filename {
-                result = NSURL(fileURLWithPath: target).URLByAppendingPathComponent(content).absoluteString
+                result = targetUrl.URLByAppendingPathComponent(content).path!
                 return true
             }
         }
@@ -159,22 +167,22 @@ class FileManager: NSObject {
     /// :param: 拡張子
     /// :param: 対象ディレクトリ
     /// :param: 再帰的に検索を行うかどうか
-    func searchExtension(ext: String, targetDir: String, recursive: Bool, inout result: String?)->Bool {
+    func searchExtension(ext: String, targetUrl: NSURL, recursive: Bool, inout result: String?)->Bool {
         
-        let target: String = targetDir.stringByRemovingPercentEncoding!
+//        let target: String = targetDir.stringByRemovingPercentEncoding!
         
         // 対象ディレクトリが存在しない
-        if !exists(target) {
-            LogE(NSString(format: "Search target directory not found. dir:%@", target))
+        if !exists(targetUrl.path!) {
+            LogE(NSString(format: "Search target directory not found. dir:%@", targetUrl.path!))
             return false
         }
         
         // 配下のファイルを取得
         var contents: [String] = []
         do {
-            contents = try self.fileManager.contentsOfDirectoryAtPath(target)
+            contents = try self.fileManager.contentsOfDirectoryAtPath(targetUrl.path!)
         } catch let error as NSError {
-            LogE(NSString(format: "Search target directory has no contents. dir:%@ [%d][msg]", target, error.code, error.description))
+            LogE(NSString(format: "Search target directory has no contents. dir:%@ [%d][msg]", targetUrl.path!, error.code, error.description))
             return false
         }
 
@@ -184,7 +192,7 @@ class FileManager: NSObject {
             Log(NSString(format: "content:%@", content))
             // 中身のファイルチェック
             var isDir = ObjCBool(false)
-            if (!self.fileManager.fileExistsAtPath(NSURL(fileURLWithPath: target).URLByAppendingPathComponent(content).path!, isDirectory: &isDir)) {
+            if (!self.fileManager.fileExistsAtPath(targetUrl.URLByAppendingPathComponent(content).path!, isDirectory: &isDir)) {
                 continue
             }
             
@@ -195,7 +203,7 @@ class FileManager: NSObject {
             
             // ディレクトリの場合で再帰的に検索する場合はサブディレクトリ検索
             if (isDir && recursive) {
-                if searchExtension(ext, targetDir: NSURL(fileURLWithPath: target).URLByAppendingPathComponent(content).path!, recursive: recursive, result: &result) {
+                if searchExtension(ext, targetUrl: targetUrl.URLByAppendingPathComponent(content), recursive: recursive, result: &result) {
                     return true
                 }
                 continue
@@ -203,7 +211,7 @@ class FileManager: NSObject {
             
             // 拡張子をチェック
             if NSURL(fileURLWithPath: content).pathExtension == ext {
-                result = NSURL(fileURLWithPath: target).URLByAppendingPathComponent(content).path!
+                result = targetUrl.URLByAppendingPathComponent(content).path!
                 return true
             }
         }
@@ -215,11 +223,11 @@ class FileManager: NSObject {
     // インポートを開始するにあたっての初期処理
     //
     func initImport()->Void {
-        if !(exists(FileManager.getImportDirString())) {
+        if !(exists(FileManager.getImportPath(nil))) {
             do {
-                try self.fileManager.createDirectoryAtPath(FileManager.getImportDirString(), withIntermediateDirectories: false, attributes: nil)
+                try self.fileManager.createDirectoryAtPath(FileManager.getImportPath(nil), withIntermediateDirectories: false, attributes: nil)
             } catch let error as NSError {
-                LogE(NSString(format: "Failed to create dir. dir:[%@] [%d][%@]", FileManager.getImportDirString(), error.code, error.description))
+                LogE(NSString(format: "Failed to create dir. dir:[%@] [%d][%@]", FileManager.getImportPath(nil), error.code, error.description))
             }
         }
     }
@@ -240,7 +248,7 @@ class FileManager: NSObject {
     //
     // XMLファイルの読み込み
     //
-    func loadXmlFiles(xmlFilePaths:[String], saveDir: String, metadata: Metadata)->String {
+    func loadXmlFiles(xmlFilePaths:[String], saveUrl: NSURL, metadata: Metadata)->String {
         Log(NSString(format: "xml_file_path:%@", xmlFilePaths))
         if xmlFilePaths.count == 0 {
             LogE(NSString(format: "No xml files. [%@]", xmlFilePaths))
@@ -280,19 +288,19 @@ class FileManager: NSObject {
             file.LoadXmlFile(tagetFile, readMode: mode)
         }
         // 一時保存
-        let saveUrl: NSURL = NSURL(fileURLWithPath: saveDir)
-        let titleBaseName = NSURL(fileURLWithPath: saveUrl.lastPathComponent!).URLByDeletingPathExtension?.path!
+//        let saveUrl: NSURL = NSURL(fileURLWithPath: saveDir)
+        let titleBaseName = saveUrl.URLByDeletingPathExtension?.lastPathComponent!
         Log(NSString(format: "base name:%@", titleBaseName!))
-        let saveFileName:String = saveUrl.URLByAppendingPathComponent(titleBaseName! + ".tdv").path!
-        Log(NSString(format: "save_to:%@", saveFileName))
-        if !(file.SaveTdvFile(saveFileName.cStringUsingEncoding(NSUTF8StringEncoding)!, head:&headInfo)) {
-            LogE(NSString(format: "Failed to save tdv file. save_file[%@]", saveFileName))
+        let saveFilePath:String = saveUrl.URLByAppendingPathComponent(titleBaseName! + ".tdv").path!
+        Log(NSString(format: "save_to:%@", saveFilePath))
+        if !(file.SaveTdvFile(saveFilePath.cStringUsingEncoding(NSUTF8StringEncoding)!, head:&headInfo)) {
+            LogE(NSString(format: "Failed to save tdv file. save_file[%@]", saveFilePath))
             keepLoading = true
             return ""
         }
         keepLoading = true
 
-        return saveFileName
+        return saveFilePath
     }
     
     func cancelLoad() {
@@ -313,7 +321,7 @@ class FileManager: NSObject {
         // タイトル名
         let titleBaseName = NSURL(fileURLWithPath: saveFileName!).URLByDeletingPathExtension!.path
         // 保存先ディレクトリ
-        let saveDir: NSURL = FileManager.getImportDir().URLByAppendingPathComponent(titleBaseName!)
+        let saveDir: NSURL = FileManager.getImportDir(titleBaseName!)
         // 保存先フルパス
         let saveFilePath = saveDir.URLByAppendingPathComponent(saveFileName!).path
         Log(NSString(format: "save_to:%@", saveFilePath!))
