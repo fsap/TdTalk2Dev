@@ -132,7 +132,7 @@ class DaisyManager: NSObject {
             })
             return
         } else {
-            LogE(NSString(format: "[%d] opf file not found. dir:%@", TTErrorCode.MetadataFileNotFound.rawValue, opfFilePath!))
+            LogE(NSString(format: "[%d] opf file not found. dir:%@", TTErrorCode.MetadataFileNotFound.rawValue, targetUrl))
             didFailure(errorCode: TTErrorCode.MetadataFileNotFound)
             return
         }
