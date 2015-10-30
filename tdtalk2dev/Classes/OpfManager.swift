@@ -60,6 +60,9 @@ class OpfManager: NSObject, NSXMLParserDelegate {
         
         currentDir = NSURL(fileURLWithPath: opfFilePath).URLByDeletingLastPathComponent
         
+        // 初期化しておく
+        self.daisy = Daisy()
+
         parser!.delegate = self
         
         parser!.parse()
